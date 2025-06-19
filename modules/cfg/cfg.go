@@ -16,9 +16,11 @@ var cfgPath *string = flag.String("config", "", "path to the config file, use 'g
 
 // Stores all necessary constants as struct, can  be accessed via [Get] function.
 type Config struct {
-	LogFilePath string
+	LogFileName string
 	LogMaxSize  int // Megabytes
 	Verbose     bool
+
+	DBfileName string
 }
 
 // Parses config flag once via [flag] and [sync] packages,
@@ -32,6 +34,23 @@ func Get() Config {
 		}
 		var cfg Config
 		if _, err := toml.DecodeFile(*cfgPath, &cfg); err != nil {
+			panic(fmt.Errorf("cannot read the config file: %w", err))
+		}
+		return cfg
+	})()
+}
+
+// Acts fully as [Get] function but with difference of requiring a path to root directory.
+// Used for testing purposes to still have configs in the same directory.
+//
+// Must be used with same pathToRoot values, since changing it after first call will not change the result.
+func TestGet(pathToRoot string) Config {
+	return sync.OnceValue(func() Config {
+		if !flag.Parsed() {
+			flag.Parse()
+		}
+		var cfg Config
+		if _, err := toml.DecodeFile(pathToRoot+(*cfgPath), &cfg); err != nil {
 			panic(fmt.Errorf("cannot read the config file: %w", err))
 		}
 		return cfg

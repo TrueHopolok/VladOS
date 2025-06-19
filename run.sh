@@ -1,0 +1,1 @@
+go run github.com/TrueHopolok/VladOS -config=./configs/debug.cfg

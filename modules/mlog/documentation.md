@@ -12,24 +12,33 @@ Contains all necessary functional to begin work with [log/slog](<https://pkg.go.
 
 ## Index
 
-- [func RegularInit\(\)](<#RegularInit>)
-- [func TestingInit\(t \*testing.T\)](<#TestingInit>)
+- [Constants](<#constants>)
+- [func Init\(\)](<#Init>)
+- [func InitTesting\(t \*testing.T, pathToRoot string\)](<#InitTesting>)
 
 
-<a name="RegularInit"></a>
-## func RegularInit
+## Constants
+
+<a name="LogFilePath"></a>
 
 ```go
-func RegularInit()
+const LogFilePath string = "logs/"
+```
+
+<a name="Init"></a>
+## func Init
+
+```go
+func Init()
 ```
 
 Initializate the slog package for performing purposes with given config parameters by calling [github.com/TrueHopolok/VladOS/cfg.Get](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/cfg/#Get>). Uses [github.com/TrueHopolok/VladOS/cfg.Config.Verbose](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/cfg/#Config.Verbose>) to decide wheter to output the debug prints \(in case of true value\) or ignore them. Creates multiwriter to print in both [os.Stdout](<https://pkg.go.dev/os/#Stdout>) and [github.com/TrueHopolok/VladOS/cfg.Config.LogFilePath](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/cfg/#Config.LogFilePath>). Creates writer that uses [gopkg.in/natefinch/lumberjack.v2](<https://pkg.go.dev/gopkg.in/natefinch/lumberjack.v2/>) package to perform the log file rotations. Writer is set as default output handler of [log/slog](<https://pkg.go.dev/log/slog/>) package, to be used outside this package.
 
-<a name="TestingInit"></a>
-## func TestingInit
+<a name="InitTesting"></a>
+## func InitTesting
 
 ```go
-func TestingInit(t *testing.T)
+func InitTesting(t *testing.T, pathToRoot string)
 ```
 
 Initializate the slog package for performing purposes with given config parameters by calling [github.com/TrueHopolok/VladOS/cfg.Get](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/cfg/#Get>). Ignores [github.com/TrueHopolok/VladOS/cfg.Config.Verbose](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/cfg/#Config.Verbose>) and always prints all [log/slog.Level](<https://pkg.go.dev/log/slog/#Level>) including debug one. Does not print in [os.Stdout](<https://pkg.go.dev/os/#Stdout>) and only prints in [github.com/TrueHopolok/VladOS/cfg.Config.LogFilePath](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/cfg/#Config.LogFilePath>). Creates writer that uses [gopkg.in/natefinch/lumberjack.v2](<https://pkg.go.dev/gopkg.in/natefinch/lumberjack.v2/>) package to perform the log file rotations. Writer is set as default output handler of [log/slog](<https://pkg.go.dev/log/slog/>) package, to be used outside this package.

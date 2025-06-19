@@ -1,0 +1,1 @@
+go test ./modules/... -config=./configs/test.cfg
