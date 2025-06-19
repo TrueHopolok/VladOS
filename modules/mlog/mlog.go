@@ -1,8 +1,10 @@
-// [vlados/modules/mlog] package shorthanded for MyLogger.
+// mlog package shorthanded for MyLogger.
 //
 // Contains all necessary functional to begin work with [log/slog] package.
-// Uses [vlados/modules/cfg] package to get all necessary info for initialization.
+// Uses [github.com/TrueHopolok/VladOS/modules/cfg] package to get all necessary info for initialization.
 package mlog
+
+//go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
 import (
 	"fmt"
@@ -10,14 +12,15 @@ import (
 	"log/slog"
 	"os"
 	"testing"
-	"vlados/modules/cfg"
+
+	"github.com/TrueHopolok/VladOS/modules/cfg"
 
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-// Initializate the slog package for performing purposes with given config parameters by calling [vlados/modules/cfg.Get].
-// Uses [vlados/modules/cfg.Config.Verbose] to decide wheter to output the debug prints (in case of true value) or ignore them.
-// Creates multiwriter to print in both [os.Stdout] and [vlados/modules/cfg.Config.LogFilePath].
+// Initializate the slog package for performing purposes with given config parameters by calling [github.com/TrueHopolok/VladOS/cfg.Get].
+// Uses [github.com/TrueHopolok/VladOS/cfg.Config.Verbose] to decide wheter to output the debug prints (in case of true value) or ignore them.
+// Creates multiwriter to print in both [os.Stdout] and [github.com/TrueHopolok/VladOS/cfg.Config.LogFilePath].
 // Creates writer that uses [gopkg.in/natefinch/lumberjack.v2] package to perform the log file rotations.
 // Writer is set as default output handler of [log/slog] package, to be used outside this package.
 func RegularInit() {
@@ -40,9 +43,9 @@ func RegularInit() {
 	slog.Info("logger is inited via RegularInit")
 }
 
-// Initializate the slog package for testing purposes with given config parameters by calling [vlados/modules/cfg.Get].
-// Ignores [vlados/modules/cfg.Config.Verbose] flag and outputs all level logs.
-// Does not print in [os.Stdout] and only prints into [vlados/modules/cfg.Config.LogFilePath].
+// Initializate the slog package for performing purposes with given config parameters by calling [github.com/TrueHopolok/VladOS/cfg.Get].
+// Ignores [github.com/TrueHopolok/VladOS/cfg.Config.Verbose] and always prints all [log/slog.Level] including debug one.
+// Does not print in [os.Stdout] and only prints in [github.com/TrueHopolok/VladOS/cfg.Config.LogFilePath].
 // Creates writer that uses [gopkg.in/natefinch/lumberjack.v2] package to perform the log file rotations.
 // Writer is set as default output handler of [log/slog] package, to be used outside this package.
 func TestingInit(t *testing.T) {

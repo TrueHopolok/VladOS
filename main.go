@@ -1,7 +1,7 @@
 package main
 
 import (
-	"vlados/modules/mlog"
+	"github.com/TrueHopolok/VladOS/modules/mlog"
 )
 
 func main() {
