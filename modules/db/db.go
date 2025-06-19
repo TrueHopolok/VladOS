@@ -47,9 +47,9 @@ func InitTesting(t *testing.T, pathToRoot string) error {
 		panic(fmt.Errorf("tried to initialize the database in test mode while not in testing mode"))
 	}
 
-	os.Remove(pathToRoot + DBfilePath + cfg.TestGet(pathToRoot).DBfileName)
+	os.Remove(pathToRoot + DBfilePath + cfg.GetTest(pathToRoot).DBfileName)
 
-	conn, err := sql.Open("sqlite3", pathToRoot+DBfilePath+cfg.TestGet(pathToRoot).DBfileName)
+	conn, err := sql.Open("sqlite3", pathToRoot+DBfilePath+cfg.GetTest(pathToRoot).DBfileName)
 	if err == nil {
 		if conn == nil {
 			return fmt.Errorf("database connection is nil")

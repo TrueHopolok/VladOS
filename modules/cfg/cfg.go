@@ -44,7 +44,7 @@ func Get() Config {
 // Used for testing purposes to still have configs in the same directory.
 //
 // Must be used with same pathToRoot values, since changing it after first call will not change the result.
-func TestGet(pathToRoot string) Config {
+func GetTest(pathToRoot string) Config {
 	return sync.OnceValue(func() Config {
 		if !flag.Parsed() {
 			flag.Parse()

@@ -57,8 +57,8 @@ func InitTesting(t *testing.T, pathToRoot string) {
 	}
 
 	writer := &lumberjack.Logger{
-		Filename: pathToRoot + LogFilePath + cfg.TestGet(pathToRoot).LogFileName,
-		MaxSize:  cfg.TestGet(pathToRoot).LogMaxSize,
+		Filename: pathToRoot + LogFilePath + cfg.GetTest(pathToRoot).LogFileName,
+		MaxSize:  cfg.GetTest(pathToRoot).LogMaxSize,
 	}
 
 	handler := slog.NewTextHandler(

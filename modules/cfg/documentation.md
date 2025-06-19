@@ -12,7 +12,7 @@ Used to parse config file that was provided in [os.Args](<https://pkg.go.dev/os/
 
 - [type Config](<#Config>)
   - [func Get\(\) Config](<#Get>)
-  - [func TestGet\(pathToRoot string\) Config](<#TestGet>)
+  - [func GetTest\(pathToRoot string\) Config](<#GetTest>)
 
 
 <a name="Config"></a>
@@ -41,11 +41,11 @@ Parses config flag once via [flag](<https://pkg.go.dev/flag/>) and [sync](<https
 
 Panic if invalid config path is non existent or config file cannot be read.
 
-<a name="TestGet"></a>
-### func TestGet
+<a name="GetTest"></a>
+### func GetTest
 
 ```go
-func TestGet(pathToRoot string) Config
+func GetTest(pathToRoot string) Config
 ```
 
 Acts fully as [Get](<#Get>) function but with difference of requiring a path to root directory. Used for testing purposes to still have configs in the same directory.
