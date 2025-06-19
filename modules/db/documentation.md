@@ -15,6 +15,7 @@ Provides initalization, migration, execution and testing for database.
 - [Constants](<#constants>)
 - [func Init\(\) error](<#Init>)
 - [func InitTesting\(t \*testing.T, pathToRoot string\) error](<#InitTesting>)
+- [func Migrate\(\) error](<#Migrate>)
 - [type DB](<#DB>)
 
 
@@ -24,6 +25,12 @@ Provides initalization, migration, execution and testing for database.
 
 ```go
 const DBfilePath string = "database/versions/"
+```
+
+<a name="MigrationsDir"></a>
+
+```go
+const MigrationsDir string = "database/migrations/"
 ```
 
 <a name="Init"></a>
@@ -45,6 +52,17 @@ func InitTesting(t *testing.T, pathToRoot string) error
 Erase provided database via [os.Remove](<https://pkg.go.dev/os/#Remove>) and then initialize it like [Init](<#Init>) function.
 
 \!WARNING\! \- must be used only for testing purposes and on testing database to avoid losing data.
+
+<a name="Migrate"></a>
+## func Migrate
+
+```go
+func Migrate() error
+```
+
+Function checks if any more migrations were added and executes them. In case of an empty database, it will create migration table and then perform all available migrations.
+
+Must be used after any initialization function.
 
 <a name="DB"></a>
 ## type DB

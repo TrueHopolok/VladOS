@@ -30,13 +30,18 @@ func Init() error {
 	conn, err := sql.Open("sqlite3", DBfilePath+cfg.Get().DBfileName)
 	if err == nil {
 		if conn == nil {
-			return fmt.Errorf("database connection is nil")
+			return fmt.Errorf("recieved nil connection")
 		}
 		Conn = DB{conn}
 	} else {
-		return err
+		return fmt.Errorf("connection error: %w", err)
 	}
-	return Conn.Ping()
+	return func() error {
+		if err := Conn.Ping(); err != nil {
+			return fmt.Errorf("pinging connection error: %w", err)
+		}
+		return nil
+	}()
 }
 
 // Erase provided database via [os.Remove] and then initialize it like [Init] function.
@@ -52,11 +57,16 @@ func InitTesting(t *testing.T, pathToRoot string) error {
 	conn, err := sql.Open("sqlite3", pathToRoot+DBfilePath+cfg.GetTest(pathToRoot).DBfileName)
 	if err == nil {
 		if conn == nil {
-			return fmt.Errorf("database connection is nil")
+			return fmt.Errorf("recieved nil connection")
 		}
 		Conn = DB{conn}
 	} else {
-		return err
+		return fmt.Errorf("connection error: %w", err)
 	}
-	return Conn.Ping()
+	return func() error {
+		if err := Conn.Ping(); err != nil {
+			return fmt.Errorf("pinging connection error: %w", err)
+		}
+		return nil
+	}()
 }
