@@ -1,6 +1,6 @@
 // db package used to work in any and all ways with SQLite database.
 //
-// Provides both initalization, migration, execution and testing for database.
+// Provides initalization, migration, execution and testing for database.
 package db
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
