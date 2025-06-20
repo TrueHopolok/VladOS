@@ -18,9 +18,18 @@ func main() {
 	slog.Info("program started")
 
 	//* DB initialization
-	slog.Info("db init", "status", "start")
+	slog.Info("db init", "STATUS", "START")
 	if err := db.Init(); err != nil {
-		slog.Error("db init", "status", "failed", "error", err)
+		slog.Error("db init", "STATUS", "FAILED", "error", err)
+		return
 	}
-	slog.Info("db init", "status", "success")
+	slog.Info("db init", "STATUS", "SUCCESS")
+
+	//* DB migrate
+	slog.Info("db migrate", "STATUS", "START")
+	if err := db.Migrate(); err != nil {
+		slog.Error("db migrate", "STATUS", "FAILED", "error", err)
+		return
+	}
+	slog.Info("db migrate", "STATUS", "SUCCESS")
 }

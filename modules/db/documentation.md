@@ -8,11 +8,12 @@ import "github.com/TrueHopolok/VladOS/modules/db"
 
 db package used to work in any and all ways with SQLite database.
 
-Provides initalization, migration, execution and testing for database.
+Provides initalization, migration, execution and testing for database. Will create a directory database if not created at the root of the project.
 
 ## Index
 
 - [Constants](<#constants>)
+- [Variables](<#variables>)
 - [func Init\(\) error](<#Init>)
 - [func InitTesting\(t \*testing.T, pathToRoot string\) error](<#InitTesting>)
 - [func Migrate\(\) error](<#Migrate>)
@@ -24,13 +25,15 @@ Provides initalization, migration, execution and testing for database.
 <a name="DBfilePath"></a>
 
 ```go
-const DBfilePath string = "database/versions/"
+const DBfilePath string = "database/"
 ```
+
+## Variables
 
 <a name="MigrationsDir"></a>
 
 ```go
-const MigrationsDir string = "database/migrations/"
+var MigrationsDir embed.FS
 ```
 
 <a name="Init"></a>

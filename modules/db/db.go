@@ -1,6 +1,7 @@
 // db package used to work in any and all ways with SQLite database.
 //
 // Provides initalization, migration, execution and testing for database.
+// Will create a directory database if not created at the root of the project.
 package db
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
@@ -15,7 +16,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-const DBfilePath string = "database/versions/"
+const DBfilePath string = "database/"
 
 type DB struct {
 	*sql.DB

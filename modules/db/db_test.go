@@ -19,3 +19,20 @@ func TestInit(t *testing.T) {
 	}
 	slog.Info("db initialized correctly, test completed")
 }
+
+func TestMigrate(t *testing.T) {
+	mlog.InitTesting(t, PathToRoot)
+	if err := db.InitTesting(t, PathToRoot); err != nil {
+		slog.Error("db migration failed", "error", err)
+		t.Fatal(err)
+	}
+	if err := db.Migrate(); err != nil {
+		slog.Error("db migration failed", "error", err)
+		t.Fatal(err)
+	}
+	if err := db.Migrate(); err != nil {
+		slog.Error("db migration failed", "error", err)
+		t.Fatal(err)
+	}
+	slog.Info("db migrted correctly, test completed")
+}
