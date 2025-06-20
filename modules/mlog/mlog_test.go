@@ -1,7 +1,6 @@
 package mlog_test
 
 import (
-	"log/slog"
 	"testing"
 
 	"github.com/TrueHopolok/VladOS/modules/mlog"
@@ -10,6 +9,10 @@ import (
 const PathToRoot string = "../../"
 
 func TestInit(t *testing.T) {
+	defer func() {
+		if x := recover(); x != nil {
+			t.Fatal(x)
+		}
+	}()
 	mlog.InitTesting(t, PathToRoot)
-	slog.Info("logger initialized correctly, test completed")
 }

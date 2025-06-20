@@ -17,6 +17,11 @@ const PathToRoot string = "../../"
 	DBfileName  = "test.db"
 */
 func TestConfig(t *testing.T) {
+	defer func() {
+		if x := recover(); x != nil {
+			t.Fatal(x)
+		}
+	}()
 	expected := cfg.Config{
 		LogFileName: "test.log",
 		LogMaxSize:  10,

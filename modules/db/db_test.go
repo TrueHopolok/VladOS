@@ -11,28 +11,40 @@ import (
 const PathToRoot string = "../../"
 
 func TestInit(t *testing.T) {
+	defer func() {
+		if x := recover(); x != nil {
+			t.Fatal(x)
+		}
+	}()
 	mlog.InitTesting(t, PathToRoot)
+	slog.Info("db.TestInit", "STATUS", "START")
 	err := db.InitTesting(t, PathToRoot)
 	if err != nil {
-		slog.Error("db initialization failed", "error", err)
+		slog.Error("db.TestInit", "STATUS", "FAILED", "error", err)
 		t.Fatal(err)
 	}
-	slog.Info("db initialized correctly, test completed")
+	slog.Info("db.TestInit", "STATUS", "SUCCESS")
 }
 
 func TestMigrate(t *testing.T) {
+	defer func() {
+		if x := recover(); x != nil {
+			t.Fatal(x)
+		}
+	}()
 	mlog.InitTesting(t, PathToRoot)
+	slog.Info("db.TestMigrate", "STATUS", "START")
 	if err := db.InitTesting(t, PathToRoot); err != nil {
-		slog.Error("db migration failed", "error", err)
+		slog.Info("db.TestMigrate", "STATUS", "FAILED", "error", err)
 		t.Fatal(err)
 	}
 	if err := db.Migrate(); err != nil {
-		slog.Error("db migration failed", "error", err)
+		slog.Info("db.TestMigrate", "STATUS", "FAILED", "error", err)
 		t.Fatal(err)
 	}
 	if err := db.Migrate(); err != nil {
-		slog.Error("db migration failed", "error", err)
+		slog.Info("db.TestMigrate", "STATUS", "FAILED", "error", err)
 		t.Fatal(err)
 	}
-	slog.Info("db migrted correctly, test completed")
+	slog.Info("db.TestMigrate", "STATUS", "SUCCESS")
 }
