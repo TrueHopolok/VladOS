@@ -30,8 +30,8 @@ TODO: add info
 
 - [Constants](<#constants>)
 - [func GenerateSalt\(\) \[\]byte](<#GenerateSalt>)
-- [func GetPSH\(password string, salt \[\]byte\) \[\]byte](<#GetPSH>)
 - [func NewJWT\(ses auth.Session\) \(string, error\)](<#NewJWT>)
+- [func NewPSH\(password string, salt \[\]byte\) \[\]byte](<#NewPSH>)
 - [func ValidateJWT\(token string\) \(auth.Session, bool, error\)](<#ValidateJWT>)
 - [func ValidatePSH\(password string, salt, psh \[\]byte\) bool](<#ValidatePSH>)
 - [type KeyChain](<#KeyChain>)
@@ -51,10 +51,21 @@ const (
 )
 ```
 
-<a name="JWTheaderJSON"></a>JWT header consisting of type itself and algorithm used. Currently [crypto/hmac](<https://pkg.go.dev/crypto/hmac/>) combined with [crypto.SHA512](<https://pkg.go.dev/crypto/#SHA512>) are being used.
+<a name="PSH_TIME"></a>Argon2 encryption specific parameters
 
 ```go
-const JWTheaderJSON string = `
+const (
+    PSH_TIME = 1
+    PSH_MEM  = 64 * 1024
+    PSH_THR  = 4
+    PSH_LEN  = 64
+)
+```
+
+<a name="JWTheader"></a>JWT header consisting of type itself and algorithm used. Currently [crypto/hmac](<https://pkg.go.dev/crypto/hmac/>) combined with [crypto.SHA512](<https://pkg.go.dev/crypto/#SHA512>) are being used.
+
+```go
+const JWTheader = `
 {
   "alg": "HS512",
   "typ": "JWT"
@@ -76,17 +87,6 @@ func GenerateSalt() []byte
 
 Returns completly crypto random salt to use for password hashing.
 
-<a name="GetPSH"></a>
-## func GetPSH
-
-```go
-func GetPSH(password string, salt []byte) []byte
-```
-
-PSH \- Password Salted and Hashed.
-
-Function simplifies getting hashed password with given salt.
-
 <a name="NewJWT"></a>
 ## func NewJWT
 
@@ -101,6 +101,15 @@ Should never return an error, since:
 - [hash.Write](<https://pkg.go.dev/hash/#Write>) never returns an error;
 - [encoding/json.Marshal](<https://pkg.go.dev/encoding/json/#Marshal>) for [github.com/TrueHopolok/VladOS/modules/vos/auth.Session](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/auth/#Session>) should not return an error.
 
+<a name="NewPSH"></a>
+## func NewPSH
+
+```go
+func NewPSH(password string, salt []byte) []byte
+```
+
+PSH \- Password Salted and Hashed. Function simplifies getting hashed password with given salt.
+
 <a name="ValidateJWT"></a>
 ## func ValidateJWT
 
@@ -108,12 +117,13 @@ Should never return an error, since:
 func ValidateJWT(token string) (auth.Session, bool, error)
 ```
 
-Returns if given JWT is valid or not.
+Returns if given JWT is valid or not. In case of being valid, parses token and returns it as [github.com/TrueHopolok/VladOS/modules/vos/auth.Session](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/auth/#Session>) struct.
 
 Should never return an error, since:
 
 - [hash.Write](<https://pkg.go.dev/hash/#Write>) never returns an error;
-- [encoding/json.Unmarshal](<https://pkg.go.dev/encoding/json/#Unmarshal>) works with valid marshalled [github.com/TrueHopolok/VladOS/modules/vos/auth.Session](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/auth/#Session>) thus should not return an error.
+- [encoding/json.Unmarshal](<https://pkg.go.dev/encoding/json/#Unmarshal>) works with valid marshalled [github.com/TrueHopolok/VladOS/modules/vos/auth.Session](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/auth/#Session>) thus should not return an error;
+- [encoding/base64.URLEncoding.DecodeString](<https://pkg.go.dev/encoding/base64/#URLEncoding.DecodeString>) works with valid encoded [github.com/TrueHopolok/VladOS/modules/vos/auth.Session](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/auth/#Session>) thus should not return an error.
 
 <a name="ValidatePSH"></a>
 ## func ValidatePSH
@@ -122,14 +132,12 @@ Should never return an error, since:
 func ValidatePSH(password string, salt, psh []byte) bool
 ```
 
-PSH \- Password Salted and Hashed.
-
-Function simplifies validating that given PSH is for the given password and salt combination.
+PSH \- Password Salted and Hashed. Function simplifies validating that given PSH is for the given password and salt combination.
 
 <a name="KeyChain"></a>
 ## type KeyChain
 
-Contains 2 keys and a mutex, making it multiple goroutines save. Used by JWT and a few additional encryption functions.
+Contains 2 keys and a mutex, making it multiple goroutines save. Used solely by JWT functions.
 
 Keys pair switch keys every [EncryptionKeysSwitchingTime](<#EncryptionKeysSwitchingTime>) minutes, thus providing additional security.
 

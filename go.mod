@@ -7,6 +7,7 @@ tool github.com/princjef/gomarkdoc/cmd/gomarkdoc
 require (
 	github.com/BurntSushi/toml v1.5.0
 	github.com/mattn/go-sqlite3 v1.14.28
+	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
@@ -51,7 +52,6 @@ require (
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/x-cray/logrus-prefixed-formatter v0.5.2 // indirect
 	github.com/xanzy/ssh-agent v0.3.0 // indirect
-	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a // indirect
 	golang.org/x/net v0.0.0-20210520170846-37e1c6afe023 // indirect
 	golang.org/x/sys v0.0.0-20220908164124-27713097b956 // indirect
 	golang.org/x/term v0.0.0-20210503060354-a79de5458b56 // indirect

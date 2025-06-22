@@ -18,7 +18,7 @@ const (
 var chain KeyChain
 
 // Contains 2 keys and a mutex, making it multiple goroutines save.
-// Used by JWT and a few additional encryption functions.
+// Used solely by JWT functions.
 //
 // Keys pair switch keys every [EncryptionKeysSwitchingTime] minutes, thus providing additional security.
 //
@@ -78,6 +78,9 @@ func getPreviousEncryptionKey() []byte {
 // Previous key will be removed from key chain.
 //
 // Old instances of keys values should not be used.
+//
+// No need to use this function outside the testing since
+// function will be called each time after [EncryptionKeysSwitchTime] minutes passes.
 func switchEncryptionKeys() {
 	chain.lock.Lock()
 	defer chain.lock.Unlock()

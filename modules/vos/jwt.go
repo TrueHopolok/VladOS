@@ -1,10 +1,11 @@
 package vos
 
 import (
-	"crypto"
 	"crypto/hmac"
+	"crypto/sha512"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"strings"
 
 	"github.com/TrueHopolok/VladOS/modules/vos/auth"
@@ -12,21 +13,22 @@ import (
 
 // JWT header consisting of type itself and algorithm used.
 // Currently [crypto/hmac] combined with [crypto.SHA512] are being used.
-const JWTheaderJSON string = `
+const JWTheader = `
 {
   "alg": "HS512",
   "typ": "JWT"
 }`
 
 // Parsed header into base64 string to be used in encryption and comparisons
-var jwtHeaderB64 string = base64.URLEncoding.EncodeToString([]byte(JWTheaderJSON))
+var jwtHeaderB64 = base64.URLEncoding.EncodeToString([]byte(JWTheader))
 
-// Returns a signature/secret part of a JWT.
+// Returns a secret part of a JWT in base64 by signing the message with given encryption key.
+// Use encryption key from key chain pair.
 //
 // Should never return an error, since [hash.Write] never returns an error.
-func signJWT(header, body string, encryptionKey []byte) (string, error) {
-	hash := hmac.New(crypto.SHA512.New, encryptionKey)
-	_, err := hash.Write([]byte(header + body))
+func signJWT(message, encryptionKey []byte) (string, error) {
+	hash := hmac.New(sha512.New, encryptionKey)
+	_, err := hash.Write(message)
 	if err != nil {
 		return "", err
 	}
@@ -44,7 +46,7 @@ func NewJWT(ses auth.Session) (string, error) {
 		return "", err
 	}
 	sesB64 := base64.URLEncoding.EncodeToString(sesJSON)
-	tokenSignature, err := signJWT(jwtHeaderB64, sesB64, getCurrentEncryptionKey())
+	tokenSignature, err := signJWT([]byte(jwtHeaderB64+sesB64), getCurrentEncryptionKey())
 	if err != nil {
 		return "", err
 	}
@@ -52,10 +54,12 @@ func NewJWT(ses auth.Session) (string, error) {
 }
 
 // Returns if given JWT is valid or not.
+// In case of being valid, parses token and returns it as [github.com/TrueHopolok/VladOS/modules/vos/auth.Session] struct.
 //
 // Should never return an error, since:
 //   - [hash.Write] never returns an error;
-//   - [encoding/json.Unmarshal] works with valid marshalled [github.com/TrueHopolok/VladOS/modules/vos/auth.Session] thus should not return an error.
+//   - [encoding/json.Unmarshal] works with valid marshalled [github.com/TrueHopolok/VladOS/modules/vos/auth.Session] thus should not return an error;
+//   - [encoding/base64.URLEncoding.DecodeString] works with valid encoded [github.com/TrueHopolok/VladOS/modules/vos/auth.Session] thus should not return an error.
 func ValidateJWT(token string) (auth.Session, bool, error) {
 	ses := auth.Session{}
 	tokenParts := strings.SplitN(token, ".", 4)
@@ -69,15 +73,15 @@ func ValidateJWT(token string) (auth.Session, bool, error) {
 
 	tokenStart := tokenParts[0] + "." + tokenParts[1] + "."
 
-	tokenSignature, err := signJWT(tokenParts[0], tokenParts[1], getCurrentEncryptionKey())
+	tokenSignature, err := signJWT([]byte(tokenParts[0]+tokenParts[1]), getCurrentEncryptionKey())
 	if err != nil {
-		return ses, false, err
+		return ses, false, fmt.Errorf("signing error: %w", err)
 	}
 	reconstructed := tokenStart + tokenSignature
 	if reconstructed != token {
-		tokenSignature, err = signJWT(tokenParts[0], tokenParts[1], getPreviousEncryptionKey())
+		tokenSignature, err = signJWT([]byte(tokenParts[0]+tokenParts[1]), getPreviousEncryptionKey())
 		if err != nil {
-			return ses, false, err
+			return ses, false, fmt.Errorf("signing error: %w", err)
 		}
 		reconstructed = tokenStart + tokenSignature
 		if reconstructed != token {
@@ -85,6 +89,12 @@ func ValidateJWT(token string) (auth.Session, bool, error) {
 		}
 	}
 
-	err = json.Unmarshal([]byte(tokenParts[1]), &ses)
-	return ses, true, err
+	sessionJSON, err := base64.URLEncoding.DecodeString(tokenParts[1])
+	if err != nil {
+		return ses, true, fmt.Errorf("base64 error: %w", err)
+	}
+	if err = json.Unmarshal(sessionJSON, &ses); err != nil {
+		return ses, true, fmt.Errorf("json error: %w", err)
+	}
+	return ses, true, nil
 }
