@@ -19,7 +19,7 @@ const PathToRoot string = "../../"
 func TestConfig(t *testing.T) {
 	defer func() {
 		if x := recover(); x != nil {
-			t.Fatal(x)
+			t.Fatal("panic", x)
 		}
 	}()
 	expected := cfg.Config{

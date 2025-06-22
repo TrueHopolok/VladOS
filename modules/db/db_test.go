@@ -13,7 +13,7 @@ const PathToRoot string = "../../"
 func TestInit(t *testing.T) {
 	defer func() {
 		if x := recover(); x != nil {
-			t.Fatal(x)
+			t.Fatal("panic", x)
 		}
 	}()
 	mlog.InitTesting(t, PathToRoot)
@@ -29,7 +29,7 @@ func TestInit(t *testing.T) {
 func TestMigrate(t *testing.T) {
 	defer func() {
 		if x := recover(); x != nil {
-			t.Fatal(x)
+			t.Fatal("panic", x)
 		}
 	}()
 	mlog.InitTesting(t, PathToRoot)
