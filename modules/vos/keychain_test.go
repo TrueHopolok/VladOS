@@ -1,12 +1,13 @@
-package vos_test
+package vos
 
 import (
 	"reflect"
 	"testing"
-
-	"github.com/TrueHopolok/VladOS/modules/vos"
 )
 
+// Test is inside the package to access all package's data and insure package security/safety by not adding additional testing methods.
+//
+// Test checks if key chain generates and switches correctly.
 func TestChain(t *testing.T) {
 	defer func() {
 		if x := recover(); x != nil {
@@ -14,28 +15,33 @@ func TestChain(t *testing.T) {
 		}
 	}()
 
-	startKeys := vos.GetBothEncryptionKeys(t)
-
-	// Test if start chain is valid
-	if len(startKeys[0]) != vos.EncryptionKeysSize || len(startKeys[1]) != vos.EncryptionKeysSize {
+	var startKeys [2][]byte
+	startKeys[0] = make([]byte, EncryptionKeysSize)
+	startKeys[1] = make([]byte, EncryptionKeysSize)
+	if n := copy(startKeys[0], getCurrentEncryptionKey()); n != EncryptionKeysSize {
+		t.Fatalf("start encryption keys size are not equal to packages constant")
+	}
+	if n := copy(startKeys[1], getPreviousEncryptionKey()); n != EncryptionKeysSize {
 		t.Fatalf("start encryption keys size are not equal to packages constant")
 	}
 	if reflect.DeepEqual(startKeys[0], startKeys[1]) {
 		t.Fatalf("start encryption keys are equal, that should not happen")
 	}
 
-	vos.ManualSwitch(t)
-	switchedKeys := vos.GetBothEncryptionKeys(t)
-
-	// Test if switched chain is valid
-	if len(switchedKeys[0]) != vos.EncryptionKeysSize || len(switchedKeys[1]) != vos.EncryptionKeysSize {
+	switchEncryptionKeys()
+	var switchedKeys [2][]byte
+	switchedKeys[0] = make([]byte, EncryptionKeysSize)
+	switchedKeys[1] = make([]byte, EncryptionKeysSize)
+	if n := copy(switchedKeys[0], getCurrentEncryptionKey()); n != EncryptionKeysSize {
+		t.Fatalf("switched encryption keys size are not equal to packages constant")
+	}
+	if n := copy(switchedKeys[1], getPreviousEncryptionKey()); n != EncryptionKeysSize {
 		t.Fatalf("switched encryption keys size are not equal to packages constant")
 	}
 	if reflect.DeepEqual(switchedKeys[0], switchedKeys[1]) {
 		t.Fatalf("switched encryption keys are equal, that should not happen")
 	}
 
-	// Test if switch was performed correctly
 	if reflect.DeepEqual(startKeys[0], switchedKeys[0]) {
 		t.Fatalf("encryption keys were switched incorrectly, current key was not switched")
 	}

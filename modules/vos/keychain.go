@@ -2,9 +2,7 @@ package vos
 
 import (
 	"crypto/rand"
-	"fmt"
 	"sync"
-	"testing"
 	"time"
 )
 
@@ -20,12 +18,15 @@ const (
 var chain KeyChain
 
 // Contains 2 keys and a mutex, making it multiple goroutines save.
+// Used by JWT and a few additional encryption functions.
+//
+// Keys pair switch keys every [EncryptionKeysSwitchingTime] minutes, thus providing additional security.
 //
 // Keys pair consist of:
 //   - current key, which is used for an encrypting and decrypting,
 //   - previous key, which should be used only for decrypting.
 //
-// Chain itself and all methods should be used only inside this package.
+// Chain itself and all its methods should be used only inside VOS package.
 type KeyChain struct {
 	lock sync.Mutex
 	keys [2][]byte
@@ -38,10 +39,15 @@ func init() {
 	chain.keys[1] = make([]byte, EncryptionKeysSize)
 	rand.Read(chain.keys[0])
 	rand.Read(chain.keys[1])
-	go cycleSwitch()
+	go func() {
+		for {
+			time.Sleep(EncryptionKeysSwitchingTime * time.Minute)
+			switchEncryptionKeys()
+		}
+	}()
 }
 
-// Returns the value of a current key in the chain.
+// Returns the copied value of a current key in the chain.
 //
 // This key can be used for both encryption and decryption.
 //
@@ -49,10 +55,12 @@ func init() {
 func getCurrentEncryptionKey() []byte {
 	chain.lock.Lock()
 	defer chain.lock.Unlock()
-	return chain.keys[0]
+	key := make([]byte, EncryptionKeysSize)
+	copy(key, chain.keys[0])
+	return key
 }
 
-// Returns the value of a previous key in the chain.
+// Returns the copied value of a previous key in the chain.
 //
 // This key should be used only for old messages decryption.
 //
@@ -60,15 +68,9 @@ func getCurrentEncryptionKey() []byte {
 func getPreviousEncryptionKey() []byte {
 	chain.lock.Lock()
 	defer chain.lock.Unlock()
-	return chain.keys[1]
-}
-
-// Automaticly calls [switchEncryptionKeys] every [EncryptionKeysSwitchingTime] minutes
-// by repeatadly restarting goroutines.
-func cycleSwitch() {
-	time.Sleep(EncryptionKeysSwitchingTime * time.Minute)
-	go cycleSwitch()
-	switchEncryptionKeys()
+	key := make([]byte, EncryptionKeysSize)
+	copy(key, chain.keys[1])
+	return key
 }
 
 // Switch keys create new current key with
@@ -81,31 +83,4 @@ func switchEncryptionKeys() {
 	defer chain.lock.Unlock()
 	copy(chain.keys[1], chain.keys[0])
 	rand.Read(chain.keys[0])
-}
-
-// Calls [switchEncryptionKeys] outside the time cycle, to test if switch was valid.
-//
-// !WARNING! - must be used only for testing purposes.
-func ManualSwitch(t *testing.T) {
-	if !testing.Testing() {
-		panic(fmt.Errorf("tried to get raw key chain while not in testing mode"))
-	}
-	switchEncryptionKeys()
-}
-
-// Returns keys field of a encryption key chain to test for validation.
-//
-// !WARNING! - must be used only for testing purposes.
-func GetBothEncryptionKeys(t *testing.T) [2][]byte {
-	if !testing.Testing() {
-		panic(fmt.Errorf("tried to get raw key chain while not in testing mode"))
-	}
-	chain.lock.Lock()
-	defer chain.lock.Unlock()
-	var keysToReturn [2][]byte
-	keysToReturn[0] = make([]byte, EncryptionKeysSize)
-	keysToReturn[1] = make([]byte, EncryptionKeysSize)
-	copy(keysToReturn[0], chain.keys[0])
-	copy(keysToReturn[1], chain.keys[1])
-	return keysToReturn
 }

@@ -1,8 +1,11 @@
+declare -A testing_flags
+testing_flags["github.com/TrueHopolok/VladOS/modules/vos"]=""
+
 all_packages=$(go list ./modules/...)
 
 for pkg in $all_packages; do
-    if [[ "$pkg" == "github.com/TrueHopolok/VladOS/modules/vos" ]]; then
-        go test "$pkg"
+    if [[ ${testing_flags["$pkg"]+_} ]]; then
+        go test "$pkg" ${testing_flags["$pkg"]}
     else
         go test "$pkg" -config=./configs/test.cfg
     fi
