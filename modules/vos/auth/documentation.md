@@ -12,8 +12,45 @@ Pacakge contains all necessary functional to work with sessions and autheficatio
 
 ## Index
 
+- [func AuthMiddleware\(handler http.HandlerFunc, permissionFlags AuthFlag\) http.HandlerFunc](<#AuthMiddleware>)
+- [type AuthFlag](<#AuthFlag>)
 - [type Session](<#Session>)
 
+
+<a name="AuthMiddleware"></a>
+## func AuthMiddleware
+
+```go
+func AuthMiddleware(handler http.HandlerFunc, permissionFlags AuthFlag) http.HandlerFunc
+```
+
+Serves as middleware for handlers and users based on authrization permission flags \(see [AuthFlag](<#AuthFlag>)\). Will block traffic for unintended users and always update valid auth cookies. Logs actions in [log/slog](<https://pkg.go.dev/log/slog/>) logger like blocked users or unexpected permissionFlag.
+
+Save authefication status and whole session data in the [net/http.Request.Context](<https://pkg.go.dev/net/http/#Request.Context>). TODO: finish this function
+
+<a name="AuthFlag"></a>
+## type AuthFlag
+
+Determine which users are allowed to go through [AuthMiddleware](<#AuthMiddleware>) to see given handler.
+
+```go
+type AuthFlag int
+```
+
+<a name="Everyone"></a>
+
+```go
+const (
+    // Allow all and any user further to given handler.
+    Everyone AuthFlag = 1 << iota
+
+    // Block all unauthorized users from handler.
+    Authorized
+
+    // Block authorized users, can be used for login handlers while already authorized.
+    Unauthorized
+)
+```
 
 <a name="Session"></a>
 ## type Session

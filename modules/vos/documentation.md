@@ -12,19 +12,25 @@ VladOS Security \(shortly VOS\) is a package used for all security related stuff
 
 ### Key Chain
 
-TODO: add info
+2 cryptografy keys used for JWT and thus for session encryption. Automatic keys switch after [EncryptionKeysSwitchingTime](<#EncryptionKeysSwitchingTime>) minutes ensures keys are hard to crack.
 
 ### Json Web Token functional
 
-TODO: add info
+Fully working JWT with a nice functions to create and validate tokens. Used in combination with sessions and in \[auth.AuthMiddleware\] functional.
+
+For more details see [JWTheader](<#JWTheader>), [NewJWT](<#NewJWT>), [ValidateJWT](<#ValidateJWT>).
 
 ### Password and Salt logic
 
-TODO: add info
+Password is generated with [golang.org/x/crypto/argon2](<https://pkg.go.dev/golang.org/x/crypto/argon2/>) package. Salt is generated via [crypto/rand.Read](<https://pkg.go.dev/crypto/rand/#Read>) to ensure cryptografic salt.
+
+For more details see [GenerateSalt](<#GenerateSalt>), [NewPSH](<#NewPSH>), [ValidatePSH](<#ValidatePSH>).
 
 ### Auth \\\- VOS sub\\\-package
 
-TODO: add info
+Package providing the interface to work with authorization on the http server. Provides session functional, cookies handlers and middleware as wrapper function for blocking unwanted traffic.
+
+For more details see [github.com/TrueHopolok/VladOS/modules/vos/auth](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/auth/>) package.
 
 ## Index
 
