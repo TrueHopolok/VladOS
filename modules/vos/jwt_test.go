@@ -10,7 +10,6 @@ import (
 	"testing"
 
 	"github.com/TrueHopolok/VladOS/modules/vos"
-	"github.com/TrueHopolok/VladOS/modules/vos/auth"
 )
 
 func TestJWT(t *testing.T) {
@@ -20,7 +19,7 @@ func TestJWT(t *testing.T) {
 		}
 	}()
 
-	ses := auth.Session{
+	ses := vos.Session{
 		Username: "test",
 	}
 	token, err := vos.NewJWT(ses)

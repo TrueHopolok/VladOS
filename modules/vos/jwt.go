@@ -7,8 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
-
-	"github.com/TrueHopolok/VladOS/modules/vos/auth"
 )
 
 // JWT header consisting of type itself and algorithm used.
@@ -39,8 +37,8 @@ func signJWT(message, encryptionKey []byte) (string, error) {
 //
 // Should never return an error, since:
 //   - [hash.Write] never returns an error;
-//   - [encoding/json.Marshal] for [github.com/TrueHopolok/VladOS/modules/vos/auth.Session] should not return an error.
-func NewJWT(ses auth.Session) (string, error) {
+//   - [encoding/json.Marshal] for [Session] should not return an error.
+func NewJWT(ses Session) (string, error) {
 	sesJSON, err := json.Marshal(&ses)
 	if err != nil {
 		return "", err
@@ -54,14 +52,14 @@ func NewJWT(ses auth.Session) (string, error) {
 }
 
 // Returns if given JWT is valid or not.
-// In case of being valid, parses token and returns it as [github.com/TrueHopolok/VladOS/modules/vos/auth.Session] struct.
+// In case of being valid, parses token and returns it as [Session] struct.
 //
 // Should never return an error, since:
 //   - [hash.Write] never returns an error;
-//   - [encoding/json.Unmarshal] works with valid marshalled [github.com/TrueHopolok/VladOS/modules/vos/auth.Session] thus should not return an error;
-//   - [encoding/base64.URLEncoding.DecodeString] works with valid encoded [github.com/TrueHopolok/VladOS/modules/vos/auth.Session] thus should not return an error.
-func ValidateJWT(token string) (auth.Session, bool, error) {
-	ses := auth.Session{}
+//   - [encoding/json.Unmarshal] works with valid marshalled [Session] thus should not return an error;
+//   - [encoding/base64.URLEncoding.DecodeString] works with valid encoded [Session] thus should not return an error.
+func ValidateJWT(token string) (Session, bool, error) {
+	ses := Session{}
 	tokenParts := strings.SplitN(token, ".", 4)
 	if len(tokenParts) != 3 {
 		return ses, false, nil // invalid amount of token parts

@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	// Time of a keys switch in minutes.
-	EncryptionKeysSwitchingTime time.Duration = 60
+	// Time of a keys switch.
+	EncryptionKeysSwitchingTime time.Duration = 60 * time.Minute
 
 	// Size of a signle key in bytes.
 	EncryptionKeysSize int = 64
@@ -41,7 +41,7 @@ func init() {
 	rand.Read(chain.keys[1])
 	go func() {
 		for {
-			time.Sleep(EncryptionKeysSwitchingTime * time.Minute)
+			time.Sleep(EncryptionKeysSwitchingTime)
 			switchEncryptionKeys()
 		}
 	}()

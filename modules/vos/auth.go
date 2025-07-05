@@ -1,16 +1,16 @@
-// This is a sub package of VladOS Security (shortly VOS) package.
-//
-// Pacakge contains all necessary functional to work with sessions and authefication.
-package auth
-
-//go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
+package vos
 
 import (
 	"net/http"
+	"time"
 )
 
 // Determine which users are allowed to go through [AuthMiddleware] to see given handler.
 type AuthFlag int
+
+// After how much time user will be unauthorized.
+// Used in both cookies and expiration time in sessions.
+const AuthExpires time.Duration = 60 * time.Minute
 
 const (
 	// Allow all and any user further to given handler.
@@ -31,6 +31,15 @@ const (
 // TODO: finish this function
 func AuthMiddleware(handler http.HandlerFunc, permissionFlags AuthFlag) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		jwt, err := GetAuthCookie(r)
+		if err != nil {
+			DeleteAuthCookie(w)
+		}
+		ses, isAuthorized, err := ValidateJWT(jwt)
+		if err != nil {
+			// unexpected value
+		}
+
 		switch permissionFlags {
 		case Everyone:
 			// do no checking, since it is allowed for everyone

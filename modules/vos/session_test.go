@@ -1,21 +1,21 @@
-package auth_test
+package vos_test
 
 import (
 	"encoding/json"
 	"testing"
 
-	"github.com/TrueHopolok/VladOS/modules/vos/auth"
+	"github.com/TrueHopolok/VladOS/modules/vos"
 )
 
 func TestJson(t *testing.T) {
-	ses := auth.Session{
+	ses := vos.Session{
 		Username: "some name",
 	}
 	raw, err := json.Marshal(ses)
 	if err != nil {
 		t.Fatalf("marshling error: %s", err)
 	}
-	var got auth.Session
+	var got vos.Session
 	err = json.Unmarshal(raw, &got)
 	if err != nil {
 		t.Fatalf("unmarshling error: %s", err)
