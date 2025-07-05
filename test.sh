@@ -1,6 +1,5 @@
 declare -A testing_flags
 testing_flags["github.com/TrueHopolok/VladOS/modules/vos"]=""
-testing_flags["github.com/TrueHopolok/VladOS/modules/vos/auth"]=""
 
 all_packages=$(go list ./modules/...)
 
