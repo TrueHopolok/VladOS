@@ -6,7 +6,7 @@ import (
 	"github.com/TrueHopolok/VladOS/modules/mlog"
 )
 
-const PathToRoot string = "../../"
+const pathToRoot string = "../../"
 
 func TestInit(t *testing.T) {
 	defer func() {
@@ -14,5 +14,5 @@ func TestInit(t *testing.T) {
 			t.Fatal("panic", x)
 		}
 	}()
-	mlog.InitTesting(t, PathToRoot)
+	mlog.InitTesting(t, pathToRoot)
 }

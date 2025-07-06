@@ -9,10 +9,7 @@ import (
 )
 
 // Helps to check equality of 2 sessions.
-func equalSessions(t *testing.T, ses1, ses2 vos.Session) bool {
-	if !testing.Testing() {
-		panic("testing function used in outside build")
-	}
+func equalSessions(ses1, ses2 vos.Session) bool {
 	return ses1.Username == ses2.Username && ses1.Expire.Equal(ses2.Expire)
 }
 
@@ -28,7 +25,7 @@ func TestJson(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unmarshling error: %s", err)
 	}
-	if !equalSessions(t, ses, got) {
+	if !equalSessions(ses, got) {
 		t.Fatalf("corrupeted after marshling")
 	}
 }

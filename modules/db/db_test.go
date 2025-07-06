@@ -8,7 +8,7 @@ import (
 	"github.com/TrueHopolok/VladOS/modules/mlog"
 )
 
-const PathToRoot string = "../../"
+const pathToRoot string = "../../"
 
 func TestInit(t *testing.T) {
 	defer func() {
@@ -16,9 +16,9 @@ func TestInit(t *testing.T) {
 			t.Fatal("panic", x)
 		}
 	}()
-	mlog.InitTesting(t, PathToRoot)
+	mlog.InitTesting(t, pathToRoot)
 	slog.Info("db.TestInit", "STATUS", "START")
-	err := db.InitTesting(t, PathToRoot)
+	err := db.InitTesting(t, pathToRoot)
 	if err != nil {
 		slog.Error("db.TestInit", "STATUS", "FAILED", "error", err)
 		t.Fatal(err)
@@ -32,9 +32,9 @@ func TestMigrate(t *testing.T) {
 			t.Fatal("panic", x)
 		}
 	}()
-	mlog.InitTesting(t, PathToRoot)
+	mlog.InitTesting(t, pathToRoot)
 	slog.Info("db.TestMigrate", "STATUS", "START")
-	if err := db.InitTesting(t, PathToRoot); err != nil {
+	if err := db.InitTesting(t, pathToRoot); err != nil {
 		slog.Info("db.TestMigrate", "STATUS", "FAILED", "error", err)
 		t.Fatal(err)
 	}

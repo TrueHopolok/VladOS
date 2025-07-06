@@ -51,7 +51,7 @@ func Init() {
 // Does not print in [os.Stdout] and only prints in [github.com/TrueHopolok/VladOS/cfg.Config.LogFilePath].
 // Creates writer that uses [gopkg.in/natefinch/lumberjack.v2] package to perform the log file rotations.
 // Writer is set as default output handler of [log/slog] package, to be used outside this package.
-func InitTesting(t *testing.T, pathToRoot string) {
+func InitTesting(_ *testing.T, pathToRoot string) {
 	if !testing.Testing() {
 		panic(fmt.Errorf("tried to initialize the logger in test mode while not in testing mode"))
 	}

@@ -48,7 +48,7 @@ func Init() error {
 // Erase provided database via [os.Remove] and then initialize it like [Init] function.
 //
 // !WARNING! - must be used only for testing purposes and on testing database to avoid losing data.
-func InitTesting(t *testing.T, pathToRoot string) error {
+func InitTesting(_ *testing.T, pathToRoot string) error {
 	if !testing.Testing() {
 		panic(fmt.Errorf("tried to initialize the database in test mode while not in testing mode"))
 	}

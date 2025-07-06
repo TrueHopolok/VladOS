@@ -43,7 +43,7 @@ func Get() Config {
 // Acts fully as [Get] function but with difference of requiring a path to root directory.
 // Used for testing purposes to still have configs in the same directory.
 //
-// Must be used with same pathToRoot values, since changing it after first call will not change the result.
+// Must be used with same pathToRoot values, since changing path after first function call will not change the result.
 func GetTest(pathToRoot string) Config {
 	return sync.OnceValue(func() Config {
 		if !flag.Parsed() {

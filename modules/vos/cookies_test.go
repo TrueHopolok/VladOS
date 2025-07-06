@@ -57,7 +57,7 @@ func TestSetCookie(t *testing.T) {
 	if !valid {
 		t.Fatalf("received session is invalid, when should be the opposite")
 	}
-	if !equalSessions(t, ses, got) {
+	if !equalSessions(ses, got) {
 		t.Fatalf("recieved session is corrupted:\nwant: %v\ngot: %v\n", ses, got)
 	}
 }

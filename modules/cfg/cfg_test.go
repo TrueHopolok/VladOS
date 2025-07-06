@@ -7,7 +7,7 @@ import (
 	"github.com/TrueHopolok/VladOS/modules/cfg"
 )
 
-const PathToRoot string = "../../"
+const pathToRoot string = "../../"
 
 // Expects the given cfg file to match expected values:
 /*
@@ -28,7 +28,7 @@ func TestConfig(t *testing.T) {
 		Verbose:     true,
 		DBfileName:  "test.db",
 	}
-	recieved := cfg.GetTest(PathToRoot)
+	recieved := cfg.GetTest(pathToRoot)
 	if !reflect.DeepEqual(expected, recieved) {
 		t.Fatalf("recieved config is not what was expected; want: %v  |  got: %v", expected, recieved)
 	}

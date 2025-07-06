@@ -15,7 +15,7 @@ Provides initalization, migration, execution and testing for database. Will crea
 - [Constants](<#constants>)
 - [Variables](<#variables>)
 - [func Init\(\) error](<#Init>)
-- [func InitTesting\(t \*testing.T, pathToRoot string\) error](<#InitTesting>)
+- [func InitTesting\(\_ \*testing.T, pathToRoot string\) error](<#InitTesting>)
 - [func Migrate\(\) error](<#Migrate>)
 - [type DB](<#DB>)
 
@@ -49,7 +49,7 @@ Connects to SQLite database with path from [github.com/TrueHopolok/VladOS/module
 ## func InitTesting
 
 ```go
-func InitTesting(t *testing.T, pathToRoot string) error
+func InitTesting(_ *testing.T, pathToRoot string) error
 ```
 
 Erase provided database via [os.Remove](<https://pkg.go.dev/os/#Remove>) and then initialize it like [Init](<#Init>) function.
