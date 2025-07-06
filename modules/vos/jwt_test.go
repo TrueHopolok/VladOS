@@ -22,7 +22,7 @@ func TestJWT(t *testing.T) {
 	ses := vos.Session{
 		Username: "test",
 	}
-	token, err := vos.NewJWT(ses)
+	token, err := ses.NewJWT()
 	if err != nil {
 		t.Fatalf("generating jwt error: %s", err)
 	}

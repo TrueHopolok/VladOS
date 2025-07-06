@@ -16,9 +16,9 @@ VladOS Security \(shortly VOS\) is a package used for all security related stuff
 
 ### Json Web Token functional
 
-Fully working JWT with a nice functions to create and validate tokens. Used in combination with sessions and in \[auth.AuthMiddleware\] functional.
+Fully working JWT with a nice functions to create and validate tokens. Used in combination with sessions and in [AuthMiddleware](<#AuthMiddleware>) functional.
 
-For more details see [JWTheader](<#JWTheader>), [NewJWT](<#NewJWT>), [ValidateJWT](<#ValidateJWT>).
+For more details see [JWTheader](<#JWTheader>), \[NewJWT\], [ValidateJWT](<#ValidateJWT>).
 
 ### Password and Salt logic
 
@@ -28,16 +28,15 @@ For more details see [GenerateSalt](<#GenerateSalt>), [NewPSH](<#NewPSH>), [Vali
 
 ### Authentication
 
-Implements \[AuthMiddlware\] to use in http server that handles whole authefication with cookie handlers. Saves result in the [net/http.Request.Context](<https://pkg.go.dev/net/http/#Request.Context>) for further use in the request handlers.
+Implements [AuthMiddleware](<#AuthMiddleware>) to use in http server that handles whole authefication with cookie handlers. Saves result in the [net/http.Request.Context](<https://pkg.go.dev/net/http/#Request.Context>) for further use in the request handlers. Can be accessed via [GetSession](<#GetSession>) function.
 
 ## Index
 
 - [Constants](<#constants>)
-- [func AuthMiddleware\(handler http.HandlerFunc, permissionFlags AuthFlag\) http.HandlerFunc](<#AuthMiddleware>)
+- [func AuthMiddleware\(handler http.Handler, permissionFlags AuthFlag\) http.HandlerFunc](<#AuthMiddleware>)
 - [func DeleteAuthCookie\(w http.ResponseWriter\)](<#DeleteAuthCookie>)
 - [func GenerateSalt\(\) \[\]byte](<#GenerateSalt>)
 - [func GetAuthCookie\(r \*http.Request\) \(string, error\)](<#GetAuthCookie>)
-- [func NewJWT\(ses Session\) \(string, error\)](<#NewJWT>)
 - [func NewPSH\(password string, salt \[\]byte\) \[\]byte](<#NewPSH>)
 - [func SetAuthCookie\(w http.ResponseWriter, jwt string\)](<#SetAuthCookie>)
 - [func ValidatePSH\(password string, salt, psh \[\]byte\) bool](<#ValidatePSH>)
@@ -45,8 +44,10 @@ Implements \[AuthMiddlware\] to use in http server that handles whole autheficat
 - [type KeyChain](<#KeyChain>)
 - [type Session](<#Session>)
   - [func GetSession\(r \*http.Request\) \(Session, bool\)](<#GetSession>)
+  - [func NewSession\(username string\) Session](<#NewSession>)
   - [func ValidateJWT\(token string\) \(Session, bool, error\)](<#ValidateJWT>)
   - [func \(ses Session\) Expired\(\) bool](<#Session.Expired>)
+  - [func \(ses Session\) NewJWT\(\) \(string, error\)](<#Session.NewJWT>)
   - [func \(ses \*Session\) Refresh\(\)](<#Session.Refresh>)
 
 
@@ -107,7 +108,7 @@ const SaltSize int = 64
 ## func AuthMiddleware
 
 ```go
-func AuthMiddleware(handler http.HandlerFunc, permissionFlags AuthFlag) http.HandlerFunc
+func AuthMiddleware(handler http.Handler, permissionFlags AuthFlag) http.HandlerFunc
 ```
 
 Serves as middleware for handlers and users based on authrization permission flags \(see [AuthFlag](<#AuthFlag>)\). Will block traffic for unintended users and always update valid auth cookies. Logs actions in [log/slog](<https://pkg.go.dev/log/slog/>) logger like blocked users or unexpected permissionFlag.
@@ -140,20 +141,6 @@ func GetAuthCookie(r *http.Request) (string, error)
 ```
 
 Read [AuthCookieName](<#AuthCookieName>) cookie from the request returning its value. Expected value is jwt. Returns error in case of 0 or \>1 cookies were given.
-
-<a name="NewJWT"></a>
-## func NewJWT
-
-```go
-func NewJWT(ses Session) (string, error)
-```
-
-Encodes session into a new JWT.
-
-Should never return an error, since:
-
-- [hash.Write](<https://pkg.go.dev/hash/#Write>) never returns an error;
-- [encoding/json.Marshal](<https://pkg.go.dev/encoding/json/#Marshal>) for [Session](<#Session>) should not return an error.
 
 <a name="NewPSH"></a>
 ## func NewPSH
@@ -247,6 +234,15 @@ func GetSession(r *http.Request) (Session, bool)
 
 Returns [Session](<#Session>) and true if is valid and user is not autheficated. Will always return false in case [AuthMiddleware](<#AuthMiddleware>) was not performed prior.
 
+<a name="NewSession"></a>
+### func NewSession
+
+```go
+func NewSession(username string) Session
+```
+
+Return new session with valid and refreshed expiration time.
+
 <a name="ValidateJWT"></a>
 ### func ValidateJWT
 
@@ -270,6 +266,20 @@ func (ses Session) Expired() bool
 ```
 
 Reports whether or not session is expired.
+
+<a name="Session.NewJWT"></a>
+### func \(Session\) NewJWT
+
+```go
+func (ses Session) NewJWT() (string, error)
+```
+
+Encodes session into a new JWT.
+
+Should never return an error, since:
+
+- [hash.Write](<https://pkg.go.dev/hash/#Write>) never returns an error;
+- [encoding/json.Marshal](<https://pkg.go.dev/encoding/json/#Marshal>) for [Session](<#Session>) should not return an error.
 
 <a name="Session.Refresh"></a>
 ### func \(\*Session\) Refresh

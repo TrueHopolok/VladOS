@@ -38,7 +38,7 @@ func signJWT(message, encryptionKey []byte) (string, error) {
 // Should never return an error, since:
 //   - [hash.Write] never returns an error;
 //   - [encoding/json.Marshal] for [Session] should not return an error.
-func NewJWT(ses Session) (string, error) {
+func (ses Session) NewJWT() (string, error) {
 	sesJSON, err := json.Marshal(&ses)
 	if err != nil {
 		return "", err

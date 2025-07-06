@@ -9,6 +9,14 @@ type Session struct {
 	Expire   time.Time `json:"Expire"`
 }
 
+// Return new session with valid and refreshed expiration time.
+func NewSession(username string) Session {
+	return Session{
+		Username: username,
+		Expire:   time.Now().Add(AuthExpires),
+	}
+}
+
 // Refresh expiration time of the session.
 func (ses *Session) Refresh() {
 	ses.Expire = time.Now().Add(AuthExpires)

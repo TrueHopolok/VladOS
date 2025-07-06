@@ -12,7 +12,7 @@ Automatic keys switch after [EncryptionKeysSwitchingTime] minutes ensures keys a
 # Json Web Token functional
 
 Fully working JWT with a nice functions to create and validate tokens.
-Used in combination with sessions and in [auth.AuthMiddleware] functional.
+Used in combination with sessions and in [AuthMiddleware] functional.
 
 For more details see [JWTheader], [NewJWT], [ValidateJWT].
 
@@ -25,8 +25,9 @@ For more details see [GenerateSalt], [NewPSH], [ValidatePSH].
 
 # Authentication
 
-Implements [AuthMiddlware] to use in http server that handles whole authefication with cookie handlers.
+Implements [AuthMiddleware] to use in http server that handles whole authefication with cookie handlers.
 Saves result in the [net/http.Request.Context] for further use in the request handlers.
+Can be accessed via [GetSession] function.
 */
 package vos
 

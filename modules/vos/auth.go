@@ -44,7 +44,7 @@ const (
 // Logs actions in [log/slog] logger like blocked users or unexpected permissionFlag.
 //
 // Save authefication status and whole session data in the [net/http.Request.Context].
-func AuthMiddleware(handler http.HandlerFunc, permissionFlags AuthFlag) http.HandlerFunc {
+func AuthMiddleware(handler http.Handler, permissionFlags AuthFlag) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		slog.Debug("AuthMiddleware", "request", r, "status", "started")
 		jwt, err := GetAuthCookie(r)
@@ -85,7 +85,7 @@ func AuthMiddleware(handler http.HandlerFunc, permissionFlags AuthFlag) http.Han
 
 		if isAuthorized {
 			r = r.WithContext(context.WithValue(r.Context(), sessionContextKey{}, ses))
-			jwt, err = NewJWT(ses)
+			jwt, err = ses.NewJWT()
 			if err != nil {
 				slog.Error("AuthMiddleware", "request", r, "status", "failed", "err", err)
 				http.Error(w, fmt.Sprintf("failed to set authorization cookie: %s", err), http.StatusInternalServerError)
@@ -94,6 +94,6 @@ func AuthMiddleware(handler http.HandlerFunc, permissionFlags AuthFlag) http.Han
 			SetAuthCookie(w, jwt)
 		}
 
-		handler(w, r)
+		handler.ServeHTTP(w, r)
 	}
 }

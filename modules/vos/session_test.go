@@ -8,10 +8,17 @@ import (
 	"github.com/TrueHopolok/VladOS/modules/vos"
 )
 
-func TestJson(t *testing.T) {
-	ses := vos.Session{
-		Username: "some name",
+// Helps to check equality of 2 sessions.
+func equalSessions(t *testing.T, ses1, ses2 vos.Session) bool {
+	if !testing.Testing() {
+		panic("testing function used in outside build")
 	}
+	return ses1.Username == ses2.Username && ses1.Expire.Equal(ses2.Expire)
+}
+
+// WARNING: may fail if fields of the session struct changes.
+func TestJson(t *testing.T) {
+	ses := vos.NewSession("test")
 	raw, err := json.Marshal(ses)
 	if err != nil {
 		t.Fatalf("marshling error: %s", err)
@@ -21,15 +28,13 @@ func TestJson(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unmarshling error: %s", err)
 	}
-	if ses.Username != got.Username {
+	if !equalSessions(t, ses, got) {
 		t.Fatalf("corrupeted after marshling")
 	}
 }
 
 func TestExpiration(t *testing.T) {
-	ses := vos.Session{
-		Expire: time.Now().Add(vos.AuthExpires),
-	}
+	ses := vos.NewSession("test")
 	if ses.Expired() {
 		t.Fatalf("new seesion expired when should not")
 	}
@@ -42,5 +47,3 @@ func TestExpiration(t *testing.T) {
 		t.Fatalf("refreshed seesion expired when should not")
 	}
 }
-
-// TODO: add tests for additional functional of session
