@@ -10,6 +10,8 @@ db package used to work in any and all ways with SQLite database.
 
 Provides initalization, migration, execution and testing for database. Will create a directory database if not created at the root of the project.
 
+Queries for different purposes will be located in the sub directories of the package.
+
 ## Index
 
 - [Constants](<#constants>)

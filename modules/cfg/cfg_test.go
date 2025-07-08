@@ -23,10 +23,11 @@ func TestConfig(t *testing.T) {
 		}
 	}()
 	expected := cfg.Config{
-		LogFileName: "test.log",
-		LogMaxSize:  10,
-		Verbose:     true,
-		DBfileName:  "test.db",
+		LogFileName:  "test.log",
+		LogMaxSize:   10,
+		Verbose:      true,
+		DBfileName:   "test.db",
+		WebStaticDir: "./static",
 	}
 	recieved := cfg.GetTest(pathToRoot)
 	if !reflect.DeepEqual(expected, recieved) {

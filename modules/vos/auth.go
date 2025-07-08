@@ -39,6 +39,10 @@ const (
 	Unauthorized
 )
 
+func AuthMiddlewareFunc(handler http.HandlerFunc, permissionFlags AuthFlag) http.HandlerFunc {
+	return AuthMiddleware(handler, permissionFlags)
+}
+
 // Serves as middleware for handlers and users based on authrization permission flags (see [AuthFlag]).
 // Will block traffic for unintended users and always update valid auth cookies.
 // Logs actions in [log/slog] logger like blocked users or unexpected permissionFlag.
@@ -46,15 +50,13 @@ const (
 // Save authefication status and whole session data in the [net/http.Request.Context].
 func AuthMiddleware(handler http.Handler, permissionFlags AuthFlag) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		slog.Debug("AuthMiddleware", "request", r.Pattern, "status", "started")
-		defer slog.Debug("AuthMiddleware", "request", r.Pattern, "status", "finished")
 		jwt, err := GetAuthCookie(r)
 		if err != nil {
 			DeleteAuthCookie(w)
 		}
 		ses, isAuthorized, err := ValidateJWT(jwt)
 		if err != nil {
-			slog.Error("AuthMiddleware", "request", r.Pattern, "status", "failed", "err", err)
+			slog.Error(r.Method, "url", r.URL, "auth", "FAILED", "err", err)
 			http.Error(w, fmt.Sprintf("failed to get authorization session: %s", err), http.StatusInternalServerError)
 			return
 		}
@@ -70,34 +72,34 @@ func AuthMiddleware(handler http.Handler, permissionFlags AuthFlag) http.Handler
 			// do nothing since any authorization status is allowed
 		case Authorized:
 			if !isAuthorized {
-				slog.Debug("AuthMiddleware", "request", r.Pattern, "status", "blocked", "msg", "user is blocked because he is unauthorized")
+				slog.Debug(r.Method, "url", r.URL, "auth", "BLOCKED", "msg", "user is blocked because he is unauthorized")
 				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return
 			}
 		case Unauthorized:
 			if isAuthorized {
-				slog.Debug("AuthMiddleware", "request", r.Pattern, "status", "blocked", "msg", "user is blocked because he is authorized")
+				slog.Debug(r.Method, "url", r.URL, "auth", "BLOCKED", "msg", "user is blocked because he is authorized")
 				http.Error(w, "user should not be authorized to send this request", http.StatusBadRequest)
 				return
 			}
 		default:
-			slog.Error("AuthMiddleware", "request", r.Pattern, "err", "unknown permission flags, assumed flag AuthFlag.Everyone")
+			slog.Error(r.Method, "url", r.URL, "auth", "FAILED", "err", "unknown permission flags, assumed flag AuthFlag.Everyone")
 			http.Error(w, "invalid permission flags are selected", http.StatusInternalServerError)
 			return
 		}
-		slog.Debug("AuthMiddleware", "request", r.Pattern, "status", "coninute")
 
 		if isAuthorized {
 			r = r.WithContext(context.WithValue(r.Context(), sessionContextKey{}, ses))
 			jwt, err = ses.NewJWT()
 			if err != nil {
-				slog.Error("AuthMiddleware", "request", r, "status", "failed", "err", err)
+				slog.Error(r.Method, "url", r.URL, "auth", "FAILED", "err", err)
 				http.Error(w, fmt.Sprintf("failed to set authorization cookie: %s", err), http.StatusInternalServerError)
 				return
 			}
 			SetAuthCookie(w, jwt)
 		}
 
+		slog.Debug(r.Method, "url", r.URL, "auth", "SUCCESS")
 		handler.ServeHTTP(w, r)
 	}
 }

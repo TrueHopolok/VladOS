@@ -2,6 +2,8 @@
 //
 // Provides initalization, migration, execution and testing for database.
 // Will create a directory database if not created at the root of the project.
+//
+// Queries for different purposes will be located in the sub directories of the package.
 package db
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md

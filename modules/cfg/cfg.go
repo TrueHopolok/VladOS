@@ -21,6 +21,8 @@ type Config struct {
 	Verbose     bool
 
 	DBfileName string
+
+	WebStaticDir string
 }
 
 // Parses config flag once via [flag] and [sync] packages,
