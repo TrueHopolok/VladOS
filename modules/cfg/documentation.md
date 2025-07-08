@@ -27,6 +27,8 @@ type Config struct {
     Verbose     bool
 
     DBfileName string
+
+    WebStaticDir string
 }
 ```
 

@@ -34,6 +34,7 @@ Implements [AuthMiddleware](<#AuthMiddleware>) to use in http server that handle
 
 - [Constants](<#constants>)
 - [func AuthMiddleware\(handler http.Handler, permissionFlags AuthFlag\) http.HandlerFunc](<#AuthMiddleware>)
+- [func AuthMiddlewareFunc\(handler http.HandlerFunc, permissionFlags AuthFlag\) http.HandlerFunc](<#AuthMiddlewareFunc>)
 - [func DeleteAuthCookie\(w http.ResponseWriter\)](<#DeleteAuthCookie>)
 - [func GenerateSalt\(\) \[\]byte](<#GenerateSalt>)
 - [func GetAuthCookie\(r \*http.Request\) \(string, error\)](<#GetAuthCookie>)
@@ -114,6 +115,15 @@ func AuthMiddleware(handler http.Handler, permissionFlags AuthFlag) http.Handler
 Serves as middleware for handlers and users based on authrization permission flags \(see [AuthFlag](<#AuthFlag>)\). Will block traffic for unintended users and always update valid auth cookies. Logs actions in [log/slog](<https://pkg.go.dev/log/slog/>) logger like blocked users or unexpected permissionFlag.
 
 Save authefication status and whole session data in the [net/http.Request.Context](<https://pkg.go.dev/net/http/#Request.Context>).
+
+<a name="AuthMiddlewareFunc"></a>
+## func AuthMiddlewareFunc
+
+```go
+func AuthMiddlewareFunc(handler http.HandlerFunc, permissionFlags AuthFlag) http.HandlerFunc
+```
+
+
 
 <a name="DeleteAuthCookie"></a>
 ## func DeleteAuthCookie
