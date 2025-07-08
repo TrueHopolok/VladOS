@@ -1,3 +1,8 @@
+// Provides handlers to handle http requests.
+//
+// Use [ConnectAll] to access final handler.
+//
+// Buisness logic handlers are in the sub-packages.
 package web
 
 import (
@@ -8,6 +13,8 @@ import (
 	"github.com/TrueHopolok/VladOS/modules/cfg"
 	"github.com/TrueHopolok/VladOS/modules/vos"
 )
+
+//go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
 // Provides a placeholder for a handler function to be used in the webpage as TODO reminder.
 func TodoHandler(w http.ResponseWriter, r *http.Request) {
