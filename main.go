@@ -4,6 +4,9 @@ import (
 	"errors"
 	"log/slog"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/TrueHopolok/VladOS/modules/db"
 	"github.com/TrueHopolok/VladOS/modules/mlog"
@@ -36,27 +39,67 @@ func main() {
 	}
 	slog.Info("db migrate", "status", "SUCCESS")
 
-	//* HTTP connect
-	slog.Info("http", "status", "START")
+	//* HTTP initialization
+	slog.Info("http init", "status", "START")
+	server := &http.Server{
+		Addr:    ":8080",
+		Handler: web.ConnectAll(),
+	}
 	httpErrorChan := make(chan error)
 	go func() {
-		httpErrorChan <- http.ListenAndServe(":8080", web.ConnectAll())
+		httpErrorChan <- server.ListenAndServe()
 	}()
-	slog.Info("http", "status", "SUCCESS")
+	select {
+	case err := <-httpErrorChan:
+		slog.Error("http init", "status", "FAILED", "error", err)
+		return
+	default:
+		slog.Info("http init", "status", "SUCCESS")
+	}
 
-	//* Bot connect
+	//* Bot initialization
 	// TODO
 
-	//* Console connect
-	// TODO
+	//* Interupt initialization
+	slog.Info("interupt init", "status", "START")
+	sigChan := make(chan os.Signal, 1)
+	go func() {
+		signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+	}()
+	slog.Info("interupt init", "status", "FINISH")
 
 	//* Multithreads listening
 	select {
 	case err := <-httpErrorChan:
 		if errors.Is(err, http.ErrServerClosed) {
-			slog.Info("http", "status", "STOPPED", "msg", "Server was closed without errors")
+			slog.Warn("http execute", "status", "STOPPED", "msg", "Server was closed without errors")
 		} else {
-			slog.Error("http", "status", "FAILED", "error", err)
+			slog.Error("http execute", "status", "FAILED", "error", err)
 		}
+	case <-sigChan:
+		slog.Warn("interupt execute", "status", "CAUGHT")
 	}
+
+	//* Stop program's execution
+	// bot
+	// TODO
+
+	// http
+	slog.Info("http close", "status", "START")
+	if err := server.Close(); err != nil {
+		slog.Error("http close", "status", "FAILED", "error", err)
+	} else {
+		slog.Info("http close", "status", "SUCCESS")
+	}
+
+	// db
+	slog.Info("db close", "status", "START")
+	if err := db.Conn.Close(); err != nil {
+		slog.Error("db close", "status", "FAILED", "error", err)
+	} else {
+		slog.Info("db close", "status", "SUCCESS")
+	}
+
+	// exiting the program
+	os.Exit(0)
 }
