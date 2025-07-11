@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/TrueHopolok/VladOS/modules/bot"
 	"github.com/TrueHopolok/VladOS/modules/db"
 	"github.com/TrueHopolok/VladOS/modules/mlog"
 	"github.com/TrueHopolok/VladOS/modules/web"
@@ -24,11 +25,22 @@ func main() {
 	slog.Info("program started")
 
 	//* DB initialization
+	// opening
 	slog.Info("db init", "status", "START")
 	if err := db.Init(); err != nil {
 		slog.Error("db init", "status", "FAILED", "error", err)
 		return
 	}
+	// closing
+	defer func() {
+		slog.Info("db close", "status", "START")
+		if err := db.Conn.Close(); err != nil {
+			slog.Error("db close", "status", "FAILED", "error", err)
+		} else {
+			slog.Info("db close", "status", "SUCCESS")
+		}
+	}()
+	// success
 	slog.Info("db init", "status", "SUCCESS")
 
 	//* DB migrate
@@ -40,25 +52,44 @@ func main() {
 	slog.Info("db migrate", "status", "SUCCESS")
 
 	//* HTTP initialization
+	// opening
 	slog.Info("http init", "status", "START")
-	server := &http.Server{
-		Addr:    ":8080",
-		Handler: web.ConnectAll(),
-	}
 	httpErrorChan := make(chan error)
-	go func() {
-		httpErrorChan <- server.ListenAndServe()
-	}()
-	select {
-	case err := <-httpErrorChan:
+	if err := web.Start(httpErrorChan); err != nil {
 		slog.Error("http init", "status", "FAILED", "error", err)
 		return
-	default:
-		slog.Info("http init", "status", "SUCCESS")
 	}
+	// closing
+	defer func() {
+		slog.Info("http close", "status", "START")
+		if err := web.Stop(); err != nil {
+			slog.Error("http close", "status", "FAILED", "error", err)
+		} else {
+			slog.Info("http close", "status", "SUCCESS")
+		}
+	}()
+	// success
+	slog.Info("http init", "status", "SUCCESS")
 
 	//* Bot initialization
-	// TODO
+	// opening
+	slog.Info("bot init", "status", "SUCCESS")
+	botErrorChan := make(chan error)
+	if err := bot.Start(botErrorChan); err != nil {
+		slog.Error("bot init", "status", "FAILED", "error", err)
+		return
+	}
+	// closing
+	defer func() {
+		slog.Info("bot close", "status", "SUCCESS")
+		if err := bot.Stop(); err != nil {
+			slog.Error("bot close", "status", "FAILED", "error", err)
+			return
+		}
+		slog.Info("bot close", "status", "SUCCESS")
+	}()
+	// success
+	slog.Info("bot init", "status", "SUCCESS")
 
 	//* Interupt initialization
 	slog.Info("interupt init", "status", "START")
@@ -76,30 +107,9 @@ func main() {
 		} else {
 			slog.Error("http execute", "status", "FAILED", "error", err)
 		}
+	case err := <-botErrorChan:
+		slog.Error("bot execute", "status", "FAILED", "error", err)
 	case <-sigChan:
 		slog.Warn("interupt execute", "status", "CAUGHT")
 	}
-
-	//* Stop program's execution
-	// bot
-	// TODO
-
-	// http
-	slog.Info("http close", "status", "START")
-	if err := server.Close(); err != nil {
-		slog.Error("http close", "status", "FAILED", "error", err)
-	} else {
-		slog.Info("http close", "status", "SUCCESS")
-	}
-
-	// db
-	slog.Info("db close", "status", "START")
-	if err := db.Conn.Close(); err != nil {
-		slog.Error("db close", "status", "FAILED", "error", err)
-	} else {
-		slog.Info("db close", "status", "SUCCESS")
-	}
-
-	// exiting the program
-	os.Exit(0)
 }

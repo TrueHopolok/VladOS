@@ -6,11 +6,14 @@
 import "github.com/TrueHopolok/VladOS/modules/web"
 ```
 
-Provides handlers to handle http requests.
+Web package provides:
 
-Use [ConnectAll](<#ConnectAll>) to access final handler.
+- handlers to handle http requests;
+- http server interface to start up it and stop it.
 
-Buisness logic handlers are in the sub\-packages.
+Use [ConnectAll](<#ConnectAll>) to access final handler. Handlers logic handlers are in the sub\-packages.
+
+Use [Start](<#Start>) and/or [Stop](<#Stop>) to control the server.
 
 ## Index
 
@@ -20,6 +23,8 @@ Buisness logic handlers are in the sub\-packages.
 - [func ConnectFileHandlers\(mux \*http.ServeMux\)](<#ConnectFileHandlers>)
 - [func ConnectUnauthorized\(mux \*http.ServeMux\)](<#ConnectUnauthorized>)
 - [func LoggerMiddleware\(handler http.Handler\) http.HandlerFunc](<#LoggerMiddleware>)
+- [func Start\(serverErrorChan chan error\) error](<#Start>)
+- [func Stop\(\) error](<#Stop>)
 - [func TodoHandler\(w http.ResponseWriter, r \*http.Request\)](<#TodoHandler>)
 
 
@@ -78,6 +83,35 @@ func LoggerMiddleware(handler http.Handler) http.HandlerFunc
 ```
 
 Provides small http middleware for logs purposes using [log/slog](<https://pkg.go.dev/log/slog/>) package.
+
+<a name="Start"></a>
+## func Start
+
+```go
+func Start(serverErrorChan chan error) error
+```
+
+Start the http server as a separate goroutinue. Will close the existing server if it was opened by this package.
+
+Server options are:
+
+```
+&http.Server{
+	Addr:    ":8080",
+	Handler: ConnectAll(),
+}
+```
+
+Returns error if happens on initialization. Otherwise uses provided channel to report about the error while executing the server.
+
+<a name="Stop"></a>
+## func Stop
+
+```go
+func Stop() error
+```
+
+Stops existing server from executing. If no server was opened, will do nothing. Returns an error from [net/http.Server.Close](<https://pkg.go.dev/net/http/#Server.Close>).
 
 <a name="TodoHandler"></a>
 ## func TodoHandler

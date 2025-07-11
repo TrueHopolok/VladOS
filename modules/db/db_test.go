@@ -1,7 +1,6 @@
 package db_test
 
 import (
-	"log/slog"
 	"testing"
 
 	"github.com/TrueHopolok/VladOS/modules/db"
@@ -16,14 +15,13 @@ func TestInit(t *testing.T) {
 			t.Fatal("panic", x)
 		}
 	}()
-	mlog.InitTesting(t, pathToRoot)
-	slog.Info("db.TestInit", "STATUS", "START")
 	err := db.InitTesting(t, pathToRoot)
 	if err != nil {
-		slog.Error("db.TestInit", "STATUS", "FAILED", "error", err)
 		t.Fatal(err)
 	}
-	slog.Info("db.TestInit", "STATUS", "SUCCESS")
+	if err := db.Conn.Close(); err != nil {
+		t.Fatal(err)
+	}
 }
 
 func TestMigrate(t *testing.T) {
@@ -32,19 +30,19 @@ func TestMigrate(t *testing.T) {
 			t.Fatal("panic", x)
 		}
 	}()
-	mlog.InitTesting(t, pathToRoot)
-	slog.Info("db.TestMigrate", "STATUS", "START")
+	mlog.InitTesting(t, pathToRoot) // used since mlog logs its actions
 	if err := db.InitTesting(t, pathToRoot); err != nil {
-		slog.Info("db.TestMigrate", "STATUS", "FAILED", "error", err)
+		t.Fatal(err)
+	}
+	defer func() {
+		if err := db.Conn.Close(); err != nil {
+			t.Fatal(err)
+		}
+	}()
+	if err := db.Migrate(); err != nil {
 		t.Fatal(err)
 	}
 	if err := db.Migrate(); err != nil {
-		slog.Info("db.TestMigrate", "STATUS", "FAILED", "error", err)
 		t.Fatal(err)
 	}
-	if err := db.Migrate(); err != nil {
-		slog.Info("db.TestMigrate", "STATUS", "FAILED", "error", err)
-		t.Fatal(err)
-	}
-	slog.Info("db.TestMigrate", "STATUS", "SUCCESS")
 }

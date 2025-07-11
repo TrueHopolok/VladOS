@@ -1,8 +1,11 @@
-// Provides handlers to handle http requests.
+// Web package provides:
+//   - handlers to handle http requests;
+//   - http server interface to start up it and stop it.
 //
 // Use [ConnectAll] to access final handler.
+// Handlers logic handlers are in the sub-packages.
 //
-// Buisness logic handlers are in the sub-packages.
+// Use [Start] and/or [Stop] to control the server.
 package web
 
 import (
@@ -15,6 +18,8 @@ import (
 )
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
+
+var server *http.Server
 
 // Provides a placeholder for a handler function to be used in the webpage as TODO reminder.
 func TodoHandler(w http.ResponseWriter, r *http.Request) {
@@ -76,4 +81,44 @@ func LoggerMiddleware(handler http.Handler) http.HandlerFunc {
 		}()
 		handler.ServeHTTP(w, r)
 	}
+}
+
+// Start the http server as a separate goroutinue.
+// Will close the existing server if it was opened by this package.
+//
+// Server options are:
+//
+//	&http.Server{
+//		Addr:    ":8080",
+//		Handler: ConnectAll(),
+//	}
+//
+// Returns error if happens on initialization.
+// Otherwise uses provided channel to report about the error while executing the server.
+func Start(serverErrorChan chan error) error {
+	if server != nil {
+		server.Close()
+	}
+	server = &http.Server{
+		Addr:    ":8080",
+		Handler: ConnectAll(),
+	}
+	go func() {
+		serverErrorChan <- server.ListenAndServe()
+	}()
+	select {
+	case err := <-serverErrorChan:
+		return err
+	default:
+		return nil
+	}
+}
+
+// Stops existing server from executing. If no server was opened, will do nothing.
+// Returns an error from [net/http.Server.Close].
+func Stop() error {
+	if server == nil {
+		return nil
+	}
+	return server.Close()
 }
