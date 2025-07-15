@@ -33,7 +33,7 @@ func Start(botErrorChan chan error) error {
 		return err
 	}
 
-	bot, err := telego.NewBot(string(rawToken), telego.WithDefaultDebugLogger())
+	bot, err := telego.NewBot(string(rawToken), telego.WithDiscardLogger())
 	if err != nil {
 		return err
 	}
