@@ -18,8 +18,6 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-const LogFilePath string = "logs/"
-
 // Initializate the slog package for performing purposes with given config parameters by calling [github.com/TrueHopolok/VladOS/cfg.Get].
 // Uses [github.com/TrueHopolok/VladOS/cfg.Config.Verbose] to decide wheter to output the debug prints (in case of true value) or ignore them.
 // Creates multiwriter to print in both [os.Stdout] and [github.com/TrueHopolok/VladOS/cfg.Config.LogFilePath].
@@ -27,7 +25,7 @@ const LogFilePath string = "logs/"
 // Writer is set as default output handler of [log/slog] package, to be used outside this package.
 func Init() {
 	writer := &lumberjack.Logger{
-		Filename: LogFilePath + cfg.Get().LogFileName,
+		Filename: cfg.Get().LogFilePath,
 		MaxSize:  cfg.Get().LogMaxSize,
 	}
 
@@ -57,7 +55,7 @@ func InitTesting(_ *testing.T, pathToRoot string) {
 	}
 
 	writer := &lumberjack.Logger{
-		Filename: pathToRoot + LogFilePath + cfg.GetTest(pathToRoot).LogFileName,
+		Filename: pathToRoot + cfg.GetTest(pathToRoot).LogFilePath,
 		MaxSize:  cfg.GetTest(pathToRoot).LogMaxSize,
 	}
 

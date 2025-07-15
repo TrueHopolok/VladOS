@@ -12,18 +12,9 @@ Contains all necessary functional to begin work with [log/slog](<https://pkg.go.
 
 ## Index
 
-- [Constants](<#constants>)
 - [func Init\(\)](<#Init>)
 - [func InitTesting\(\_ \*testing.T, pathToRoot string\)](<#InitTesting>)
 
-
-## Constants
-
-<a name="LogFilePath"></a>
-
-```go
-const LogFilePath string = "logs/"
-```
 
 <a name="Init"></a>
 ## func Init

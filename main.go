@@ -81,10 +81,9 @@ func main() {
 	}
 	// closing
 	defer func() {
-		slog.Info("bot close", "status", "SUCCESS")
+		slog.Info("bot close", "status", "START")
 		if err := bot.Stop(); err != nil {
-			slog.Error("bot close", "status", "FAILED", "error", err)
-			return
+			slog.Error("bot close", "status", "FAILED", "err", err)
 		}
 		slog.Info("bot close", "status", "SUCCESS")
 	}()

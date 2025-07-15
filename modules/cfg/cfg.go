@@ -16,13 +16,16 @@ var cfgPath *string = flag.String("config", "", "path to the config file, use 'g
 
 // Stores all necessary constants as struct, can  be accessed via [Get] function.
 type Config struct {
-	LogFileName string
-	LogMaxSize  int // Megabytes
-	Verbose     bool
+	Verbose bool
 
-	DBfileName string
+	LogFilePath string
+	LogMaxSize  int // Megabytes
+
+	DBfilePath string
 
 	WebStaticDir string
+
+	BotTokenPath string
 }
 
 // Parses config flag once via [flag] and [sync] packages,

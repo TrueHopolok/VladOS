@@ -11,10 +11,16 @@ const pathToRoot string = "../../"
 
 // Expects the given cfg file to match expected values:
 /*
-	LogFileName = "test.log"
-	LogMaxSize  = 10
-	Verbose     = true
-	DBfileName  = "test.db"
+	Verbose      = true
+
+	LogFilePath  = "./logs/test.log"
+	LogMaxSize   = 10
+
+	DBfilePath   = "./database/test.db"
+
+	WebStaticDir = "./static"
+
+	BotTokenPath = "./configs/bot.key"
 */
 func TestConfig(t *testing.T) {
 	defer func() {
@@ -23,11 +29,16 @@ func TestConfig(t *testing.T) {
 		}
 	}()
 	expected := cfg.Config{
-		LogFileName:  "test.log",
-		LogMaxSize:   10,
-		Verbose:      true,
-		DBfileName:   "test.db",
+		Verbose: true,
+
+		LogFilePath: "./logs/test.log",
+		LogMaxSize:  10,
+
+		DBfilePath: "./database/test.db",
+
 		WebStaticDir: "./static",
+
+		BotTokenPath: "./configs/bot.key",
 	}
 	recieved := cfg.GetTest(pathToRoot)
 	if !reflect.DeepEqual(expected, recieved) {

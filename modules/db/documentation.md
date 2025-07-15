@@ -14,21 +14,12 @@ Queries for different purposes will be located in the sub directories of the pac
 
 ## Index
 
-- [Constants](<#constants>)
 - [Variables](<#variables>)
 - [func Init\(\) error](<#Init>)
 - [func InitTesting\(\_ \*testing.T, pathToRoot string\) error](<#InitTesting>)
 - [func Migrate\(\) error](<#Migrate>)
 - [type DB](<#DB>)
 
-
-## Constants
-
-<a name="DBfilePath"></a>
-
-```go
-const DBfilePath string = "database/"
-```
 
 ## Variables
 

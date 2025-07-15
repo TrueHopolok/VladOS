@@ -18,8 +18,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-const DBfilePath string = "database/"
-
 type DB struct {
 	*sql.DB
 }
@@ -30,7 +28,7 @@ var Conn DB = DB{nil}
 // Since it is SQLite, the database is opened (or created does not exists) and modified as file.
 // Saves in [DB] struct to prevent any outside modifications.
 func Init() error {
-	conn, err := sql.Open("sqlite3", DBfilePath+cfg.Get().DBfileName)
+	conn, err := sql.Open("sqlite3", cfg.Get().DBfilePath)
 	if err == nil {
 		if conn == nil {
 			return fmt.Errorf("recieved nil connection")
@@ -55,9 +53,9 @@ func InitTesting(_ *testing.T, pathToRoot string) error {
 		panic(fmt.Errorf("tried to initialize the database in test mode while not in testing mode"))
 	}
 
-	os.Remove(pathToRoot + DBfilePath + cfg.GetTest(pathToRoot).DBfileName)
+	os.Remove(pathToRoot + cfg.GetTest(pathToRoot).DBfilePath)
 
-	conn, err := sql.Open("sqlite3", pathToRoot+DBfilePath+cfg.GetTest(pathToRoot).DBfileName)
+	conn, err := sql.Open("sqlite3", pathToRoot+cfg.GetTest(pathToRoot).DBfilePath)
 	if err == nil {
 		if conn == nil {
 			return fmt.Errorf("recieved nil connection")

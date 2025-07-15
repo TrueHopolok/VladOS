@@ -22,13 +22,16 @@ Stores all necessary constants as struct, can be accessed via [Get](<#Get>) func
 
 ```go
 type Config struct {
-    LogFileName string
-    LogMaxSize  int // Megabytes
-    Verbose     bool
+    Verbose bool
 
-    DBfileName string
+    LogFilePath string
+    LogMaxSize  int // Megabytes
+
+    DBfilePath string
 
     WebStaticDir string
+
+    BotTokenPath string
 }
 ```
 
