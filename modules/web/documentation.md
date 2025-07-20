@@ -11,33 +11,22 @@ Web package provides:
 - handlers to handle http requests;
 - http server interface to start up it and stop it.
 
-Use [ConnectAll](<#ConnectAll>) to access final handler. Handlers logic handlers are in the sub\-packages.
+Use \[ConnectAll\] to access final handler. Handlers logic handlers are in the sub\-packages.
 
 Use [Start](<#Start>) and/or [Stop](<#Stop>) to control the server.
 
 ## Index
 
-- [func ConnectAll\(\) http.HandlerFunc](<#ConnectAll>)
 - [func ConnectAuthorized\(mux \*http.ServeMux\)](<#ConnectAuthorized>)
 - [func ConnectEveryone\(mux \*http.ServeMux\)](<#ConnectEveryone>)
 - [func ConnectFileHandlers\(mux \*http.ServeMux\)](<#ConnectFileHandlers>)
 - [func ConnectUnauthorized\(mux \*http.ServeMux\)](<#ConnectUnauthorized>)
 - [func LoggerMiddleware\(handler http.Handler\) http.HandlerFunc](<#LoggerMiddleware>)
+- [func NewWebHandler\(\) http.Handler](<#NewWebHandler>)
 - [func Start\(serverErrorChan chan error\) error](<#Start>)
 - [func Stop\(\) error](<#Stop>)
 - [func TodoHandler\(w http.ResponseWriter, r \*http.Request\)](<#TodoHandler>)
 
-
-<a name="ConnectAll"></a>
-## func ConnectAll
-
-```go
-func ConnectAll() http.HandlerFunc
-```
-
-Connects all connector into 1 new [net/http.ServeMux](<https://pkg.go.dev/net/http/#ServeMux>) to serve.
-
-For connectors info see [ConnectEveryone](<#ConnectEveryone>), [ConnectAuthorized](<#ConnectAuthorized>), [ConnectUnauthorized](<#ConnectUnauthorized>) and [ConnectFileHandlers](<#ConnectFileHandlers>).
 
 <a name="ConnectAuthorized"></a>
 ## func ConnectAuthorized
@@ -84,6 +73,17 @@ func LoggerMiddleware(handler http.Handler) http.HandlerFunc
 
 Provides small http middleware for logs purposes using [log/slog](<https://pkg.go.dev/log/slog/>) package.
 
+<a name="NewWebHandler"></a>
+## func NewWebHandler
+
+```go
+func NewWebHandler() http.Handler
+```
+
+Connects all connector into 1 new [net/http.ServeMux](<https://pkg.go.dev/net/http/#ServeMux>) to serve.
+
+For connectors info see [ConnectEveryone](<#ConnectEveryone>), [ConnectAuthorized](<#ConnectAuthorized>), [ConnectUnauthorized](<#ConnectUnauthorized>) and [ConnectFileHandlers](<#ConnectFileHandlers>).
+
 <a name="Start"></a>
 ## func Start
 
@@ -98,7 +98,7 @@ Server options are:
 ```
 &http.Server{
 	Addr:    ":8080",
-	Handler: ConnectAll(),
+	Handler: NewWebHandler(),
 }
 ```
 

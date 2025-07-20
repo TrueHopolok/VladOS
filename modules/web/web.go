@@ -59,7 +59,7 @@ func ConnectFileHandlers(mux *http.ServeMux) {
 // Connects all connector into 1 new [net/http.ServeMux] to serve.
 //
 // For connectors info see [ConnectEveryone], [ConnectAuthorized], [ConnectUnauthorized] and [ConnectFileHandlers].
-func ConnectAll() http.HandlerFunc {
+func NewWebHandler() http.Handler {
 	mux := http.NewServeMux()
 	ConnectEveryone(mux)
 	ConnectAuthorized(mux)
@@ -71,11 +71,11 @@ func ConnectAll() http.HandlerFunc {
 // Provides small http middleware for logs purposes using [log/slog] package.
 func LoggerMiddleware(handler http.Handler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		slog.Debug(r.Method, "url", r.URL, "status", "START")
+		slog.Debug("http exe", "mtd", r.Method, "url", r.URL, "status", "START")
 		defer slog.Debug(r.Method, "url", r.URL, "status", "FINISH")
 		defer func() {
 			if x := recover(); x != nil {
-				slog.Error(r.Pattern, "status", "FAILED", "panic", x)
+				slog.Error(r.Method, "url", r.URL, "status", "FAILED", "panic", x)
 				http.Error(w, "http handler paniced", http.StatusInternalServerError)
 			}
 		}()
@@ -90,7 +90,7 @@ func LoggerMiddleware(handler http.Handler) http.HandlerFunc {
 //
 //	&http.Server{
 //		Addr:    ":8080",
-//		Handler: ConnectAll(),
+//		Handler: NewWebHandler(),
 //	}
 //
 // Returns error if happens on initialization.
@@ -101,7 +101,7 @@ func Start(serverErrorChan chan error) error {
 	}
 	server = &http.Server{
 		Addr:    ":8080",
-		Handler: ConnectAll(),
+		Handler: NewWebHandler(),
 	}
 	go func() {
 		serverErrorChan <- server.ListenAndServe()

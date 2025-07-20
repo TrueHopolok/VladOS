@@ -73,7 +73,7 @@ func main() {
 
 	//* Bot initialization
 	// opening
-	slog.Info("bot init", "status", "SUCCESS")
+	slog.Info("bot init", "status", "START")
 	botErrorChan := make(chan error)
 	if err := bot.Start(botErrorChan); err != nil {
 		slog.Error("bot init", "status", "FAILED", "error", err)

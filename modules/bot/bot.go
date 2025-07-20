@@ -5,24 +5,39 @@ package bot
 
 import (
 	"context"
+	"log/slog"
 	"os"
 
+	"github.com/TrueHopolok/VladOS/modules/bot/commands"
 	"github.com/TrueHopolok/VladOS/modules/cfg"
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 )
 
-var botUpdHandler *th.BotHandler
-
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
-// TODO
-func ConnectAll(bot *telego.Bot) error {
-	return nil
+var handler *th.BotHandler
+
+// Connects [LoggerMiddleware] and all subpackages via their connect commands (e.g. [github.com/TrueHopolok/VladOS/modules/bot/commands.Connect]).
+func ConnectAll(bh *th.BotHandler) {
+	bh.Use(LoggerMiddleware)
+	commands.Connect(bh)
 }
 
-// Initialize for a whole pacakge, connecting all handlers via [ConnectAll].
-// Return an error on initialization or after any repeated function call.
+// Provides small bot handler middleware to connect for logs purposes using [log/slog] package.
+func LoggerMiddleware(ctx *th.Context, update telego.Update) error {
+	slog.Debug("bot handler", "upd", update.UpdateID, "status", "START")
+	defer slog.Debug("bot handler", "upd", update.UpdateID, "status", "FINISH")
+	err := ctx.Next(update)
+	if err != nil {
+		slog.Error("bot handler", "upd", update.UpdateID, "status", "FAILED", "error", err)
+	}
+	return err
+}
+
+// Initialize a bot and starts it with handlers connected via [ConnectAll].
+//
+// Will stop execution of a previous bot in case it was working previously.
 func Start(botErrorChan chan error) error {
 	if err := Stop(); err != nil {
 		return err
@@ -41,17 +56,31 @@ func Start(botErrorChan chan error) error {
 	ctx := context.Background()
 	updates, err := bot.UpdatesViaLongPolling(ctx, nil)
 	if err != nil {
-		return nil
+		return err
 	}
 
-	botUpdHandler, err = th.NewBotHandler(bot, updates)
-	return err
+	handler, err = th.NewBotHandler(bot, updates)
+	if err != nil {
+		return err
+	}
+
+	ConnectAll(handler)
+
+	go func() {
+		botErrorChan <- handler.Start()
+	}()
+	select {
+	case err := <-botErrorChan:
+		return err
+	default:
+		return nil
+	}
 }
 
-// Stop bot from receiving and handling the updates.
+// Stop package's global bot from receiving and handling any updates.
 func Stop() error {
-	if botUpdHandler == nil {
+	if handler == nil {
 		return nil
 	}
-	return botUpdHandler.Stop()
+	return handler.Stop()
 }
