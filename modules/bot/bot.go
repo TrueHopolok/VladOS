@@ -8,7 +8,6 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/TrueHopolok/VladOS/modules/bot/commands"
 	"github.com/TrueHopolok/VladOS/modules/cfg"
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
@@ -18,10 +17,14 @@ import (
 
 var handler *th.BotHandler
 
-// Connects [LoggerMiddleware] and all subpackages via their connect commands (e.g. [github.com/TrueHopolok/VladOS/modules/bot/commands.Connect]).
+// Connects all connectors and middlewares into given [github.com/mymmrac/telego/telegohandler.BotHandler] to serve.
+//   - [LoggerMiddleware],
+//   - [ConnectConversation],
+//   - [ConnectCommands].
 func ConnectAll(bh *th.BotHandler) {
 	bh.Use(LoggerMiddleware)
-	commands.Connect(bh)
+	ConnectConversation(bh)
+	ConnectCommands(bh)
 }
 
 // Provides small bot handler middleware to connect for logs purposes using [log/slog] package.

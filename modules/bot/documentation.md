@@ -12,11 +12,37 @@ Basicly: BRAIN of the VladOS.
 
 ## Index
 
+- [Variables](<#variables>)
 - [func ConnectAll\(bh \*th.BotHandler\)](<#ConnectAll>)
+- [func ConnectCommands\(bh \*th.BotHandler\)](<#ConnectCommands>)
+- [func ConnectConversation\(bh \*th.BotHandler\)](<#ConnectConversation>)
+- [func HandleCancel\(ctx \*th.Context, update telego.Update\) error](<#HandleCancel>)
+- [func HandleConversation\(ctx \*th.Context, update telego.Update\) error](<#HandleConversation>)
+- [func HandleHelp\(ctx \*th.Context, update telego.Update\) error](<#HandleHelp>)
+- [func HandleSpelling\(ctx \*th.Context, update telego.Update\) error](<#HandleSpelling>)
+- [func HandleStart\(ctx \*th.Context, update telego.Update\) error](<#HandleStart>)
 - [func LoggerMiddleware\(ctx \*th.Context, update telego.Update\) error](<#LoggerMiddleware>)
 - [func Start\(botErrorChan chan error\) error](<#Start>)
 - [func Stop\(\) error](<#Stop>)
+- [type Command](<#Command>)
+- [type ConversationStatus](<#ConversationStatus>)
 
+
+## Variables
+
+<a name="CommandsList"></a>Stores all commands in the map using initialized variables \(see [Command](<#Command>), example [CommandHelp](<#CommandHelp>)\).
+
+Few commands are stored and handled seperatly from the list:
+
+- [HandleSpelling](<#HandleSpelling>) is not a command and executed if given command was not spelled correctly \(also partially executed during help command, see [HandleHelp](<#HandleHelp>)\).
+- [HandleStart](<#HandleStart>) should be used only once on initialization, thus is executed seperatly.
+- [HandleCancel](<#HandleCancel>) is used in conversation only, thus is not a independed command.
+
+```go
+var CommandsList map[string]Command = map[string]Command{
+    "help": CommandHelp,
+}
+```
 
 <a name="ConnectAll"></a>
 ## func ConnectAll
@@ -25,7 +51,79 @@ Basicly: BRAIN of the VladOS.
 func ConnectAll(bh *th.BotHandler)
 ```
 
-Connects [LoggerMiddleware](<#LoggerMiddleware>) and all subpackages via their connect commands \(e.g. [github.com/TrueHopolok/VladOS/modules/bot/commands.Connect](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/bot/commands/#Connect>)\).
+Connects all connectors and middlewares into given [github.com/mymmrac/telego/telegohandler.BotHandler](<https://pkg.go.dev/github.com/mymmrac/telego/telegohandler/#BotHandler>) to serve.
+
+- [LoggerMiddleware](<#LoggerMiddleware>),
+- [ConnectConversation](<#ConnectConversation>),
+- [ConnectCommands](<#ConnectCommands>).
+
+<a name="ConnectCommands"></a>
+## func ConnectCommands
+
+```go
+func ConnectCommands(bh *th.BotHandler)
+```
+
+Create a group in bot handler that handles all incomming commands. See [CommandsList](<#CommandsList>) for all commands details.
+
+<a name="ConnectConversation"></a>
+## func ConnectConversation
+
+```go
+func ConnectConversation(bh *th.BotHandler)
+```
+
+
+
+<a name="HandleCancel"></a>
+## func HandleCancel
+
+```go
+func HandleCancel(ctx *th.Context, update telego.Update) error
+```
+
+TODO
+
+```
+in DB set [ConversationStatus.Free] to true
+return nil gurantee
+```
+
+<a name="HandleConversation"></a>
+## func HandleConversation
+
+```go
+func HandleConversation(ctx *th.Context, update telego.Update) error
+```
+
+TODO
+
+<a name="HandleHelp"></a>
+## func HandleHelp
+
+```go
+func HandleHelp(ctx *th.Context, update telego.Update) error
+```
+
+TODO
+
+<a name="HandleSpelling"></a>
+## func HandleSpelling
+
+```go
+func HandleSpelling(ctx *th.Context, update telego.Update) error
+```
+
+TODO
+
+<a name="HandleStart"></a>
+## func HandleStart
+
+```go
+func HandleStart(ctx *th.Context, update telego.Update) error
+```
+
+TODO
 
 <a name="LoggerMiddleware"></a>
 ## func LoggerMiddleware
@@ -55,5 +153,61 @@ func Stop() error
 ```
 
 Stop package's global bot from receiving and handling any updates.
+
+<a name="Command"></a>
+## type Command
+
+Contains the command's handler and the info text that is displayed on help command.
+
+Name of the command is stored in key of the [CommandsList](<#CommandsList>) map.
+
+```go
+type Command struct {
+    // Description and a usage of the command.
+    Info string
+
+    // Command handler that executes on command call.
+    Handler th.Handler
+
+    // In case the command is multistep (conversation based) this will handle the conversation.
+    // See [ConnectConversation] for more details.
+    //
+    // Value will be nil in case conversation is not intended.
+    Conversation *th.Handler
+}
+```
+
+<a name="CommandHelp"></a>
+
+```go
+var CommandHelp Command = Command{
+    Info: `
+Has 2 usages:
+
+` + "`/help`" + `
+Output a list of all commands in the big message.
+
+` + "`/help <command>`" + `
+Output description of the given command.
+`,
+    Handler:      HandleHelp,
+    Conversation: nil,
+}
+```
+
+<a name="ConversationStatus"></a>
+## type ConversationStatus
+
+Stores info about the user's engagement with the commands.
+
+```go
+type ConversationStatus struct {
+    // If user is free from any conversation.
+    Free bool
+
+    // Name of command for whom conversation is.
+    Owner string
+}
+```
 
 Generated by [gomarkdoc](<https://github.com/princjef/gomarkdoc>)

@@ -1,4 +1,4 @@
-package commands
+package bot
 
 import (
 	"github.com/mymmrac/telego"
@@ -6,6 +6,6 @@ import (
 )
 
 // TODO
-func HandleSpelling(ctx *th.Context, update telego.Update) error {
+func HandleStart(ctx *th.Context, update telego.Update) error {
 	return nil
 }

@@ -80,9 +80,13 @@ Provides small http middleware for logs purposes using [log/slog](<https://pkg.g
 func NewWebHandler() http.Handler
 ```
 
-Connects all connector into 1 new [net/http.ServeMux](<https://pkg.go.dev/net/http/#ServeMux>) to serve.
+Connects all connectors into 1 new [net/http.ServeMux](<https://pkg.go.dev/net/http/#ServeMux>) to serve.
 
-For connectors info see [ConnectEveryone](<#ConnectEveryone>), [ConnectAuthorized](<#ConnectAuthorized>), [ConnectUnauthorized](<#ConnectUnauthorized>) and [ConnectFileHandlers](<#ConnectFileHandlers>).
+- [LoggerMiddleware](<#LoggerMiddleware>),
+- [ConnectEveryone](<#ConnectEveryone>),
+- [ConnectAuthorized](<#ConnectAuthorized>),
+- [ConnectUnauthorized](<#ConnectUnauthorized>),
+- [ConnectFileHandlers](<#ConnectFileHandlers>).
 
 <a name="Start"></a>
 ## func Start

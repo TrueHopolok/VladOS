@@ -56,9 +56,12 @@ func ConnectFileHandlers(mux *http.ServeMux) {
 	})
 }
 
-// Connects all connector into 1 new [net/http.ServeMux] to serve.
-//
-// For connectors info see [ConnectEveryone], [ConnectAuthorized], [ConnectUnauthorized] and [ConnectFileHandlers].
+// Connects all connectors into 1 new [net/http.ServeMux] to serve.
+//   - [LoggerMiddleware],
+//   - [ConnectEveryone],
+//   - [ConnectAuthorized],
+//   - [ConnectUnauthorized],
+//   - [ConnectFileHandlers].
 func NewWebHandler() http.Handler {
 	mux := http.NewServeMux()
 	ConnectEveryone(mux)
