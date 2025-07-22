@@ -1,8 +1,11 @@
 package bot
 
 import (
+	"log/slog"
+
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
+	tu "github.com/mymmrac/telego/telegoutil"
 )
 
 // Stores info about the user's engagement with the commands.
@@ -33,6 +36,14 @@ func HandleConversation(ctx *th.Context, update telego.Update) error {
 //	in DB set [ConversationStatus.Free] to true
 //	return nil gurantee
 func HandleCancel(ctx *th.Context, update telego.Update) error {
+	slog.Debug("bot handler", "upd", update.UpdateID, "command", "ghoul")
+	bot := ctx.Bot()
+	chatID := update.Message.Chat.ChatID()
+	_, _, args := tu.ParseCommand(update.Message.Text)
+	if len(args) > 0 {
+		_, err := bot.SendMessage(ctx, tu.MessageWithEntities(chatID, CmdInvalidArgsAmount()...))
+		return err
+	}
 	return nil
 }
 

@@ -10,7 +10,10 @@ import (
 // Name of the command is stored in key of the [CommandsList] map.
 type Command struct {
 	// Description and a usage of the command.
-	Info string
+	InfoFull string
+
+	// Brief description about the command.
+	InfoBrief string
 
 	// Command handler that executes on command call.
 	Handler th.Handler
@@ -29,7 +32,9 @@ type Command struct {
 //   - [HandleHelp] does not serve any purpose for usage except for guidance, thus stored seperatly.
 //   - [HandleCancel] is used in conversation only, thus is not a independed command.
 //   - [HandleStart] should be used once thus no need to include in the whole command list.
-var CommandsList map[string]Command = map[string]Command{}
+var CommandsList map[string]Command = map[string]Command{
+	"ghoul": CommandGhoul,
+}
 
 // Create a group in bot handler that handles all incomming commands.
 // See [CommandsList] for all commands details.

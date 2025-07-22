@@ -25,6 +25,7 @@ func ConnectAll(bh *th.BotHandler) {
 	bh.Use(LoggerMiddleware)
 	ConnectConversation(bh)
 	ConnectCommands(bh)
+	ConnectJokes(bh)
 }
 
 // Provides small bot handler middleware to connect for logs purposes using [log/slog] package.

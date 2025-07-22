@@ -13,9 +13,13 @@ Basicly: BRAIN of the VladOS.
 ## Index
 
 - [Variables](<#variables>)
+- [func CmdInfoAll\(\) \[\]tu.MessageEntityCollection](<#CmdInfoAll>)
+- [func CmdInfoOne\(cmdName string\) \[\]tu.MessageEntityCollection](<#CmdInfoOne>)
+- [func CmdInvalidArgsAmount\(\) \[\]tu.MessageEntityCollection](<#CmdInvalidArgsAmount>)
 - [func ConnectAll\(bh \*th.BotHandler\)](<#ConnectAll>)
 - [func ConnectCommands\(bh \*th.BotHandler\)](<#ConnectCommands>)
 - [func ConnectConversation\(bh \*th.BotHandler\)](<#ConnectConversation>)
+- [func ConnectJokes\(bh \*th.BotHandler\)](<#ConnectJokes>)
 - [func HandleCancel\(ctx \*th.Context, update telego.Update\) error](<#HandleCancel>)
 - [func HandleConversation\(ctx \*th.Context, update telego.Update\) error](<#HandleConversation>)
 - [func HandleHelp\(ctx \*th.Context, update telego.Update\) error](<#HandleHelp>)
@@ -40,8 +44,37 @@ Few commands are stored and handled seperatly from the list:
 - [HandleStart](<#HandleStart>) should be used once thus no need to include in the whole command list.
 
 ```go
-var CommandsList map[string]Command = map[string]Command{}
+var CommandsList map[string]Command = map[string]Command{
+    "ghoul": CommandGhoul,
+}
 ```
+
+<a name="CmdInfoAll"></a>
+## func CmdInfoAll
+
+```go
+func CmdInfoAll() []tu.MessageEntityCollection
+```
+
+Returns a message containing info about all of the commands bot has.
+
+<a name="CmdInfoOne"></a>
+## func CmdInfoOne
+
+```go
+func CmdInfoOne(cmdName string) []tu.MessageEntityCollection
+```
+
+Returns a message containing a full info about a single command.
+
+<a name="CmdInvalidArgsAmount"></a>
+## func CmdInvalidArgsAmount
+
+```go
+func CmdInvalidArgsAmount() []tu.MessageEntityCollection
+```
+
+Create a message to send about invalid amount of arguments in the command.
 
 <a name="ConnectAll"></a>
 ## func ConnectAll
@@ -73,6 +106,15 @@ func ConnectConversation(bh *th.BotHandler)
 ```
 
 
+
+<a name="ConnectJokes"></a>
+## func ConnectJokes
+
+```go
+func ConnectJokes(bh *th.BotHandler)
+```
+
+TODO Connect a handler that analyze the message and find a joke / pun for the suffix of that message.
 
 <a name="HandleCancel"></a>
 ## func HandleCancel
@@ -163,7 +205,10 @@ Name of the command is stored in key of the [CommandsList](<#CommandsList>) map.
 ```go
 type Command struct {
     // Description and a usage of the command.
-    Info string
+    InfoFull string
+
+    // Brief description about the command.
+    InfoBrief string
 
     // Command handler that executes on command call.
     Handler th.Handler
@@ -173,6 +218,37 @@ type Command struct {
     //
     // Value will be nil in case conversation is not intended.
     Conversation *th.Handler
+}
+```
+
+<a name="CommandGhoul"></a>
+
+```go
+var CommandGhoul Command = Command{
+    InfoFull: `
+ /ghoul
+Starts from 1000, calculate that minus 7.
+Result is outputed in the message, than repeat a process. 
+ `,
+    InfoBrief: "output 1000-7 loop",
+    Handler: func(ctx *th.Context, update telego.Update) error {
+        slog.Debug("bot handler", "upd", update.UpdateID, "command", "ghoul")
+        bot := ctx.Bot()
+        chatID := update.Message.Chat.ChatID()
+        _, _, args := tu.ParseCommand(update.Message.Text)
+        if len(args) > 0 {
+            _, err := bot.SendMessage(ctx, tu.MessageWithEntities(chatID, CmdInvalidArgsAmount()...))
+            return err
+        }
+        for i := 1000; i > 7; i -= 7 {
+            _, err := bot.SendMessage(ctx, tu.MessageWithEntities(chatID, tu.Entityf("%4d-7=%-3d", i, i-7).Blockquote()))
+            if err != nil {
+                return err
+            }
+        }
+        return nil
+    },
+    Conversation: nil,
 }
 ```
 
