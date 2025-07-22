@@ -3,23 +3,19 @@ package bot
 import (
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
+	tu "github.com/mymmrac/telego/telegoutil"
 )
 
-var CommandHelp Command = Command{
-	Info: `
-Has 2 usages:
-
-` + "`/help`" + `
-Output a list of all commands in the big message.
-
-` + "`/help <command>`" + `
-Output description of the given command.
-`,
-	Handler:      HandleHelp,
-	Conversation: nil,
-}
-
-// TODO
+// TODO: add seperation between empty argument command and non empty argument
 func HandleHelp(ctx *th.Context, update telego.Update) error {
-	return nil
+	var msgText []tu.MessageEntityCollection
+	msgText = append(msgText, tu.Entity("Here is the whole list of all available commands:\n\n"))
+	for name := range CommandsList {
+		msgText = append(msgText, tu.Entityf("/%s\n", name))
+	}
+	msgText = append(msgText, tu.Entity("\nFor more info about particular command use:\n /help "))
+	msgText = append(msgText, tu.Entity("<command>").Bold())
+	bot := ctx.Bot()
+	_, err := bot.SendMessage(ctx, tu.MessageWithEntities(update.Message.Chat.ChatID(), msgText...))
+	return err
 }

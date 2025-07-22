@@ -1,8 +1,6 @@
 package bot
 
 import (
-	"fmt"
-
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 )
@@ -18,15 +16,16 @@ type ConversationStatus struct {
 
 // TODO
 func HandleConversation(ctx *th.Context, update telego.Update) error {
-	cs := ConversationStatus{} // TODO: GET FROM DB
-	if cs.Free {
-		return ctx.Next(update)
-	} else if _, exists := CommandsList[cs.Owner]; !exists {
-		return fmt.Errorf("%s command does not exists in the commands list, but got in conversation status", cs.Owner)
-	} else if CommandsList[cs.Owner].Conversation == nil {
-		return fmt.Errorf("%s command conversation handler is nil, but got in conversation status", cs.Owner)
-	}
-	return (*CommandsList[cs.Owner].Conversation)(ctx, update)
+	return ctx.Next(update) // TODO: remove this for code to be executed
+	// cs := ConversationStatus{} // TODO: GET FROM DB
+	// if cs.Free {
+	// 	return ctx.Next(update)
+	// } else if _, exists := CommandsList[cs.Owner]; !exists {
+	// 	return fmt.Errorf("%s command does not exists in the commands list, but got in conversation status", cs.Owner)
+	// } else if CommandsList[cs.Owner].Conversation == nil {
+	// 	return fmt.Errorf("%s command conversation handler is nil, but got in conversation status", cs.Owner)
+	// }
+	// return (*CommandsList[cs.Owner].Conversation)(ctx, update)
 }
 
 // TODO
