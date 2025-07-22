@@ -22,15 +22,14 @@ type Command struct {
 	Conversation *th.Handler
 }
 
-// Stores all commands in the map using initialized variables (see [Command], example [CommandStart]).
+// Stores all commands in the map using initialized variables (see [Command] type and its variables).
 //
 // Few commands are stored and handled seperatly from the list:
-//   - [HandleSpelling] is not a command and executed if given command was not spelled correctly (also partially executed during help command, see [CommandStart]).
+//   - [HandleSpelling] is not a command and executed if given command was not spelled correctly (also partially executed during help command, see [HandleHelp]).
 //   - [HandleHelp] does not serve any purpose for usage except for guidance, thus stored seperatly.
 //   - [HandleCancel] is used in conversation only, thus is not a independed command.
-var CommandsList map[string]Command = map[string]Command{
-	"start": CommandStart,
-}
+//   - [HandleStart] should be used once thus no need to include in the whole command list.
+var CommandsList map[string]Command = map[string]Command{}
 
 // Create a group in bot handler that handles all incomming commands.
 // See [CommandsList] for all commands details.
@@ -39,6 +38,7 @@ func ConnectCommands(bh *th.BotHandler) {
 	for name, cmd := range CommandsList {
 		ch.Handle(cmd.Handler, th.CommandEqual(name))
 	}
+	ch.Handle(HandleStart, th.CommandEqual("start"))
 	ch.Handle(HandleHelp, th.CommandEqual("help"))
 	ch.Handle(HandleSpelling, th.Any())
 }
