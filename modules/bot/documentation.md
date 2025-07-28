@@ -12,6 +12,7 @@ Basicly: BRAIN of the VladOS.
 
 ## Index
 
+- [Constants](<#constants>)
 - [Variables](<#variables>)
 - [func CmdFindClosest\(cmdName string\) \[\]string](<#CmdFindClosest>)
 - [func CmdInfoAll\(\) \[\]tu.MessageEntityCollection](<#CmdInfoAll>)
@@ -22,14 +23,25 @@ Basicly: BRAIN of the VladOS.
 - [func ConnectConversation\(bh \*th.BotHandler\)](<#ConnectConversation>)
 - [func ConnectJokes\(bh \*th.BotHandler\)](<#ConnectJokes>)
 - [func HandleConversation\(ctx \*th.Context, update telego.Update\) error](<#HandleConversation>)
+- [func HandleConvoCancel\(ctx \*th.Context, update telego.Update\) error](<#HandleConvoCancel>)
+- [func HandleConvoStatus\(ctx \*th.Context, update telego.Update\) error](<#HandleConvoStatus>)
 - [func HandleHelp\(ctx \*th.Context, update telego.Update\) error](<#HandleHelp>)
 - [func HandleSpelling\(ctx \*th.Context, update telego.Update\) error](<#HandleSpelling>)
 - [func HandleStart\(ctx \*th.Context, update telego.Update\) error](<#HandleStart>)
 - [func LoggerMiddleware\(ctx \*th.Context, update telego.Update\) error](<#LoggerMiddleware>)
 - [func Start\(botErrorChan chan error\) error](<#Start>)
 - [func Stop\(\) error](<#Stop>)
+- [type CmdRandStatus](<#CmdRandStatus>)
 - [type Command](<#Command>)
 
+
+## Constants
+
+<a name="RandMaxValue"></a>
+
+```go
+const RandMaxValue int = 1_000_000_000
+```
 
 ## Variables
 
@@ -46,6 +58,7 @@ var CommandsList map[string]map[string]Command = map[string]map[string]Command{
     "Gambling": {},
     "Others": {
         "ghoul": CommandGhoul,
+        "rand":  CommandRand,
     },
 }
 ```
@@ -135,6 +148,24 @@ func HandleConversation(ctx *th.Context, update telego.Update) error
 
 
 
+<a name="HandleConvoCancel"></a>
+## func HandleConvoCancel
+
+```go
+func HandleConvoCancel(ctx *th.Context, update telego.Update) error
+```
+
+
+
+<a name="HandleConvoStatus"></a>
+## func HandleConvoStatus
+
+```go
+func HandleConvoStatus(ctx *th.Context, update telego.Update) error
+```
+
+
+
 <a name="HandleHelp"></a>
 ## func HandleHelp
 
@@ -191,6 +222,21 @@ func Stop() error
 
 Stop package's global bot from receiving and handling any updates.
 
+<a name="CmdRandStatus"></a>
+## type CmdRandStatus
+
+
+
+```go
+type CmdRandStatus struct {
+    // 0 - start, waiting left one
+    // 1 - left is given, waiting right one
+    Stage int
+
+    Left int
+}
+```
+
 <a name="Command"></a>
 ## type Command
 
@@ -212,8 +258,8 @@ type Command struct {
     // In case the command is multistep (conversation based) this will handle the conversation.
     // See [ConnectConversation] for more details.
     //
-    // Value will be nil in case conversation is not intended.
-    Conversation *th.Handler
+    // Value will be nil if conversation handler is not defined.
+    Conversation th.Handler
 }
 ```
 
@@ -241,6 +287,94 @@ Result is outputed in the message. Then the process is repeated till the 0.
         return nil
     },
     Conversation: nil,
+}
+```
+
+<a name="CommandRand"></a>
+
+```go
+var CommandRand Command = Command{
+    InfoFull: fmt.Sprintf(`
+ /rand
+Generates a random number between 0 and %d including.
+Command will give you a prompt asking what min and max values of the random you want.
+`, RandMaxValue),
+    InfoBrief: "generates random number",
+    Handler: func(ctx *th.Context, update telego.Update) error {
+        bot, chatID, _, valid, err := CmdStart(ctx, update, "rand", 0)
+        if !valid {
+            return err
+        }
+        _, err = bot.SendMessage(ctx, tu.Message(chatID, "Type what minimum value (including) is allowed."))
+        if err != nil {
+            return fmt.Errorf("send msg: %w", err)
+        }
+        status := CmdRandStatus{
+            Stage: 0,
+            Left:  0,
+        }
+        var buf bytes.Buffer
+        enc := gob.NewEncoder(&buf)
+        if err := enc.Encode(status); err != nil {
+            return fmt.Errorf("gob encoder: %w", err)
+        }
+        return dbconvo.Busy(update.Message.From.ID, "rand", buf.Bytes())
+    },
+    Conversation: func(ctx *th.Context, update telego.Update) error {
+        slog.Debug("bot handler", "upd", update.UpdateID, "command", "rand")
+        bot := ctx.Bot()
+        chatID := update.Message.Chat.ChatID()
+        cs := ctx.Value("ConvoStatus").(dbconvo.Status)
+        getbuf := bytes.NewBuffer(cs.Data)
+        dec := gob.NewDecoder(getbuf)
+        var status CmdRandStatus
+        if err := dec.Decode(&status); err != nil {
+            return fmt.Errorf("gob decoder: %w", err)
+        }
+        switch status.Stage {
+        case 0:
+            value, err := strconv.Atoi(update.Message.Text)
+            if err != nil || value < 0 || value > RandMaxValue {
+                _, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Inputed text is invalid number, please enter the valid number between 0 and %d (included).\nTo cancel execution of the command type /cancel.", RandMaxValue))
+                if err != nil {
+                    return fmt.Errorf("send msg: %w", err)
+                }
+                return nil
+            }
+
+            _, err = bot.SendMessage(ctx, tu.Message(chatID, "Type what maximum value (including) is allowed."))
+            if err != nil {
+                return fmt.Errorf("send msg: %w", err)
+            }
+
+            status.Left = value
+            status.Stage++
+            var buf bytes.Buffer
+            enc := gob.NewEncoder(&buf)
+            if err := enc.Encode(status); err != nil {
+                return fmt.Errorf("gob encoder: %w", err)
+            }
+            return dbconvo.Busy(update.Message.From.ID, "rand", buf.Bytes())
+        case 1:
+            value, err := strconv.Atoi(update.Message.Text)
+            if err != nil || value < status.Left || value > RandMaxValue {
+                _, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Inputed text is invalid number, please enter the valid number between %d and %d (included).\nTo cancel execution of the command type /cancel.", status.Left, RandMaxValue))
+                if err != nil {
+                    return fmt.Errorf("send msg: %w", err)
+                }
+                return nil
+            }
+
+            r := rand.New(rand.NewSource(time.Now().UnixNano()))
+            _, err = bot.SendMessage(ctx, tu.MessageWithEntities(chatID, tu.Entityf("Generated number between %d and %d is:\n\n", status.Left, value), tu.Entityf("%d", r.Intn(value+1)+status.Left).Blockquote()))
+            if err != nil {
+                return fmt.Errorf("send msg: %w", err)
+            }
+
+            return dbconvo.Free(update.Message.From.ID)
+        }
+        return nil
+    },
 }
 ```
 
