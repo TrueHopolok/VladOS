@@ -16,14 +16,16 @@ func HandleConversation(ctx *th.Context, update telego.Update) error {
 		return ctx.Next(update)
 	}
 
-	cmd, isGambling := CommandsList.Gambling[cs.CommandName]
-	cmd, isOthers := CommandsList.Others[cs.CommandName]
-	if !isGambling && !isOthers {
-		return fmt.Errorf("%s command does not exists in the commands list, but got in conversation status", cs.CommandName)
-	} else if cmd.Conversation == nil {
-		return fmt.Errorf("%s command conversation handler is nil, but got in conversation status", cs.CommandName)
+	for category := range CommandsList {
+		cmd, exists := CommandsList[category][cs.CommandName]
+		if !exists {
+			continue
+		} else if cmd.Conversation == nil {
+			return fmt.Errorf("%s command conversation handler is nil, but got in conversation status", cs.CommandName)
+		}
+		return (*(cmd.Conversation))(ctx, update)
 	}
-	return (*(cmd.Conversation))(ctx, update)
+	return fmt.Errorf("%s command does not exists in the commands list, but got in conversation status", cs.CommandName)
 }
 
 func ConnectConversation(bh *th.BotHandler) {

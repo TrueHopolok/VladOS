@@ -23,27 +23,20 @@ func HandleSpelling(ctx *th.Context, update telego.Update) error {
 	return err
 }
 
+// Given command name, finds closest existing commands by spelling.
 func CmdFindClosest(cmdName string) []string {
 	var potentialCommands []string
 	minScore := 0
-	for existingName := range CommandsList.Gambling {
-		curScore := spch.FindScore(cmdName, existingName)
-		if minScore == 0 || minScore > curScore {
-			potentialCommands = potentialCommands[:0]
-			minScore = curScore
-		}
-		if minScore == curScore {
-			potentialCommands = append(potentialCommands, existingName)
-		}
-	}
-	for existingName := range CommandsList.Others {
-		curScore := spch.FindScore(cmdName, existingName)
-		if minScore == 0 || minScore > curScore {
-			potentialCommands = potentialCommands[:0]
-			minScore = curScore
-		}
-		if minScore == curScore {
-			potentialCommands = append(potentialCommands, existingName)
+	for category := range CommandsList {
+		for existingName := range CommandsList[category] {
+			curScore := spch.FindScore(cmdName, existingName)
+			if minScore == 0 || minScore > curScore {
+				potentialCommands = potentialCommands[:0]
+				minScore = curScore
+			}
+			if minScore == curScore {
+				potentialCommands = append(potentialCommands, existingName)
+			}
 		}
 	}
 	extraCmdList := []string{"help", "start"}

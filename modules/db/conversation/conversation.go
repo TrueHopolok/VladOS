@@ -8,6 +8,8 @@ import (
 	"github.com/TrueHopolok/VladOS/modules/db"
 )
 
+//go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
+
 //go:embed *.sql
 var QueryDir embed.FS
 
@@ -23,6 +25,7 @@ type Status struct {
 	Data []byte
 }
 
+// Deletes all records from the conversation table, so all users start from scratch.
 func Clear() error {
 	query, err := QueryDir.ReadFile("clear.sql")
 	if err != nil {
@@ -46,6 +49,7 @@ func Clear() error {
 	}()
 }
 
+// Return the [Status] with whole information about conversation.
 func Get(userId int64) (Status, error) {
 	res := Status{Available: true, CommandName: "", Data: []byte{}}
 
@@ -88,6 +92,7 @@ func Get(userId int64) (Status, error) {
 	}()
 }
 
+// Saves [Status.Available] as true for given user.
 func Free(userId int64) error {
 	query, err := QueryDir.ReadFile("free.sql")
 	if err != nil {
@@ -111,6 +116,7 @@ func Free(userId int64) error {
 	}()
 }
 
+// Saves [Status.Available] as false with [Status.CommandName] and [Status.Data] that were given.
 func Busy(userId int64, cmdName string, data []byte) error {
 	query, err := QueryDir.ReadFile("busy.sql")
 	if err != nil {

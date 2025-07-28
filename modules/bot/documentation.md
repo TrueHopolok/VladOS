@@ -13,14 +13,14 @@ Basicly: BRAIN of the VladOS.
 ## Index
 
 - [Variables](<#variables>)
+- [func CmdFindClosest\(cmdName string\) \[\]string](<#CmdFindClosest>)
 - [func CmdInfoAll\(\) \[\]tu.MessageEntityCollection](<#CmdInfoAll>)
 - [func CmdInfoOne\(cmdName string\) \[\]tu.MessageEntityCollection](<#CmdInfoOne>)
-- [func CmdInvalidArgsAmount\(\) \[\]tu.MessageEntityCollection](<#CmdInvalidArgsAmount>)
+- [func CmdStart\(ctx \*th.Context, update telego.Update, cmdName string, argsAmount int\) \(bot \*telego.Bot, chatID telego.ChatID, cmdArgs \[\]string, validArgs bool, invalidMSG error\)](<#CmdStart>)
 - [func ConnectAll\(bh \*th.BotHandler\)](<#ConnectAll>)
 - [func ConnectCommands\(bh \*th.BotHandler\)](<#ConnectCommands>)
 - [func ConnectConversation\(bh \*th.BotHandler\)](<#ConnectConversation>)
 - [func ConnectJokes\(bh \*th.BotHandler\)](<#ConnectJokes>)
-- [func HandleCancel\(ctx \*th.Context, update telego.Update\) error](<#HandleCancel>)
 - [func HandleConversation\(ctx \*th.Context, update telego.Update\) error](<#HandleConversation>)
 - [func HandleHelp\(ctx \*th.Context, update telego.Update\) error](<#HandleHelp>)
 - [func HandleSpelling\(ctx \*th.Context, update telego.Update\) error](<#HandleSpelling>)
@@ -29,7 +29,6 @@ Basicly: BRAIN of the VladOS.
 - [func Start\(botErrorChan chan error\) error](<#Start>)
 - [func Stop\(\) error](<#Stop>)
 - [type Command](<#Command>)
-- [type ConversationStatus](<#ConversationStatus>)
 
 
 ## Variables
@@ -40,14 +39,25 @@ Few commands are stored and handled seperatly from the list:
 
 - [HandleSpelling](<#HandleSpelling>) is not a command and executed if given command was not spelled correctly \(also partially executed during help command, see [HandleHelp](<#HandleHelp>)\).
 - [HandleHelp](<#HandleHelp>) does not serve any purpose for usage except for guidance, thus stored seperatly.
-- [HandleCancel](<#HandleCancel>) is used in conversation only, thus is not a independed command.
 - [HandleStart](<#HandleStart>) should be used once thus no need to include in the whole command list.
 
 ```go
-var CommandsList map[string]Command = map[string]Command{
-    "ghoul": CommandGhoul,
+var CommandsList map[string]map[string]Command = map[string]map[string]Command{
+    "Gambling": {},
+    "Others": {
+        "ghoul": CommandGhoul,
+    },
 }
 ```
+
+<a name="CmdFindClosest"></a>
+## func CmdFindClosest
+
+```go
+func CmdFindClosest(cmdName string) []string
+```
+
+Given command name, finds closest existing commands by spelling.
 
 <a name="CmdInfoAll"></a>
 ## func CmdInfoAll
@@ -67,14 +77,14 @@ func CmdInfoOne(cmdName string) []tu.MessageEntityCollection
 
 Returns a message containing a full info about a single command.
 
-<a name="CmdInvalidArgsAmount"></a>
-## func CmdInvalidArgsAmount
+<a name="CmdStart"></a>
+## func CmdStart
 
 ```go
-func CmdInvalidArgsAmount() []tu.MessageEntityCollection
+func CmdStart(ctx *th.Context, update telego.Update, cmdName string, argsAmount int) (bot *telego.Bot, chatID telego.ChatID, cmdArgs []string, validArgs bool, invalidMSG error)
 ```
 
-Create a message to send about invalid amount of arguments in the command.
+Outputs log with info \[cmdName\] in the [log/slog](<https://pkg.go.dev/log/slog/>). Checks if received \[len\(args\)\] is equal to given \[argsAmount\]. Sends a message if it is false.
 
 <a name="ConnectAll"></a>
 ## func ConnectAll
@@ -116,20 +126,6 @@ func ConnectJokes(bh *th.BotHandler)
 
 TODO Connect a handler that analyze the message and find a joke / pun for the suffix of that message.
 
-<a name="HandleCancel"></a>
-## func HandleCancel
-
-```go
-func HandleCancel(ctx *th.Context, update telego.Update) error
-```
-
-TODO
-
-```
-in DB set [ConversationStatus.Free] to true
-return nil gurantee
-```
-
 <a name="HandleConversation"></a>
 ## func HandleConversation
 
@@ -137,7 +133,7 @@ return nil gurantee
 func HandleConversation(ctx *th.Context, update telego.Update) error
 ```
 
-TODO
+
 
 <a name="HandleHelp"></a>
 ## func HandleHelp
@@ -146,7 +142,7 @@ TODO
 func HandleHelp(ctx *th.Context, update telego.Update) error
 ```
 
-TODO: add seperation between empty argument command and non empty argument
+
 
 <a name="HandleSpelling"></a>
 ## func HandleSpelling
@@ -155,7 +151,7 @@ TODO: add seperation between empty argument command and non empty argument
 func HandleSpelling(ctx *th.Context, update telego.Update) error
 ```
 
-TODO
+
 
 <a name="HandleStart"></a>
 ## func HandleStart
@@ -182,7 +178,7 @@ Provides small bot handler middleware to connect for logs purposes using [log/sl
 func Start(botErrorChan chan error) error
 ```
 
-Initialize a bot and starts it with handlers connected via [ConnectAll](<#ConnectAll>).
+Initialize a bot and starts it with handlers connected via [ConnectAll](<#ConnectAll>). Additionaly clears all DB dynamic tables \(those that requires restarting every launch\).
 
 Will stop execution of a previous bot in case it was working previously.
 
@@ -227,17 +223,13 @@ type Command struct {
 var CommandGhoul Command = Command{
     InfoFull: `
  /ghoul
-Starts from 1000, calculate that minus 7.
-Result is outputed in the message, than repeat a process. 
+Starts from 1000, subtracts 7.
+Result is outputed in the message. Then the process is repeated till the 0. 
  `,
     InfoBrief: "output 1000-7 loop",
     Handler: func(ctx *th.Context, update telego.Update) error {
-        slog.Debug("bot handler", "upd", update.UpdateID, "command", "ghoul")
-        bot := ctx.Bot()
-        chatID := update.Message.Chat.ChatID()
-        _, _, args := tu.ParseCommand(update.Message.Text)
-        if len(args) > 0 {
-            _, err := bot.SendMessage(ctx, tu.MessageWithEntities(chatID, CmdInvalidArgsAmount()...))
+        bot, chatID, _, valid, err := CmdStart(ctx, update, "ghoul", 0)
+        if !valid {
             return err
         }
         for i := 1000; i > 7; i -= 7 {
@@ -249,21 +241,6 @@ Result is outputed in the message, than repeat a process.
         return nil
     },
     Conversation: nil,
-}
-```
-
-<a name="ConversationStatus"></a>
-## type ConversationStatus
-
-Stores info about the user's engagement with the commands.
-
-```go
-type ConversationStatus struct {
-    // If user is free from any conversation.
-    Free bool
-
-    // Name of command for whom conversation is.
-    Owner string
 }
 ```
 
