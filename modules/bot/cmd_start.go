@@ -16,13 +16,13 @@ func HandleStart(ctx *th.Context, update telego.Update) error {
 		tu.Entity("I am bot "), tu.Entity("VladOS.\nVlad Operation System.\n").Bold(),
 		tu.Entity(`
 I am a project that combines:
- - Telegram bot;
- - Reincarnaction of the AllEgg bot from Discord;
+ - Gambling telegram bot;
+ - Reincarnaction of the 'AllEgg' bot from Discord;
  - Webpage to control and view bot activities.
 
 Bot will react to any message and will try to find a pun for suffix of the message.
 
-Also has additional functional via commands.
+Gambling and other functional via commands.
 Type /help for more info about them.
 `)))
 	return err

@@ -14,9 +14,29 @@ func HandleSpelling(ctx *th.Context, update telego.Update) error {
 	bot := ctx.Bot()
 	chatID := update.Message.Chat.ChatID()
 	cmdName, _, _ := tu.ParseCommand(update.Message.Text)
-	minScore := 0
+	var msgText []tu.MessageEntityCollection
+	msgText = append(msgText, tu.Entityf("'%s' is not a command.\nSee /help for whole list of the commands.\n\nThe most similar commands are:", cmdName))
+	for _, potName := range CmdFindClosest(cmdName) {
+		msgText = append(msgText, tu.Entityf("\n /%s", potName))
+	}
+	_, err := bot.SendMessage(ctx, tu.MessageWithEntities(chatID, msgText...))
+	return err
+}
+
+func CmdFindClosest(cmdName string) []string {
 	var potentialCommands []string
-	for existingName := range CommandsList {
+	minScore := 0
+	for existingName := range CommandsList.Gambling {
+		curScore := spch.FindScore(cmdName, existingName)
+		if minScore == 0 || minScore > curScore {
+			potentialCommands = potentialCommands[:0]
+			minScore = curScore
+		}
+		if minScore == curScore {
+			potentialCommands = append(potentialCommands, existingName)
+		}
+	}
+	for existingName := range CommandsList.Others {
 		curScore := spch.FindScore(cmdName, existingName)
 		if minScore == 0 || minScore > curScore {
 			potentialCommands = potentialCommands[:0]
@@ -37,11 +57,5 @@ func HandleSpelling(ctx *th.Context, update telego.Update) error {
 			potentialCommands = append(potentialCommands, potName)
 		}
 	}
-	var msgText []tu.MessageEntityCollection
-	msgText = append(msgText, tu.Entityf("'%s' is not a command.\nSee /help for whole list of the commands.\n\nThe most similar commands are:", cmdName))
-	for _, potName := range potentialCommands {
-		msgText = append(msgText, tu.Entityf("\n /%s", potName))
-	}
-	_, err := bot.SendMessage(ctx, tu.MessageWithEntities(chatID, msgText...))
-	return err
+	return potentialCommands
 }

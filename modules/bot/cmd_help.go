@@ -44,8 +44,12 @@ func CmdStart(ctx *th.Context, update telego.Update, cmdName string, argsAmount 
 // Returns a message containing info about all of the commands bot has.
 func CmdInfoAll() []tu.MessageEntityCollection {
 	var msgText []tu.MessageEntityCollection
-	msgText = append(msgText, tu.Entity("Here is the whole list of all available commands:\n\n"))
-	for name, cmd := range CommandsList {
+	msgText = append(msgText, tu.Entity("Here is the whole list of all available commands:\n\nGambling:\n"))
+	for name, cmd := range CommandsList.Gambling {
+		msgText = append(msgText, tu.Entityf(" /%s - %s\n", name, cmd.InfoBrief))
+	}
+	msgText = append(msgText, tu.Entity("\nOthers:\n"))
+	for name, cmd := range CommandsList.Others {
 		msgText = append(msgText, tu.Entityf(" /%s - %s\n", name, cmd.InfoBrief))
 	}
 	msgText = append(msgText, tu.Entity("\nFor more info about particular command use:\n /help "))
@@ -56,6 +60,21 @@ func CmdInfoAll() []tu.MessageEntityCollection {
 // Returns a message containing a full info about a single command.
 func CmdInfoOne(cmdName string) []tu.MessageEntityCollection {
 	var msgText []tu.MessageEntityCollection
-	msgText = append(msgText, tu.Entityf("%s", CommandsList[cmdName].InfoFull))
+	for name, cmd := range CommandsList.Gambling {
+		if name == cmdName {
+			msgText = append(msgText, tu.Entityf("%s", cmd.InfoFull))
+			return msgText
+		}
+	}
+	for name, cmd := range CommandsList.Others {
+		if name == cmdName {
+			msgText = append(msgText, tu.Entityf("%s", cmd.InfoFull))
+			return msgText
+		}
+	}
+	msgText = append(msgText, tu.Entityf("'%s' is not a command.\nSee /help for whole list of the commands.\n\nThe most similar commands are:", cmdName))
+	for _, potName := range CmdFindClosest(cmdName) {
+		msgText = append(msgText, tu.Entityf("\n /%s", potName))
+	}
 	return msgText
 }

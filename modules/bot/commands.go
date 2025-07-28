@@ -30,17 +30,27 @@ type Command struct {
 // Few commands are stored and handled seperatly from the list:
 //   - [HandleSpelling] is not a command and executed if given command was not spelled correctly (also partially executed during help command, see [HandleHelp]).
 //   - [HandleHelp] does not serve any purpose for usage except for guidance, thus stored seperatly.
-//   - [HandleCancel] is used in conversation only, thus is not a independed command.
 //   - [HandleStart] should be used once thus no need to include in the whole command list.
-var CommandsList map[string]Command = map[string]Command{
-	"ghoul": CommandGhoul,
+type CmdList struct {
+	Gambling map[string]Command
+	Others   map[string]Command
+}
+
+var CommandsList CmdList = CmdList{
+	Gambling: map[string]Command{},
+	Others: map[string]Command{
+		"ghoul": CommandGhoul,
+	},
 }
 
 // Create a group in bot handler that handles all incomming commands.
 // See [CommandsList] for all commands details.
 func ConnectCommands(bh *th.BotHandler) {
 	ch := bh.Group(th.AnyCommand())
-	for name, cmd := range CommandsList {
+	for name, cmd := range CommandsList.Gambling {
+		ch.Handle(cmd.Handler, th.CommandEqual(name))
+	}
+	for name, cmd := range CommandsList.Others {
 		ch.Handle(cmd.Handler, th.CommandEqual(name))
 	}
 	ch.Handle(HandleStart, th.CommandEqual("start"))
