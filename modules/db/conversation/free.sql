@@ -1,1 +1,1 @@
-INSERT OR REPLACE INTO conversation (user_id) VALUES (?);
+INSERT OR REPLACE INTO conversation (user_id, available) VALUES (?, 1);

@@ -74,10 +74,12 @@ func Get(userId int64) (Status, error) {
 		return res, nil
 	}
 
-	if err := rows.Scan(&res.Available, &res.CommandName, &res.Data); err != nil {
+	var availableNum int
+	if err := rows.Scan(&availableNum, &res.CommandName, &res.Data); err != nil {
 		err = fmt.Errorf("result scanning error: %w", err)
 		return res, err
 	}
+	res.Available = availableNum == 1
 	return res, func() error {
 		if err := tx.Commit(); err != nil {
 			return fmt.Errorf("commit error: %w", err)
@@ -109,7 +111,7 @@ func Free(userId int64) error {
 	}()
 }
 
-func Busy(userId int64, cmdName string) error {
+func Busy(userId int64, cmdName string, data []byte) error {
 	query, err := QueryDir.ReadFile("busy.sql")
 	if err != nil {
 		return fmt.Errorf("reading query error: %w", err)
@@ -121,7 +123,7 @@ func Busy(userId int64, cmdName string) error {
 	}
 	defer tx.Rollback()
 
-	if _, err := tx.Exec(string(query), userId, cmdName); err != nil {
+	if _, err := tx.Exec(string(query), userId, cmdName, data); err != nil {
 		return fmt.Errorf("query execution error: %w", err)
 	}
 	return func() error {
