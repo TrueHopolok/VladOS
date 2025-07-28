@@ -23,7 +23,7 @@ func HandleConversation(ctx *th.Context, update telego.Update) error {
 		} else if cmd.Conversation == nil {
 			return fmt.Errorf("%s command conversation handler is nil, but got in conversation status", cs.CommandName)
 		}
-		return (*(cmd.Conversation))(ctx, update)
+		return (cmd.Conversation)(ctx, update)
 	}
 	return fmt.Errorf("%s command does not exists in the commands list, but got in conversation status", cs.CommandName)
 }

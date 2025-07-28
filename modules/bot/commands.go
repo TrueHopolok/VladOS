@@ -21,8 +21,8 @@ type Command struct {
 	// In case the command is multistep (conversation based) this will handle the conversation.
 	// See [ConnectConversation] for more details.
 	//
-	// Value will be nil in case conversation is not intended.
-	Conversation *th.Handler
+	// Value will be nil if conversation handler is not defined.
+	Conversation th.Handler
 }
 
 // Stores all commands in the map using initialized variables (see [Command] type and its variables).
