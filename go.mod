@@ -8,6 +8,7 @@ tool github.com/princjef/gomarkdoc/cmd/gomarkdoc
 
 require (
 	github.com/BurntSushi/toml v1.5.0
+	github.com/TrueHopolok/spellchecker v0.0.0-20250409130629-a6ed874a9358
 	github.com/mattn/go-sqlite3 v1.14.28
 	github.com/mymmrac/telego v1.1.1
 	golang.org/x/crypto v0.38.0

@@ -1,23 +1,17 @@
 package bot
 
 import (
-	"log/slog"
-
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 	tu "github.com/mymmrac/telego/telegoutil"
 )
 
 func HandleStart(ctx *th.Context, update telego.Update) error {
-	slog.Debug("bot handler", "upd", update.UpdateID, "command", "start")
-	bot := ctx.Bot()
-	chatID := update.Message.Chat.ChatID()
-	_, _, args := tu.ParseCommand(update.Message.Text)
-	if len(args) > 0 {
-		_, err := bot.SendMessage(ctx, tu.MessageWithEntities(chatID, CmdInvalidArgsAmount()...))
+	bot, chatID, _, valid, err := CmdStart(ctx, update, "start", 0)
+	if !valid {
 		return err
 	}
-	_, err := bot.SendMessage(ctx, tu.MessageWithEntities(chatID,
+	_, err = bot.SendMessage(ctx, tu.MessageWithEntities(chatID,
 		tu.Entity("Hello, "), tu.Entity("user.\n").Bold(),
 		tu.Entity("I am bot "), tu.Entity("VladOS.\nVlad Operation System.\n").Bold(),
 		tu.Entity(`

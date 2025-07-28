@@ -8,7 +8,6 @@ import (
 	tu "github.com/mymmrac/telego/telegoutil"
 )
 
-// TODO: add seperation between empty argument command and non empty argument
 func HandleHelp(ctx *th.Context, update telego.Update) error {
 	slog.Debug("bot handler", "upd", update.UpdateID, "command", "help")
 	bot := ctx.Bot()
@@ -16,7 +15,7 @@ func HandleHelp(ctx *th.Context, update telego.Update) error {
 	_, _, args := tu.ParseCommand(update.Message.Text)
 	var msgText []tu.MessageEntityCollection
 	if len(args) > 1 {
-		msgText = CmdInvalidArgsAmount()
+		msgText = []tu.MessageEntityCollection{tu.Entity("Invalid amount of arguments in the command.\nFor more info type:\n /help <command>\n /help")}
 	} else if len(args) == 1 {
 		msgText = CmdInfoOne(args[0])
 	} else {
@@ -27,11 +26,19 @@ func HandleHelp(ctx *th.Context, update telego.Update) error {
 
 }
 
-// Create a message to send about invalid amount of arguments in the command.
-func CmdInvalidArgsAmount() []tu.MessageEntityCollection {
-	var msgText []tu.MessageEntityCollection
-	msgText = append(msgText, tu.Entity("Invalid amount of arguments in the command.\nTry /help or /help <command>."))
-	return msgText
+// Outputs log with info [cmdName] in the [log/slog].
+// Checks if received [len(args)] is equal to given [argsAmount].
+// Sends a message if it is false.
+func CmdStart(ctx *th.Context, update telego.Update, cmdName string, argsAmount int) (bot *telego.Bot, chatID telego.ChatID, cmdArgs []string, validArgs bool, invalidMSG error) {
+	slog.Debug("bot handler", "upd", update.UpdateID, "command", cmdName)
+	bot = ctx.Bot()
+	chatID = update.Message.Chat.ChatID()
+	_, _, cmdArgs = tu.ParseCommand(update.Message.Text)
+	validArgs = len(cmdArgs) == argsAmount
+	if !validArgs {
+		_, invalidMSG = bot.SendMessage(ctx, tu.Messagef(chatID, "Invalid amount of arguments in the command.\nFor more info type:\n /help %s\n /help", cmdName))
+	}
+	return bot, chatID, cmdArgs, validArgs, invalidMSG
 }
 
 // Returns a message containing info about all of the commands bot has.
