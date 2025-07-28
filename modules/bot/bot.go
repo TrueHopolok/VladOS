@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/TrueHopolok/VladOS/modules/cfg"
+	dbconvo "github.com/TrueHopolok/VladOS/modules/db/conversation"
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 )
@@ -40,10 +41,15 @@ func LoggerMiddleware(ctx *th.Context, update telego.Update) error {
 }
 
 // Initialize a bot and starts it with handlers connected via [ConnectAll].
+// Additionaly clears all DB dynamic tables (those that requires restarting every launch).
 //
 // Will stop execution of a previous bot in case it was working previously.
 func Start(botErrorChan chan error) error {
 	if err := Stop(); err != nil {
+		return err
+	}
+
+	if err := dbconvo.Clear(); err != nil {
 		return err
 	}
 

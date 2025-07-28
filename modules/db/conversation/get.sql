@@ -1,0 +1,1 @@
+SELECT available, command_name, additional_data FROM conversation WHERE user_id = ?;  

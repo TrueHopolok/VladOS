@@ -1,0 +1,1 @@
+INSERT OR REPLACE INTO conversation (user_id, command_name) VALUES (?, ?);
