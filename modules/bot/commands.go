@@ -29,11 +29,11 @@ type Command struct {
 //
 // Few commands are stored and handled seperatly from the list:
 //   - [HandleSpelling] is not a command and executed if given command was not spelled correctly (also partially executed during help command, see [HandleHelp]).
-//   - [HandleHelp] does not serve any purpose for usage except for guidance, thus stored seperatly.
-//   - [HandleStart] should be used once thus no need to include in the whole command list.
+//   - [HandleHelp] does not serve any purpose for usage except for guidance, thus stored seperatly (and it has incompability to be stored in global map).
 var CommandsList map[string]map[string]Command = map[string]map[string]Command{
 	"Gambling": {},
 	"Others": {
+		"start": CommandStart,
 		"ghoul": CommandGhoul,
 		"rand":  CommandRand,
 	},
@@ -48,7 +48,6 @@ func ConnectCommands(bh *th.BotHandler) {
 			ch.Handle(cmd.Handler, th.CommandEqual(name))
 		}
 	}
-	ch.Handle(HandleStart, th.CommandEqual("start"))
 	ch.Handle(HandleHelp, th.CommandEqual("help"))
-	ch.Handle(HandleSpelling, th.Any())
+	ch.Handle(handleSpelling, th.Any())
 }

@@ -9,7 +9,7 @@ import (
 	tu "github.com/mymmrac/telego/telegoutil"
 )
 
-func HandleSpelling(ctx *th.Context, update telego.Update) error {
+func handleSpelling(ctx *th.Context, update telego.Update) error {
 	slog.Debug("bot handler", "upd", update.UpdateID, "command", "spelling")
 	bot := ctx.Bot()
 	chatID := update.Message.Chat.ChatID()
