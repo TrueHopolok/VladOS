@@ -67,9 +67,7 @@ Command will immediatly send a response. Expects that min_num <= max_num and the
 				return err
 			}
 
-			r := rand.New(rand.NewSource(time.Now().UnixNano()))
-			_, err = bot.SendMessage(ctx, tu.MessageWithEntities(chatID, tu.Entityf("Generated number between 0 and %d is:\n\n", right), tu.Entityf("%d", r.Intn(right+1)).Blockquote()))
-			return err
+			return outputRand(ctx, chatID, 0, right)
 		case 2:
 			left, invalid, err := inputRand(ctx, chatID, cmdArgs[0], 0, false)
 			if invalid {
@@ -81,9 +79,7 @@ Command will immediatly send a response. Expects that min_num <= max_num and the
 				return err
 			}
 
-			r := rand.New(rand.NewSource(time.Now().UnixNano()))
-			_, err = bot.SendMessage(ctx, tu.MessageWithEntities(chatID, tu.Entityf("Generated number between %d and %d is:\n\n", left, right), tu.Entityf("%d", r.Intn(right-left+1)+left).Blockquote()))
-			return err
+			return outputRand(ctx, chatID, left, right)
 		default:
 			_, err := bot.SendMessage(ctx, tu.Message(chatID, "Too many arguments are given for the command.\nFor more info type:\n /help rand\n /help"))
 			return err
@@ -107,7 +103,7 @@ Command will immediatly send a response. Expects that min_num <= max_num and the
 				return err
 			}
 
-			_, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Type what maximum value is allowed. Allowed values are between %d and %d (included).", left, RandMaxValue))
+			_, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Type what maximum value is allowed.\nAllowed values are between %d and %d (included).", left, RandMaxValue))
 			if err != nil {
 				return fmt.Errorf("send msg: %w", err)
 			}
@@ -141,9 +137,9 @@ func inputRand(ctx *th.Context, chatID telego.ChatID, inputText string, left int
 	num, err := strconv.Atoi(inputText)
 	if err != nil || num < left || num > RandMaxValue {
 		if withCancel {
-			_, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Given argument is invalid, please enter the valid number between %d and %d (included). To cancel the command input and execution type:\n /cancel", left, RandMaxValue))
+			_, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Given argument is invalid, please enter the valid number between %d and %d (included).\nTo cancel the command input and execution type:\n /cancel", left, RandMaxValue))
 		} else {
-			_, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Given argument is invalid, please enter the valid number between %d and %d (included). For more info type:\n /help rand\n /help", left, RandMaxValue))
+			_, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Given argument is invalid, please enter the valid number between %d and %d (included).\nFor more info type:\n /help rand\n /help", left, RandMaxValue))
 		}
 		return 0, true, err
 	}
@@ -157,6 +153,6 @@ func outputRand(ctx *th.Context, chatID telego.ChatID, left, right int) error {
 	if err != nil {
 		return err
 	}
-	_, err = bot.SendMessage(ctx, tu.MessageWithEntities(chatID, tu.Entityf("%d", r.Intn(right-left+1)+left).Blockquote()))
+	_, err = bot.SendMessage(ctx, tu.MessageWithEntities(chatID, tu.Entityf("%d", r.Intn(right-left+1)+left)))
 	return err
 }

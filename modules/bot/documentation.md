@@ -57,6 +57,7 @@ var CommandsList map[string]map[string]Command = map[string]map[string]Command{
         "start": CommandStart,
         "ghoul": CommandGhoul,
         "rand":  CommandRand,
+        "tip":   CommandTip,
     },
 }
 ```
@@ -355,7 +356,7 @@ Command will immediatly send a response. Expects that min_num <= max_num and the
                 return err
             }
 
-            _, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Type what maximum value is allowed. Allowed values are between %d and %d (included).", left, RandMaxValue))
+            _, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Type what maximum value is allowed.\nAllowed values are between %d and %d (included).", left, RandMaxValue))
             if err != nil {
                 return fmt.Errorf("send msg: %w", err)
             }
@@ -414,6 +415,57 @@ Bot will react to any message and will try to find a pun for suffix of the messa
 Gambling and other functional via commands.
 Type /help for more info about them.
 `)))
+        return err
+    },
+    Conversation: nil,
+}
+```
+
+<a name="CommandTip"></a>
+
+```go
+var CommandTip Command = Command{
+    InfoBrief: "output some advice/tip/quote",
+    InfoFull: `
+ /tip
+Output a random advice, tip or quote.
+
+ /tip <advice_id>
+Output a tip with id equal to given one. 
+`,
+    Handler: func(ctx *th.Context, update telego.Update) error {
+        slog.Debug("bot handler", "upd", update.UpdateID, "command", "tip")
+        bot := ctx.Bot()
+        chatID := update.Message.Chat.ChatID()
+        _, _, cmdArgs := tu.ParseCommand(update.Message.Text)
+        var msgText []tu.MessageEntityCollection
+        switch len(cmdArgs) {
+        case 0:
+            tip_text, author, tip_id, err := dbtip.Rand()
+            if err != nil {
+                return err
+            }
+            msgText = append(msgText, tu.Entityf("TIP #%d\n", tip_id).Bold(), tu.Entity(tip_text).Blockquote(), tu.Entityf("\n-- %s", author))
+        case 1:
+            tip_id, err := strconv.Atoi(cmdArgs[0])
+            if err != nil || tip_id < 0 {
+                _, err := bot.SendMessage(ctx, tu.Message(chatID, "Given argument is invalid, please enter the valid non-negative number.\nFor more info type:\n /help tip\n /help"))
+                return err
+            }
+            tip_text, author, found, err := dbtip.Get(tip_id)
+            if err != nil {
+                return err
+            }
+            if !found {
+                _, err := bot.SendMessage(ctx, tu.Message(chatID, "The advice/tip with given id does not exists."))
+                return err
+            }
+            msgText = append(msgText, tu.Entityf("TIP #%d\n", tip_id).Bold(), tu.Entity(tip_text).Blockquote(), tu.Entityf("\n-- %s", author))
+        default:
+            _, err := bot.SendMessage(ctx, tu.Message(chatID, "Too many arguments are given for the command.\nFor more info type:\n /help tip\n /help"))
+            return err
+        }
+        _, err := bot.SendMessage(ctx, tu.MessageWithEntities(chatID, msgText...))
         return err
     },
     Conversation: nil,
