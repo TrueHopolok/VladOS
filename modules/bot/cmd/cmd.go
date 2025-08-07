@@ -74,7 +74,7 @@ func ConnectCommands(bh *th.BotHandler) error {
 		}
 	}
 	ch.Handle(handleHelp, th.CommandEqual("help"))
-	ch.Handle(handleSpelling, th.Any())
+	ch.Handle(handleSpelling, th.AnyMessage())
 	return nil
 }
 
