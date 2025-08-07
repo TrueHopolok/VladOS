@@ -40,12 +40,16 @@ Few commands are stored and handled seperatly from the list:
 
 ```go
 var CommandsList map[string]map[string]Command = map[string]map[string]Command{
-    "Gambling": {},
+    "Gambling": {
+        "slot": CommandSlot,
+        "dice": CommandDice,
+    },
     "Others": {
         "start": CommandStart,
         "ghoul": CommandGhoul,
         "rand":  CommandRand,
         "tip":   CommandTip,
+        "mb":    CommandM8B,
     },
 }
 ```
@@ -77,6 +81,20 @@ type Command struct {
 }
 ```
 
+<a name="CommandDice"></a>
+
+```go
+var CommandDice Command = Command{
+    InfoBrief: "throw a dice",
+    InfoFull: `
+ /dice
+Throw a dice. Win is recieving hitting a six (1:6 chance).
+
+Has a leaderboard to count largest winstreak.`,
+    // contains filtered or unexported fields
+}
+```
+
 <a name="CommandGhoul"></a>
 
 ```go
@@ -87,6 +105,18 @@ Starts from 1000, subtracts 7.
 Result is outputed in the message. Then the process is repeated till the 0. 
  `,
     InfoBrief: "output 1000-7 loop",
+    // contains filtered or unexported fields
+}
+```
+
+<a name="CommandM8B"></a>
+
+```go
+var CommandM8B Command = Command{
+    InfoBrief: "magic 8 ball",
+    InfoFull: `
+ /mb
+Tells you the truth to a yes/no question in mind.`,
     // contains filtered or unexported fields
 }
 ```
@@ -109,6 +139,20 @@ Generates a random number between 2 given numbers which values is from 0 till %d
 Command will immediatly send a response. Expects that min_num <= max_num and they are in the allowed range.
 `, randMaxValue, randMaxValue, randMaxValue),
     InfoBrief: "generates random number",
+    // contains filtered or unexported fields
+}
+```
+
+<a name="CommandSlot"></a>
+
+```go
+var CommandSlot Command = Command{
+    InfoBrief: "spin slot machine",
+    InfoFull: `
+ /slot
+Spin a slot machine. Win is recieving a Jackpot (1:64 chance).
+
+Has a leaderboard to count largest winstreak.`,
     // contains filtered or unexported fields
 }
 ```

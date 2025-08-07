@@ -51,12 +51,16 @@ type Command struct {
 //   - help command since it require accessing this map, which is impossible wihtout cyclic import
 //   - spell checking since it is not a command and happens in case of misspelled command
 var CommandsList map[string]map[string]Command = map[string]map[string]Command{
-	"Gambling": {},
+	"Gambling": {
+		"slot": CommandSlot,
+		"dice": CommandDice,
+	},
 	"Others": {
 		"start": CommandStart,
 		"ghoul": CommandGhoul,
 		"rand":  CommandRand,
 		"tip":   CommandTip,
+		"mb":    CommandM8B,
 	},
 }
 
