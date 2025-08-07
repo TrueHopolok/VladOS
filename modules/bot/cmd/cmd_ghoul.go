@@ -1,4 +1,4 @@
-package bot
+package cmd
 
 import (
 	"github.com/mymmrac/telego"
@@ -13,8 +13,8 @@ Starts from 1000, subtracts 7.
 Result is outputed in the message. Then the process is repeated till the 0. 
  `,
 	InfoBrief: "output 1000-7 loop",
-	Handler: func(ctx *th.Context, update telego.Update) error {
-		bot, chatID, _, valid, err := CmdStart(ctx, update, "ghoul", 0)
+	handler: func(ctx *th.Context, update telego.Update) error {
+		bot, chatID, _, valid, err := utilStart(ctx, update, "ghoul", 0)
 		if !valid {
 			return err
 		}
@@ -26,5 +26,5 @@ Result is outputed in the message. Then the process is repeated till the 0.
 		}
 		return nil
 	},
-	Conversation: nil,
+	conversation: nil,
 }

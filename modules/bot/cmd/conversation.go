@@ -1,4 +1,4 @@
-package bot
+package cmd
 
 import (
 	"fmt"
@@ -9,17 +9,19 @@ import (
 	tu "github.com/mymmrac/telego/telegoutil"
 )
 
-func HandleConvoStatus(ctx *th.Context, update telego.Update) error {
+type ctxValueConvoStatus struct{}
+
+func handleConvoStatus(ctx *th.Context, update telego.Update) error {
 	cs, err := dbconvo.Get(update.Message.From.ID)
 	if err != nil {
 		return err
 	}
-	ctx = ctx.WithValue("ConvoStatus", cs)
+	ctx = ctx.WithValue(ctxValueConvoStatus{}, cs)
 	return ctx.Next(update)
 }
 
-func HandleConvoCancel(ctx *th.Context, update telego.Update) error {
-	bot, chatID, _, valid, err := CmdStart(ctx, update, "cancel", 0)
+func handleConvoCancel(ctx *th.Context, update telego.Update) error {
+	bot, chatID, _, valid, err := utilStart(ctx, update, "cancel", 0)
 	if !valid {
 		return err
 	}
@@ -30,8 +32,8 @@ func HandleConvoCancel(ctx *th.Context, update telego.Update) error {
 	return dbconvo.Free(update.Message.From.ID)
 }
 
-func HandleConversation(ctx *th.Context, update telego.Update) error {
-	cs := ctx.Value("ConvoStatus").(dbconvo.Status)
+func handleConversation(ctx *th.Context, update telego.Update) error {
+	cs := ctx.Value(ctxValueConvoStatus{}).(dbconvo.Status)
 	if cs.Available {
 		return ctx.Next(update)
 	}
@@ -40,16 +42,20 @@ func HandleConversation(ctx *th.Context, update telego.Update) error {
 		cmd, exists := CommandsList[category][cs.CommandName]
 		if !exists {
 			continue
-		} else if cmd.Conversation == nil {
+		} else if cmd.conversation == nil {
 			return fmt.Errorf("%s command conversation handler is nil, but got in conversation status", cs.CommandName)
 		}
-		return (cmd.Conversation)(ctx, update)
+		return (cmd.conversation)(ctx, update)
 	}
 	return fmt.Errorf("%s command does not exists in the commands list, but got in conversation status", cs.CommandName)
 }
 
-func ConnectConversation(bh *th.BotHandler) {
-	bh.Handle(HandleConvoStatus, th.AnyMessage())
-	bh.Handle(HandleConvoCancel, th.CommandEqual("cancel"))
-	bh.Handle(HandleConversation, th.AnyMessage())
+func connectConversation(bh *th.BotHandler) error {
+	if err := dbconvo.Clear(); err != nil {
+		return err
+	}
+	bh.Handle(handleConvoStatus, th.AnyMessage())
+	bh.Handle(handleConvoCancel, th.CommandEqual("cancel"))
+	bh.Handle(handleConversation, th.AnyMessage())
+	return nil
 }

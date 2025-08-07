@@ -1,4 +1,4 @@
-package bot
+package cmd
 
 import (
 	"github.com/mymmrac/telego"
@@ -13,8 +13,8 @@ var CommandStart Command = Command{
 Output information about bot's life purpose and who it is.
 Provide useful links to bot's website. 
 `,
-	Handler: func(ctx *th.Context, update telego.Update) error {
-		bot, chatID, _, valid, err := CmdStart(ctx, update, "start", 0)
+	handler: func(ctx *th.Context, update telego.Update) error {
+		bot, chatID, _, valid, err := utilStart(ctx, update, "start", 0)
 		if !valid {
 			return err
 		}
@@ -34,5 +34,5 @@ Type /help for more info about them.
 `)))
 		return err
 	},
-	Conversation: nil,
+	conversation: nil,
 }

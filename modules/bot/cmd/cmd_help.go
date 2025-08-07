@@ -1,4 +1,4 @@
-package bot
+package cmd
 
 import (
 	"log/slog"
@@ -8,7 +8,7 @@ import (
 	tu "github.com/mymmrac/telego/telegoutil"
 )
 
-func HandleHelp(ctx *th.Context, update telego.Update) error {
+func handleHelp(ctx *th.Context, update telego.Update) error {
 	slog.Debug("bot handler", "upd", update.UpdateID, "command", "help")
 	bot := ctx.Bot()
 	chatID := update.Message.Chat.ChatID()
@@ -17,32 +17,17 @@ func HandleHelp(ctx *th.Context, update telego.Update) error {
 	if len(args) > 1 {
 		msgText = []tu.MessageEntityCollection{tu.Entity("Invalid amount of arguments in the command.\nFor more info type:\n /help <command>\n /help")}
 	} else if len(args) == 1 {
-		msgText = CmdInfoOne(args[0])
+		msgText = utilInfoSingle(args[0])
 	} else {
-		msgText = CmdInfoAll()
+		msgText = utilInfoAll()
 	}
 	_, err := bot.SendMessage(ctx, tu.MessageWithEntities(chatID, msgText...))
 	return err
 
 }
 
-// Outputs log with info [cmdName] in the [log/slog].
-// Checks if received [len(args)] is equal to given [argsAmount].
-// Sends a message if it is false.
-func CmdStart(ctx *th.Context, update telego.Update, cmdName string, argsAmount int) (bot *telego.Bot, chatID telego.ChatID, cmdArgs []string, validArgs bool, invalidMSG error) {
-	slog.Debug("bot handler", "upd", update.UpdateID, "command", cmdName)
-	bot = ctx.Bot()
-	chatID = update.Message.Chat.ChatID()
-	_, _, cmdArgs = tu.ParseCommand(update.Message.Text)
-	validArgs = len(cmdArgs) == argsAmount
-	if !validArgs {
-		_, invalidMSG = bot.SendMessage(ctx, tu.Messagef(chatID, "Invalid amount of arguments in the command.\nFor more info type:\n /help %s\n /help", cmdName))
-	}
-	return bot, chatID, cmdArgs, validArgs, invalidMSG
-}
-
 // Returns a message containing info about all of the commands bot has.
-func CmdInfoAll() []tu.MessageEntityCollection {
+func utilInfoAll() []tu.MessageEntityCollection {
 	var msgText []tu.MessageEntityCollection
 	msgText = append(msgText, tu.Entity("Here is the whole list of all available commands:\n"))
 	for category := range CommandsList {
@@ -57,7 +42,7 @@ func CmdInfoAll() []tu.MessageEntityCollection {
 }
 
 // Returns a message containing a full info about a single command.
-func CmdInfoOne(cmdName string) []tu.MessageEntityCollection {
+func utilInfoSingle(cmdName string) []tu.MessageEntityCollection {
 	var msgText []tu.MessageEntityCollection
 	for category := range CommandsList {
 		for name, cmd := range CommandsList[category] {
@@ -68,7 +53,7 @@ func CmdInfoOne(cmdName string) []tu.MessageEntityCollection {
 		}
 	}
 	msgText = append(msgText, tu.Entityf("'%s' is not a command.\nSee /help for whole list of the commands.\n\nThe most similar commands are:", cmdName))
-	for _, potName := range CmdFindClosest(cmdName) {
+	for _, potName := range utilClosestSpelling(cmdName) {
 		msgText = append(msgText, tu.Entityf("\n /%s", potName))
 	}
 	return msgText

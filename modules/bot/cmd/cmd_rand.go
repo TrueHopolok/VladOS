@@ -1,4 +1,4 @@
-package bot
+package cmd
 
 import (
 	"bytes"
@@ -15,9 +15,9 @@ import (
 	tu "github.com/mymmrac/telego/telegoutil"
 )
 
-const RandMaxValue int = 1_000_000_000
+const randMaxValue int = 1_000_000_000
 
-type CmdRandStatus struct {
+type randConvoStatus struct {
 	// 0 - start, waiting left one
 	// 1 - left is given, waiting right one
 	Stage int
@@ -38,20 +38,20 @@ Command will immediatly send a response. Expects that max_num is in the allowed 
  /rand <min_num> <max_num>
 Generates a random number between 2 given numbers which values is from 0 till %d included.
 Command will immediatly send a response. Expects that min_num <= max_num and they are in the allowed range.
-`, RandMaxValue, RandMaxValue, RandMaxValue),
+`, randMaxValue, randMaxValue, randMaxValue),
 	InfoBrief: "generates random number",
-	Handler: func(ctx *th.Context, update telego.Update) error {
+	handler: func(ctx *th.Context, update telego.Update) error {
 		slog.Debug("bot handler", "upd", update.UpdateID, "command", "rand")
 		bot := ctx.Bot()
 		chatID := update.Message.Chat.ChatID()
 		_, _, cmdArgs := tu.ParseCommand(update.Message.Text)
 		switch len(cmdArgs) {
 		case 0:
-			_, err := bot.SendMessage(ctx, tu.Messagef(chatID, "Type what minimum value is allowed.\nAllowed values are between 0 and %d (included).", RandMaxValue))
+			_, err := bot.SendMessage(ctx, tu.Messagef(chatID, "Type what minimum value is allowed.\nAllowed values are between 0 and %d (included).", randMaxValue))
 			if err != nil {
 				return fmt.Errorf("send msg: %w", err)
 			}
-			status := CmdRandStatus{
+			status := randConvoStatus{
 				Stage: 0,
 				Left:  0,
 			}
@@ -85,14 +85,14 @@ Command will immediatly send a response. Expects that min_num <= max_num and the
 			return err
 		}
 	},
-	Conversation: func(ctx *th.Context, update telego.Update) error {
+	conversation: func(ctx *th.Context, update telego.Update) error {
 		slog.Debug("bot handler", "upd", update.UpdateID, "command", "rand")
 		bot := ctx.Bot()
 		chatID := update.Message.Chat.ChatID()
-		cs := ctx.Value("ConvoStatus").(dbconvo.Status)
+		cs := ctx.Value(ctxValueConvoStatus{}).(dbconvo.Status)
 		getbuf := bytes.NewBuffer(cs.Data)
 		dec := gob.NewDecoder(getbuf)
-		var status CmdRandStatus
+		var status randConvoStatus
 		if err := dec.Decode(&status); err != nil {
 			return fmt.Errorf("gob decoder: %w", err)
 		}
@@ -103,7 +103,7 @@ Command will immediatly send a response. Expects that min_num <= max_num and the
 				return err
 			}
 
-			_, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Type what maximum value is allowed.\nAllowed values are between %d and %d (included).", left, RandMaxValue))
+			_, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Type what maximum value is allowed.\nAllowed values are between %d and %d (included).", left, randMaxValue))
 			if err != nil {
 				return fmt.Errorf("send msg: %w", err)
 			}
@@ -135,11 +135,11 @@ Command will immediatly send a response. Expects that min_num <= max_num and the
 func inputRand(ctx *th.Context, chatID telego.ChatID, inputText string, left int, withCancel bool) (inputNum int, invalid bool, msgErr error) {
 	bot := ctx.Bot()
 	num, err := strconv.Atoi(inputText)
-	if err != nil || num < left || num > RandMaxValue {
+	if err != nil || num < left || num > randMaxValue {
 		if withCancel {
-			_, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Given argument is invalid, please enter the valid number between %d and %d (included).\nTo cancel the command input and execution type:\n /cancel", left, RandMaxValue))
+			_, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Given argument is invalid, please enter the valid number between %d and %d (included).\nTo cancel the command input and execution type:\n /cancel", left, randMaxValue))
 		} else {
-			_, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Given argument is invalid, please enter the valid number between %d and %d (included).\nFor more info type:\n /help rand\n /help", left, RandMaxValue))
+			_, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Given argument is invalid, please enter the valid number between %d and %d (included).\nFor more info type:\n /help rand\n /help", left, randMaxValue))
 		}
 		return 0, true, err
 	}

@@ -8,6 +8,8 @@ import (
 	"log/slog"
 	"os"
 
+	"github.com/TrueHopolok/VladOS/modules/bot/cmd"
+	"github.com/TrueHopolok/VladOS/modules/bot/pun"
 	"github.com/TrueHopolok/VladOS/modules/cfg"
 	dbconvo "github.com/TrueHopolok/VladOS/modules/db/conversation"
 	"github.com/mymmrac/telego"
@@ -20,13 +22,15 @@ var handler *th.BotHandler
 
 // Connects all connectors and middlewares into given [github.com/mymmrac/telego/telegohandler.BotHandler] to serve.
 //   - [LoggerMiddleware],
-//   - [ConnectConversation],
-//   - [ConnectCommands].
-func ConnectAll(bh *th.BotHandler) {
+//   - [github.com/TrueHopolok/VladOS/modules/bot/cmd.ConnectConversation],
+//   - [github.com/TrueHopolok/VladOS/modules/bot/cmd.ConnectCommands].
+func ConnectAll(bh *th.BotHandler) error {
 	bh.Use(LoggerMiddleware)
-	ConnectConversation(bh)
-	ConnectCommands(bh)
-	ConnectJokes(bh)
+	if err := cmd.ConnectCommands(bh); err != nil {
+		return err
+	}
+	pun.ConnectJokes(bh)
+	return nil
 }
 
 // Provides small bot handler middleware to connect for logs purposes using [log/slog] package.

@@ -1,4 +1,4 @@
-package bot
+package cmd
 
 import (
 	"log/slog"
@@ -19,7 +19,7 @@ Output a random advice, tip or quote.
  /tip <advice_id>
 Output a tip with id equal to given one. 
 `,
-	Handler: func(ctx *th.Context, update telego.Update) error {
+	handler: func(ctx *th.Context, update telego.Update) error {
 		slog.Debug("bot handler", "upd", update.UpdateID, "command", "tip")
 		bot := ctx.Bot()
 		chatID := update.Message.Chat.ChatID()
@@ -54,7 +54,7 @@ Output a tip with id equal to given one.
 		_, err := bot.SendMessage(ctx, tu.MessageWithEntities(chatID, msgText...))
 		return err
 	},
-	Conversation: nil,
+	conversation: nil,
 }
 
 func getTipText(tip_id int, tip_text, author string) []tu.MessageEntityCollection {

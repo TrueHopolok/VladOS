@@ -1,4 +1,4 @@
-package bot
+package cmd
 
 import (
 	"log/slog"
@@ -16,7 +16,7 @@ func handleSpelling(ctx *th.Context, update telego.Update) error {
 	cmdName, _, _ := tu.ParseCommand(update.Message.Text)
 	var msgText []tu.MessageEntityCollection
 	msgText = append(msgText, tu.Entityf("'%s' is not a command.\nSee /help for whole list of the commands.\n\nThe most similar commands are:", cmdName))
-	for _, potName := range CmdFindClosest(cmdName) {
+	for _, potName := range utilClosestSpelling(cmdName) {
 		msgText = append(msgText, tu.Entityf("\n /%s", potName))
 	}
 	_, err := bot.SendMessage(ctx, tu.MessageWithEntities(chatID, msgText...))
@@ -24,7 +24,7 @@ func handleSpelling(ctx *th.Context, update telego.Update) error {
 }
 
 // Given command name, finds closest existing commands by spelling.
-func CmdFindClosest(cmdName string) []string {
+func utilClosestSpelling(cmdName string) []string {
 	var potentialCommands []string
 	minScore := 0
 	for category := range CommandsList {

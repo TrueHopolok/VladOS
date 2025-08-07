@@ -1,4 +1,4 @@
-package bot
+package pun
 
 import (
 	th "github.com/mymmrac/telego/telegohandler"
