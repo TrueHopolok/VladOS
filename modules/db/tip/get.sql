@@ -1,3 +1,3 @@
 SELECT text, author
 FROM tip
-WHERE id = ?;
+WHERE id = $1;

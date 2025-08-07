@@ -9,7 +9,7 @@ import (
 
 const pathToRoot = "../../../"
 
-func TestTip(t *testing.T) {
+func TestM8B(t *testing.T) {
 	defer func() {
 		if x := recover(); x != nil {
 			t.Fatal("panic", x)
