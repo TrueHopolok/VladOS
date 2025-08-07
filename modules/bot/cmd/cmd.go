@@ -52,8 +52,9 @@ type Command struct {
 //   - spell checking since it is not a command and happens in case of misspelled command
 var CommandsList map[string]map[string]Command = map[string]map[string]Command{
 	"Gambling": {
-		"slot": CommandSlot,
-		"dice": CommandDice,
+		"slot":  CommandSlot,
+		"dice":  CommandDice,
+		"stats": CommandStats,
 	},
 	"Others": {
 		"start": CommandStart,

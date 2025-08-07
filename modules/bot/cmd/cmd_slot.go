@@ -8,6 +8,7 @@ import (
 	tu "github.com/mymmrac/telego/telegoutil"
 )
 
+// TODO: finish handler in value
 var CommandSlot Command = Command{
 	InfoBrief: "spin slot machine",
 	InfoFull: `
@@ -29,7 +30,7 @@ Has a leaderboard to count largest winstreak.`,
 		if msg.Dice == nil {
 			return fmt.Errorf("msg is not a dice result: %v", msg)
 		}
-		// msg.Dice.Value == 64
+		// msg.Dice.Value
 		return nil
 	},
 }

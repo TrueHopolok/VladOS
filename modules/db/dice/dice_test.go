@@ -1,7 +1,6 @@
 package dice_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/TrueHopolok/VladOS/modules/db"
@@ -35,7 +34,7 @@ func TestDice(t *testing.T) {
 		t.Fatal(err)
 	}
 	want := dice.UserStats{ThrowsTotal: 1, ThrowsWon: 0, StreakCurrent: 0, StreakBest: 0}
-	if equalStats(stats, want) {
+	if !equalStats(stats, want) {
 		t.Fatalf("Unexpeceted stats:\ngot: %+v\nwant:%+v", stats, want)
 	}
 
@@ -50,7 +49,7 @@ func TestDice(t *testing.T) {
 		t.Fatal(err)
 	}
 	want = dice.UserStats{ThrowsTotal: 3, ThrowsWon: 2, StreakCurrent: 2, StreakBest: 2}
-	if reflect.DeepEqual(stats, want) {
+	if !equalStats(stats, want) {
 		t.Fatalf("Unexpeceted stats:\ngot: %+v\nwant:%+v", stats, want)
 	}
 
@@ -65,7 +64,7 @@ func TestDice(t *testing.T) {
 		t.Fatal(err)
 	}
 	want = dice.UserStats{ThrowsTotal: 5, ThrowsWon: 3, StreakCurrent: 1, StreakBest: 2}
-	if reflect.DeepEqual(stats, want) {
+	if !equalStats(stats, want) {
 		t.Fatalf("Unexpeceted stats:\ngot: %+v\nwant:%+v", stats, want)
 	}
 }

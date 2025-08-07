@@ -21,7 +21,7 @@ type UserStats struct {
 }
 
 // Updates a leaderboard with recieved result for a particular user.
-func Update(user_id int, user_name string, dice_value int) error {
+func Update(user_id int64, user_name string, dice_value int) error {
 	query, err := QueryDir.ReadFile("update.sql")
 	if err != nil {
 		err = fmt.Errorf("reading query error: %w", err)
@@ -48,7 +48,8 @@ func Update(user_id int, user_name string, dice_value int) error {
 	}()
 }
 
-func Get(user_id int) (UserStats, error) {
+// Recieve stats for certain user and zero if there is no stats.
+func Get(user_id int64) (UserStats, error) {
 	query, err := QueryDir.ReadFile("get.sql")
 	if err != nil {
 		err = fmt.Errorf("reading query error: %w", err)

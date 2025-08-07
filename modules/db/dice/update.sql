@@ -6,4 +6,4 @@ SET
     throws_total = dice.throws_total + 1,
     throws_won = dice.throws_won + CASE WHEN $3 = 6 THEN 1 ELSE 0 END,
     streak_current = CASE WHEN $3 = 6 THEN dice.streak_current + 1 ELSE 0 END,
-    streak_best = CASE WHEN streak_best < streak_current THEN streak_current ELSE streak_best END
+    streak_best = CASE WHEN streak_best <= streak_current AND $3 = 6  THEN dice.streak_current + 1 ELSE streak_best END
