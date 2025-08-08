@@ -10,10 +10,10 @@ import (
 const pathToRoot = "../../../"
 
 func equalStats(x, y dbslot.UserStats) bool {
-	return x.ThrowsTotal == y.ThrowsTotal && x.ScoreCurrent == y.ScoreCurrent && x.ScoreBest == y.ScoreBest
+	return x.SpinsTotal == y.SpinsTotal && x.ScoreCurrent == y.ScoreCurrent && x.ScoreBest == y.ScoreBest
 }
 
-func TestDice(t *testing.T) {
+func TestSlot(t *testing.T) {
 	defer func() {
 		if x := recover(); x != nil {
 			t.Fatal("panic", x)
@@ -26,19 +26,43 @@ func TestDice(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if err := dbslot.Update(1, 1); err != nil {
+	if err := dbslot.Update(0, 5); err != nil {
 		t.Fatal(err)
 	}
-	stats, err := dbslot.Get(1)
+	stats, err := dbslot.Get(0)
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := dbslot.UserStats{ThrowsTotal: 1, ScoreCurrent: 0, ScoreBest: 0}
+	want := dbslot.UserStats{SpinsTotal: 1, ScoreCurrent: 5, ScoreBest: 5}
+
+	if err := dbslot.Update(1, 0); err != nil {
+		t.Fatal(err)
+	}
+	stats, err = dbslot.Get(1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want = dbslot.UserStats{SpinsTotal: 1, ScoreCurrent: 0, ScoreBest: 0}
 	if !equalStats(stats, want) {
 		t.Fatalf("Unexpeceted stats:\ngot: %+v\nwant:%+v", stats, want)
 	}
 
-	if err := dbslot.Update(1, 3); err != nil {
+	if err := dbslot.Update(1, 1); err != nil {
+		t.Fatal(err)
+	}
+	if err := dbslot.Update(1, 64); err != nil {
+		t.Fatal(err)
+	}
+	stats, err = dbslot.Get(1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want = dbslot.UserStats{SpinsTotal: 3, ScoreCurrent: 65, ScoreBest: 65}
+	if !equalStats(stats, want) {
+		t.Fatalf("Unexpeceted stats:\ngot: %+v\nwant:%+v", stats, want)
+	}
+
+	if err := dbslot.Update(1, 0); err != nil {
 		t.Fatal(err)
 	}
 	if err := dbslot.Update(1, 6); err != nil {
@@ -48,22 +72,7 @@ func TestDice(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	want = dbslot.UserStats{ThrowsTotal: 3, ScoreCurrent: 9, ScoreBest: 9}
-	if !equalStats(stats, want) {
-		t.Fatalf("Unexpeceted stats:\ngot: %+v\nwant:%+v", stats, want)
-	}
-
-	if err := dbslot.Update(1, 1); err != nil {
-		t.Fatal(err)
-	}
-	if err := dbslot.Update(1, 6); err != nil {
-		t.Fatal(err)
-	}
-	stats, err = dbslot.Get(1)
-	if err != nil {
-		t.Fatal(err)
-	}
-	want = dbslot.UserStats{ThrowsTotal: 5, ScoreCurrent: 6, ScoreBest: 9}
+	want = dbslot.UserStats{SpinsTotal: 5, ScoreCurrent: 6, ScoreBest: 65}
 	if !equalStats(stats, want) {
 		t.Fatalf("Unexpeceted stats:\ngot: %+v\nwant:%+v", stats, want)
 	}

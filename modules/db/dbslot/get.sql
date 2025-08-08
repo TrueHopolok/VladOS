@@ -1,3 +1,3 @@
 SELECT throws_total, score_current, score_best
-FROM dice
+FROM slot
 WHERE user_id = $1;

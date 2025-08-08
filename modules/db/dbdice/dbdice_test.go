@@ -26,14 +26,23 @@ func TestDice(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if err := dbdice.Update(1, 1); err != nil {
+	if err := dbdice.Update(0, 6); err != nil {
 		t.Fatal(err)
 	}
-	stats, err := dbdice.Get(1)
+	stats, err := dbdice.Get(0)
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := dbdice.UserStats{ThrowsTotal: 1, ScoreCurrent: 0, ScoreBest: 0}
+	want := dbdice.UserStats{ThrowsTotal: 1, ScoreCurrent: 6, ScoreBest: 6}
+
+	if err := dbdice.Update(1, 1); err != nil {
+		t.Fatal(err)
+	}
+	stats, err = dbdice.Get(1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want = dbdice.UserStats{ThrowsTotal: 1, ScoreCurrent: 0, ScoreBest: 0}
 	if !equalStats(stats, want) {
 		t.Fatalf("Unexpeceted stats:\ngot: %+v\nwant:%+v", stats, want)
 	}
