@@ -39,16 +39,5 @@ func utilClosestSpelling(cmdName string) []string {
 			}
 		}
 	}
-	extraCmdList := []string{"help", "start"}
-	for _, potName := range extraCmdList {
-		curScore := spch.FindScore(cmdName, potName)
-		if minScore == 0 || minScore > curScore {
-			potentialCommands = potentialCommands[:0]
-			minScore = curScore
-		}
-		if minScore == curScore {
-			potentialCommands = append(potentialCommands, potName)
-		}
-	}
 	return potentialCommands
 }
