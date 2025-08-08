@@ -36,8 +36,8 @@ func utilInfoAll() []tu.MessageEntityCollection {
 			msgText = append(msgText, tu.Entityf(" /%s - %s\n", name, cmd.InfoBrief))
 		}
 	}
-	msgText = append(msgText, tu.Entity("\nFor more info about particular command use:\n /help "))
-	msgText = append(msgText, tu.Entity("<command>").Code())
+	msgText = append(msgText, tu.Entity("\nFor more info about particular command use:\n "))
+	msgText = append(msgText, tu.Entity("/help <command>").Code())
 	return msgText
 }
 

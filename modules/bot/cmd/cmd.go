@@ -52,6 +52,7 @@ type Command struct {
 //   - spell checking since it is not a command and happens in case of misspelled command
 var CommandsList map[string]map[string]Command = map[string]map[string]Command{
 	"Gambling": {
+		"bjack": CommandBjack,
 		"slot":  CommandSlot,
 		"dice":  CommandDice,
 		"stats": CommandStats,
@@ -93,7 +94,10 @@ func utilStart(ctx *th.Context, update telego.Update, cmdName string, argsAmount
 	_, _, cmdArgs = tu.ParseCommand(update.Message.Text)
 	validArgs = len(cmdArgs) == argsAmount
 	if !validArgs {
-		_, invalidMSG = bot.SendMessage(ctx, tu.Messagef(chatID, "Invalid amount of arguments in the command.\nFor more info type:\n /help %s\n /help", cmdName))
+		_, invalidMSG = bot.SendMessage(ctx, tu.MessageWithEntities(chatID,
+			tu.Entity("Invalid amount of arguments in the command.\nFor more info type:\n "),
+			tu.Entityf("/help %s", cmdName).Code(),
+			tu.Entity("\n /help")))
 	}
 	return bot, chatID, cmdArgs, validArgs, invalidMSG
 }
