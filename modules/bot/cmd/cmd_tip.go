@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"strconv"
 
-	dbtip "github.com/TrueHopolok/VladOS/modules/db/tip"
+	"github.com/TrueHopolok/VladOS/modules/db/dbtip"
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 	tu "github.com/mymmrac/telego/telegoutil"

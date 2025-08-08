@@ -1,4 +1,4 @@
-package m8b
+package dbm8b
 
 import (
 	"database/sql"

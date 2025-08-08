@@ -1,10 +1,10 @@
-package tip_test
+package dbtip_test
 
 import (
 	"testing"
 
 	"github.com/TrueHopolok/VladOS/modules/db"
-	dbtip "github.com/TrueHopolok/VladOS/modules/db/tip"
+	"github.com/TrueHopolok/VladOS/modules/db/dbtip"
 )
 
 const pathToRoot = "../../../"

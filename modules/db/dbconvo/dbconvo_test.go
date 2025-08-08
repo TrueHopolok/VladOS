@@ -1,10 +1,10 @@
-package conversation_test
+package dbconvo_test
 
 import (
 	"testing"
 
 	"github.com/TrueHopolok/VladOS/modules/db"
-	dbconvo "github.com/TrueHopolok/VladOS/modules/db/conversation"
+	"github.com/TrueHopolok/VladOS/modules/db/dbconvo"
 )
 
 const pathToRoot = "../../../"

@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"time"
 
-	dbconvo "github.com/TrueHopolok/VladOS/modules/db/conversation"
+	"github.com/TrueHopolok/VladOS/modules/db/dbconvo"
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 	tu "github.com/mymmrac/telego/telegoutil"

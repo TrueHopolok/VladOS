@@ -89,9 +89,11 @@ var CommandDice Command = Command{
     InfoBrief: "throw a dice",
     InfoFull: `
  /dice
-Throw a dice. Win is recieving hitting a six (1:6 chance).
+Throw a dice. Win is hitting anything except one (5:6 chance).
+The value of the dice is counted towards score.
+On losing score is reset.
 
-Has a leaderboard to count largest winstreak.`,
+Has a leaderboard to count largest score streak.`,
     // contains filtered or unexported fields
 }
 ```
@@ -144,7 +146,7 @@ Command will immediatly send a response. Expects that min_num <= max_num and the
 }
 ```
 
-<a name="CommandSlot"></a>TODO: finish handler in value
+<a name="CommandSlot"></a>
 
 ```go
 var CommandSlot Command = Command{

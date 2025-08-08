@@ -11,7 +11,7 @@ import (
 	"github.com/TrueHopolok/VladOS/modules/bot/cmd"
 	"github.com/TrueHopolok/VladOS/modules/bot/pun"
 	"github.com/TrueHopolok/VladOS/modules/cfg"
-	dbconvo "github.com/TrueHopolok/VladOS/modules/db/conversation"
+	"github.com/TrueHopolok/VladOS/modules/db/dbconvo"
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 )

@@ -1,10 +1,10 @@
-package m8b_test
+package dbm8b_test
 
 import (
 	"testing"
 
 	"github.com/TrueHopolok/VladOS/modules/db"
-	"github.com/TrueHopolok/VladOS/modules/db/m8b"
+	"github.com/TrueHopolok/VladOS/modules/db/dbm8b"
 )
 
 const pathToRoot = "../../../"
@@ -22,10 +22,10 @@ func TestM8B(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if _, err := m8b.Get(true); err != nil {
+	if _, err := dbm8b.Get(true); err != nil {
 		t.Fatal(err)
 	}
-	if _, err := m8b.Get(false); err != nil {
+	if _, err := dbm8b.Get(false); err != nil {
 		t.Fatal(err)
 	}
 }

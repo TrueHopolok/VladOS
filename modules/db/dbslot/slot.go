@@ -1,4 +1,4 @@
-package tip
+package dbslot
 
 import (
 	"database/sql"
@@ -13,38 +13,33 @@ import (
 //go:embed *.sql
 var QueryDir embed.FS
 
-// Retrive a tip from the db table with a given id.
-func Get(id int) (text string, author string, found bool, err error) {
-	query, err := QueryDir.ReadFile("get.sql")
+type UserStats struct {
+	ThrowsTotal  int
+	ScoreCurrent int
+	ScoreBest    int
+}
+
+// Updates a leaderboard with recieved result for a particular user.
+func Update(user_id int64, dice_value int) error {
+	query, err := QueryDir.ReadFile("update.sql")
 	if err != nil {
 		err = fmt.Errorf("reading query error: %w", err)
-		return "", "", false, err
+		return err
 	}
 
 	tx, err := db.Conn.Begin()
 	if err != nil {
 		err = fmt.Errorf("beggining connection error: %w", err)
-		return "", "", false, err
+		return err
 	}
 	defer tx.Rollback()
 
-	rows, err := tx.Query(string(query), id)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return "", "", false, nil
-		}
+	if _, err := tx.Exec(string(query), user_id, dice_value); err != nil {
 		err = fmt.Errorf("query execution error: %w", err)
-		return "", "", false, err
-	}
-	if !rows.Next() { // should not be possible since there are results and no error, but leave it just in case
-		return "", "", false, nil
+		return err
 	}
 
-	if err := rows.Scan(&text, &author); err != nil {
-		err = fmt.Errorf("result scanning error: %w", err)
-		return "", "", false, err
-	}
-	return text, author, true, func() error {
+	return func() error {
 		if err := tx.Commit(); err != nil {
 			return fmt.Errorf("commit error: %w", err)
 		}
@@ -52,38 +47,39 @@ func Get(id int) (text string, author string, found bool, err error) {
 	}()
 }
 
-// Retrive a random tip from a db table.
-func Rand() (text string, author string, id int, err error) {
-	query, err := QueryDir.ReadFile("rand.sql")
+// Recieve stats for certain user and zero if there is no stats.
+func Get(user_id int64) (UserStats, error) {
+	query, err := QueryDir.ReadFile("get.sql")
 	if err != nil {
 		err = fmt.Errorf("reading query error: %w", err)
-		return "", "", 0, err
+		return UserStats{}, err
 	}
 
 	tx, err := db.Conn.Begin()
 	if err != nil {
 		err = fmt.Errorf("beggining connection error: %w", err)
-		return "", "", 0, err
+		return UserStats{}, err
 	}
 	defer tx.Rollback()
 
-	rows, err := tx.Query(string(query))
+	rows, err := tx.Query(string(query), user_id)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return "", "", 0, nil
+			return UserStats{ThrowsTotal: 0, ScoreCurrent: 0, ScoreBest: 0}, nil
 		}
 		err = fmt.Errorf("query execution error: %w", err)
-		return "", "", 0, err
+		return UserStats{}, err
 	}
 	if !rows.Next() { // should not be possible since there are results and no error, but leave it just in case
-		return "", "", 0, nil
+		return UserStats{}, nil
 	}
 
-	if err := rows.Scan(&id, &text, &author); err != nil {
+	var stats UserStats
+	if err := rows.Scan(&stats.ThrowsTotal, &stats.ScoreCurrent, &stats.ScoreBest); err != nil {
 		err = fmt.Errorf("result scanning error: %w", err)
-		return "", "", 0, err
+		return UserStats{}, err
 	}
-	return text, author, id, func() error {
+	return stats, func() error {
 		if err := tx.Commit(); err != nil {
 			return fmt.Errorf("commit error: %w", err)
 		}

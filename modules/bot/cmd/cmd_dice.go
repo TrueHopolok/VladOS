@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/TrueHopolok/VladOS/modules/db/dice"
+	"github.com/TrueHopolok/VladOS/modules/db/dbdice"
 	"github.com/mymmrac/telego"
 	"github.com/mymmrac/telego/telegohandler"
 	tu "github.com/mymmrac/telego/telegoutil"
@@ -32,7 +32,7 @@ Has a leaderboard to count largest score streak.`,
 		if msg.Dice == nil {
 			return fmt.Errorf("msg is not a dice result: %v", msg)
 		}
-		err = dice.Update(update.Message.From.ID, msg.Dice.Value)
+		err = dbdice.Update(update.Message.From.ID, msg.Dice.Value)
 		if err != nil {
 			return err
 		}
@@ -46,7 +46,7 @@ Has a leaderboard to count largest score streak.`,
 }
 
 func outputDice(user_id int64, has_won bool) ([]tu.MessageEntityCollection, error) {
-	stats, err := dice.Get(user_id)
+	stats, err := dbdice.Get(user_id)
 	if err != nil {
 		return nil, err
 	}

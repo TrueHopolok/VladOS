@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	dbconvo "github.com/TrueHopolok/VladOS/modules/db/conversation"
+	"github.com/TrueHopolok/VladOS/modules/db/dbconvo"
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 	tu "github.com/mymmrac/telego/telegoutil"

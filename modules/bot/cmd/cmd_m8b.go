@@ -4,7 +4,7 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/TrueHopolok/VladOS/modules/db/m8b"
+	"github.com/TrueHopolok/VladOS/modules/db/dbm8b"
 	"github.com/mymmrac/telego"
 	"github.com/mymmrac/telego/telegohandler"
 	tu "github.com/mymmrac/telego/telegoutil"
@@ -22,7 +22,7 @@ Tells you the truth to a yes/no question in mind.`,
 		}
 
 		ans_int := rand.New(rand.NewSource(time.Now().UnixNano())).Intn(2)
-		ans_str, err := m8b.Get(ans_int == 1)
+		ans_str, err := dbm8b.Get(ans_int == 1)
 		if err != nil {
 			return err
 		}
