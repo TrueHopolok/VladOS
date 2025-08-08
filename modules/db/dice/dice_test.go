@@ -10,7 +10,7 @@ import (
 const pathToRoot = "../../../"
 
 func equalStats(x, y dice.UserStats) bool {
-	return x.ThrowsTotal == y.ThrowsTotal && x.ThrowsWon == y.ThrowsWon && x.StreakCurrent == y.StreakCurrent && x.StreakBest == y.StreakBest
+	return x.ThrowsTotal == y.ThrowsTotal && x.ScoreCurrent == y.ScoreCurrent && x.ScoreBest == y.ScoreBest
 }
 
 func TestDice(t *testing.T) {
@@ -26,44 +26,44 @@ func TestDice(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if err := dice.Update(1, "testname", 1); err != nil {
+	if err := dice.Update(1, 1); err != nil {
 		t.Fatal(err)
 	}
 	stats, err := dice.Get(1)
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := dice.UserStats{ThrowsTotal: 1, ThrowsWon: 0, StreakCurrent: 0, StreakBest: 0}
+	want := dice.UserStats{ThrowsTotal: 1, ScoreCurrent: 0, ScoreBest: 0}
 	if !equalStats(stats, want) {
 		t.Fatalf("Unexpeceted stats:\ngot: %+v\nwant:%+v", stats, want)
 	}
 
-	if err := dice.Update(1, "testname", 6); err != nil {
+	if err := dice.Update(1, 3); err != nil {
 		t.Fatal(err)
 	}
-	if err := dice.Update(1, "testname", 6); err != nil {
+	if err := dice.Update(1, 6); err != nil {
 		t.Fatal(err)
 	}
 	stats, err = dice.Get(1)
 	if err != nil {
 		t.Fatal(err)
 	}
-	want = dice.UserStats{ThrowsTotal: 3, ThrowsWon: 2, StreakCurrent: 2, StreakBest: 2}
+	want = dice.UserStats{ThrowsTotal: 3, ScoreCurrent: 9, ScoreBest: 9}
 	if !equalStats(stats, want) {
 		t.Fatalf("Unexpeceted stats:\ngot: %+v\nwant:%+v", stats, want)
 	}
 
-	if err := dice.Update(1, "testname", 1); err != nil {
+	if err := dice.Update(1, 1); err != nil {
 		t.Fatal(err)
 	}
-	if err := dice.Update(1, "testname", 6); err != nil {
+	if err := dice.Update(1, 6); err != nil {
 		t.Fatal(err)
 	}
 	stats, err = dice.Get(1)
 	if err != nil {
 		t.Fatal(err)
 	}
-	want = dice.UserStats{ThrowsTotal: 5, ThrowsWon: 3, StreakCurrent: 1, StreakBest: 2}
+	want = dice.UserStats{ThrowsTotal: 5, ScoreCurrent: 6, ScoreBest: 9}
 	if !equalStats(stats, want) {
 		t.Fatalf("Unexpeceted stats:\ngot: %+v\nwant:%+v", stats, want)
 	}

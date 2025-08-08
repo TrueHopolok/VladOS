@@ -13,9 +13,11 @@ var CommandDice Command = Command{
 	InfoBrief: "throw a dice",
 	InfoFull: `
  /dice
-Throw a dice. Win is recieving hitting a six (1:6 chance).
+Throw a dice. Win is hitting anything except one (5:6 chance).
+The value of the dice is counted towards score.
+On losing score is reset.
 
-Has a leaderboard to count largest winstreak.`,
+Has a leaderboard to count largest score streak.`,
 	handler: func(ctx *telegohandler.Context, update telego.Update) error {
 		bot, chatID, _, valid, err := utilStart(ctx, update, "dice", 0)
 		if !valid {
@@ -30,11 +32,11 @@ Has a leaderboard to count largest winstreak.`,
 		if msg.Dice == nil {
 			return fmt.Errorf("msg is not a dice result: %v", msg)
 		}
-		err = dice.Update(update.Message.From.ID, update.Message.From.FirstName, msg.Dice.Value)
+		err = dice.Update(update.Message.From.ID, msg.Dice.Value)
 		if err != nil {
 			return err
 		}
-		msgText, err := outputDice(update.Message.From.ID, msg.Dice.Value == 6)
+		msgText, err := outputDice(update.Message.From.ID, msg.Dice.Value > 1)
 		if err != nil {
 			return err
 		}
@@ -56,6 +58,6 @@ func outputDice(user_id int64, has_won bool) ([]tu.MessageEntityCollection, erro
 		msgText = append(msgText, tu.Entity("You lost!\n").Bold())
 	}
 
-	msgText = append(msgText, tu.Entityf("\nCurrent winstreak: %d\nBest winstreak: %d\nMore stats:", stats.StreakCurrent, stats.StreakBest), tu.Entity(" /stats dice").BotCommand(), tu.Entity("\nRepeat: /dice"))
+	msgText = append(msgText, tu.Entityf("\nCurrent score: %d\nBest score: %d\nMore stats:", stats.ScoreCurrent, stats.ScoreBest), tu.Entity(" /stats dice").BotCommand(), tu.Entity("\nPlay again: /dice"))
 	return msgText, nil
 }

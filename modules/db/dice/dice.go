@@ -14,14 +14,13 @@ import (
 var QueryDir embed.FS
 
 type UserStats struct {
-	ThrowsTotal   int
-	ThrowsWon     int
-	StreakCurrent int
-	StreakBest    int
+	ThrowsTotal  int
+	ScoreCurrent int
+	ScoreBest    int
 }
 
 // Updates a leaderboard with recieved result for a particular user.
-func Update(user_id int64, user_name string, dice_value int) error {
+func Update(user_id int64, dice_value int) error {
 	query, err := QueryDir.ReadFile("update.sql")
 	if err != nil {
 		err = fmt.Errorf("reading query error: %w", err)
@@ -35,7 +34,7 @@ func Update(user_id int64, user_name string, dice_value int) error {
 	}
 	defer tx.Rollback()
 
-	if _, err := tx.Exec(string(query), user_id, user_name, dice_value); err != nil {
+	if _, err := tx.Exec(string(query), user_id, dice_value); err != nil {
 		err = fmt.Errorf("query execution error: %w", err)
 		return err
 	}
@@ -66,7 +65,7 @@ func Get(user_id int64) (UserStats, error) {
 	rows, err := tx.Query(string(query), user_id)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return UserStats{ThrowsTotal: 0, ThrowsWon: 0, StreakCurrent: 0, StreakBest: 0}, nil
+			return UserStats{ThrowsTotal: 0, ScoreCurrent: 0, ScoreBest: 0}, nil
 		}
 		err = fmt.Errorf("query execution error: %w", err)
 		return UserStats{}, err
@@ -76,7 +75,7 @@ func Get(user_id int64) (UserStats, error) {
 	}
 
 	var stats UserStats
-	if err := rows.Scan(&stats.ThrowsTotal, &stats.ThrowsWon, &stats.StreakCurrent, &stats.StreakBest); err != nil {
+	if err := rows.Scan(&stats.ThrowsTotal, &stats.ScoreCurrent, &stats.ScoreBest); err != nil {
 		err = fmt.Errorf("result scanning error: %w", err)
 		return UserStats{}, err
 	}

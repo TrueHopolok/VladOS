@@ -41,8 +41,9 @@ Few commands are stored and handled seperatly from the list:
 ```go
 var CommandsList map[string]map[string]Command = map[string]map[string]Command{
     "Gambling": {
-        "slot": CommandSlot,
-        "dice": CommandDice,
+        "slot":  CommandSlot,
+        "dice":  CommandDice,
+        "stats": CommandStats,
     },
     "Others": {
         "start": CommandStart,
@@ -143,7 +144,7 @@ Command will immediatly send a response. Expects that min_num <= max_num and the
 }
 ```
 
-<a name="CommandSlot"></a>
+<a name="CommandSlot"></a>TODO: finish handler in value
 
 ```go
 var CommandSlot Command = Command{
@@ -167,6 +168,19 @@ var CommandStart Command = Command{
 Output information about bot's life purpose and who it is.
 Provide useful links to bot's website. 
 `,
+    // contains filtered or unexported fields
+}
+```
+
+<a name="CommandStats"></a>TODO: make whole stats and update on for each new machine \(potentialy make it dynamic\)
+
+```go
+var CommandStats Command = Command{
+    InfoBrief: "output stats for game",
+    InfoFull: `
+ /stats <game_name>
+Output all stats for ceratin game.
+With a your placement and top placement in the leaderboard.`,
     // contains filtered or unexported fields
 }
 ```
