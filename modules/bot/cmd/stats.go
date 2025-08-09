@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/TrueHopolok/VladOS/modules/db/dbslot"
 	"github.com/mymmrac/telego"
 	"github.com/mymmrac/telego/telegohandler"
 	tu "github.com/mymmrac/telego/telegoutil"
@@ -19,14 +20,40 @@ With a your placement and top placement in the leaderboard.`,
 			return err
 		}
 
-		_, err = bot.SendMessage(ctx, tu.Message(chatID, "Sorry, but currently this command is in development. Comeback later."))
-		return err
-
+		userID := update.Message.From.ID
 		switch args[0] {
 		case "slot":
-			return nil
+			ranking, err := dbslot.GetFull(userID)
+			if err != nil {
+				return err
+			}
+			if len(ranking) == 0 {
+				_, err = bot.SendMessage(ctx, tu.Message(chatID, "Currently no players have played this game. Become the first one."))
+				return err
+			}
+			var yourStats dbslot.UserStats
+			foundYou := false
+			msgText := []tu.MessageEntityCollection{
+				tu.Entityf("Players in total:\n%d\n\nLeaderboard:", ranking[0].PlayersTotal).Bold(),
+			}
+			for _, stats := range ranking {
+				msgText = append(msgText, tu.Entityf("\n%d. place: %d", stats.Placement, stats.Personal.ScoreBest))
+				if stats.UserId == userID {
+					foundYou = true
+					yourStats = stats.Personal
+					msgText = append(msgText, tu.Entity("  (you)").Bold())
+				}
+			}
+			if foundYou {
+				msgText = append(msgText, tu.Entity("\n\nYour stats:").Bold(), tu.Entityf("\nTotal spins: %d\nCurrent score streak: %d\nBest score streak: %d", yourStats.SpinsTotal, yourStats.ScoreCurrent, yourStats.ScoreBest))
+			} else {
+				msgText = append(msgText, tu.Entity("\n\nPlay the game to have any stats..."))
+			}
+			_, err = bot.SendMessage(ctx, tu.MessageWithEntities(chatID, msgText...))
+			return err
 		case "dice":
-			return nil
+			_, err = bot.SendMessage(ctx, tu.Message(chatID, "Sorry, but currently this command is in development. Comeback later."))
+			return err
 		case "bjack":
 			_, err = bot.SendMessage(ctx, tu.Message(chatID, "Sorry, but currently this command is in development. Comeback later."))
 			return err

@@ -41,6 +41,7 @@ Few commands are stored and handled seperatly from the list:
 ```go
 var CommandsList map[string]map[string]Command = map[string]map[string]Command{
     "Gambling": {
+        "bjack": CommandBjack,
         "slot":  CommandSlot,
         "dice":  CommandDice,
         "stats": CommandStats,
@@ -78,6 +79,26 @@ type Command struct {
 
     // Brief description about the command.
     InfoBrief string
+    // contains filtered or unexported fields
+}
+```
+
+<a name="CommandBjack"></a>TODO: make a blackjack game
+
+```go
+var CommandBjack Command = Command{
+    InfoBrief: "game of a blackjack",
+    InfoFull: `
+ /bjack
+Play a blackjack against a classical dealer. 
+No need to bet any money, since you will bet your score streak like in dice and slots.
+
+Gameplay:
+Sorry, but this command is currently in development.
+
+On losing score is reset.
+
+Has a leaderboard to count largest score streak.`,
     // contains filtered or unexported fields
 }
 ```
@@ -153,9 +174,18 @@ var CommandSlot Command = Command{
     InfoBrief: "spin slot machine",
     InfoFull: `
  /slot
-Spin a slot machine. Win is recieving a Jackpot (1:64 chance).
+Spin a slot machine.
+Win is counted if two or three of 1 kind with excpetion of bar.
+Score board (with its chances):
+ - Two of a kind   =  +1 (27:64);
+ - Double sevens   =  +3 (9:64);
+ - Three of a kind   =  +9 (3:64);
+ - Triple sevens / JACKPOT   = +27 (1:64).
 
-Has a leaderboard to count largest winstreak.`,
+Overall chance to win and continue the streak is (40:64) or (5:8).
+On losing score is reset.
+
+Has a leaderboard to count largest score streak.`,
     // contains filtered or unexported fields
 }
 ```

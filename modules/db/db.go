@@ -48,12 +48,14 @@ func Init() error {
 // Erase provided database via [os.Remove] and then initialize it like [Init] function.
 //
 // !WARNING! - must be used only for testing purposes and on testing database to avoid losing data.
-func InitTesting(_ *testing.T, pathToRoot string) error {
+func InitTesting(t *testing.T, pathToRoot string) error {
 	if !testing.Testing() {
 		panic(fmt.Errorf("tried to initialize the database in test mode while not in testing mode"))
 	}
 
-	os.Remove(pathToRoot + cfg.GetTest(pathToRoot).DBfilePath)
+	if err := os.Remove(pathToRoot + cfg.GetTest(pathToRoot).DBfilePath); err != nil {
+		return err
+	}
 
 	conn, err := sql.Open("sqlite3", pathToRoot+cfg.GetTest(pathToRoot).DBfilePath)
 	if err == nil {

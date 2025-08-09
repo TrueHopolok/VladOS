@@ -16,7 +16,7 @@ Queries for different purposes will be located in the sub directories of the pac
 
 - [Variables](<#variables>)
 - [func Init\(\) error](<#Init>)
-- [func InitTesting\(\_ \*testing.T, pathToRoot string\) error](<#InitTesting>)
+- [func InitTesting\(t \*testing.T, pathToRoot string\) error](<#InitTesting>)
 - [func Migrate\(\) error](<#Migrate>)
 - [type DB](<#DB>)
 
@@ -42,7 +42,7 @@ Connects to SQLite database with path from [github.com/TrueHopolok/VladOS/module
 ## func InitTesting
 
 ```go
-func InitTesting(_ *testing.T, pathToRoot string) error
+func InitTesting(t *testing.T, pathToRoot string) error
 ```
 
 Erase provided database via [os.Remove](<https://pkg.go.dev/os/#Remove>) and then initialize it like [Init](<#Init>) function.

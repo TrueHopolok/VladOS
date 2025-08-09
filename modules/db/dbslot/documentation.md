@@ -9,7 +9,9 @@ import "github.com/TrueHopolok/VladOS/modules/db/dbslot"
 ## Index
 
 - [Variables](<#variables>)
-- [func Update\(user\_id int64, dice\_value int\) error](<#Update>)
+- [func Update\(user\_id int64, slot\_score int\) error](<#Update>)
+- [type FullStats](<#FullStats>)
+  - [func GetFull\(user\_id int64\) \(\[\]FullStats, error\)](<#GetFull>)
 - [type UserStats](<#UserStats>)
   - [func Get\(user\_id int64\) \(UserStats, error\)](<#Get>)
 
@@ -26,10 +28,33 @@ var QueryDir embed.FS
 ## func Update
 
 ```go
-func Update(user_id int64, dice_value int) error
+func Update(user_id int64, slot_score int) error
 ```
 
 Updates a leaderboard with recieved result for a particular user.
+
+<a name="FullStats"></a>
+## type FullStats
+
+
+
+```go
+type FullStats struct {
+    UserId       int64
+    Personal     UserStats
+    Placement    int
+    PlayersTotal int
+}
+```
+
+<a name="GetFull"></a>
+### func GetFull
+
+```go
+func GetFull(user_id int64) ([]FullStats, error)
+```
+
+
 
 <a name="UserStats"></a>
 ## type UserStats
@@ -38,7 +63,7 @@ Updates a leaderboard with recieved result for a particular user.
 
 ```go
 type UserStats struct {
-    ThrowsTotal  int
+    SpinsTotal   int
     ScoreCurrent int
     ScoreBest    int
 }

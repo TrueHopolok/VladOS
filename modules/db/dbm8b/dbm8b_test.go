@@ -18,6 +18,11 @@ func TestM8B(t *testing.T) {
 	if err := db.InitTesting(t, pathToRoot); err != nil {
 		t.Fatal(err)
 	}
+	defer func() {
+		if err := db.Conn.Close(); err != nil {
+			t.Fatal(err)
+		}
+	}()
 	if err := db.Migrate(); err != nil {
 		t.Fatal(err)
 	}
