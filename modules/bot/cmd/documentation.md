@@ -135,7 +135,7 @@ Result is outputed in the message. Then the process is repeated till the 0.
 }
 ```
 
-<a name="CommandGuess"></a>TODO: make a blackjack game
+<a name="CommandGuess"></a>
 
 ```go
 var CommandGuess Command = Command{
