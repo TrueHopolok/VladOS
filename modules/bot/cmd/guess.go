@@ -79,32 +79,43 @@ You have 6 guesses, good luck!`))
 		status.GuessesLeft--
 
 		playerGuess, err := strconv.Atoi(update.Message.Text)
-		if err != nil {
+		if err != nil || playerGuess < 1 || playerGuess > guessesMaxValue {
 			_, err = bot.SendMessage(ctx, tu.Messagef(chatID, "Given argument is invalid, please enter the valid number between 1 and %d (included).\nTo cancel the command input and execution type:\n /cancel", guessesMaxValue))
 			return err
 		}
+
 		if playerGuess == status.PickedNumber {
+			err = dbstats.Update("guess", update.Message.From.ID, 1)
+			if err != nil {
+				return fmt.Errorf("error: %w\ndbconvo.Free: %w", err, dbconvo.Free(userID))
+			}
+			if err := dbconvo.Free(userID); err != nil {
+				return err
+			}
+
 			msgText, err := utilOutputDice("guess", userID, true)
 			if err != nil {
 				return err
 			}
 			_, err = bot.SendMessage(ctx, tu.MessageWithEntities(chatID, msgText...))
-			if err != nil {
-				return err
-			}
-			return dbconvo.Free(userID)
+			return err
 		}
 
 		if status.GuessesLeft == 0 {
+			err = dbstats.Update("guess", update.Message.From.ID, 0)
+			if err != nil {
+				return fmt.Errorf("error: %w\ndbconvo.Free: %w", err, dbconvo.Free(userID))
+			}
+			if err := dbconvo.Free(userID); err != nil {
+				return err
+			}
+
 			msgText, err := utilOutputDice("guess", userID, false)
 			if err != nil {
 				return err
 			}
 			_, err = bot.SendMessage(ctx, tu.MessageWithEntities(chatID, msgText...))
-			if err != nil {
-				return err
-			}
-			return dbconvo.Free(userID)
+			return err
 		}
 
 		var answer string
