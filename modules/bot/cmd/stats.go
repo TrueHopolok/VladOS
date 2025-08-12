@@ -22,7 +22,7 @@ With a your placement and top placement in the leaderboard.`,
 
 		userID := update.Message.From.ID
 		switch args[0] {
-		case "slot", "dice":
+		case "slot", "dice", "bjack":
 			ranking, err := dbstats.GetFull(args[0], userID)
 			if err != nil {
 				return err
@@ -32,9 +32,6 @@ With a your placement and top placement in the leaderboard.`,
 				return err
 			}
 			_, err = bot.SendMessage(ctx, tu.MessageWithEntities(chatID, outputStats(userID, ranking)...))
-			return err
-		case "bjack":
-			_, err = bot.SendMessage(ctx, tu.Message(chatID, "Sorry, but currently this command is in development. Comeback later."))
 			return err
 		default:
 			_, err = bot.SendMessage(ctx, tu.MessageWithEntities(chatID,
