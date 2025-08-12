@@ -34,5 +34,4 @@ Type /help for more info about them.
 `)))
 		return err
 	},
-	conversation: nil,
 }

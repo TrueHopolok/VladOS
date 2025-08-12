@@ -42,7 +42,6 @@ With a your placement and top placement in the leaderboard.`,
 			return err
 		}
 	},
-	conversation: nil,
 }
 
 func outputStats(userID int64, ranking []dbstats.FullStats) []tu.MessageEntityCollection {

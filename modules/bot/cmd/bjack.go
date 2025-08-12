@@ -30,4 +30,5 @@ Has a leaderboard to count largest score streak.`,
 		return err
 	},
 	conversation: nil,
+	cancelation:  nil,
 }

@@ -30,5 +30,4 @@ Tells you the truth to a yes/no question in mind.`,
 		_, err = bot.SendMessage(ctx, tu.Message(chatID, ans_str))
 		return err
 	},
-	conversation: nil,
 }

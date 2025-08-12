@@ -26,5 +26,4 @@ Result is outputed in the message. Then the process is repeated till the 0.
 		}
 		return nil
 	},
-	conversation: nil,
 }

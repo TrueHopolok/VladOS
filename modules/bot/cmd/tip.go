@@ -54,7 +54,6 @@ Output a tip with id equal to given one.
 		_, err := bot.SendMessage(ctx, tu.MessageWithEntities(chatID, msgText...))
 		return err
 	},
-	conversation: nil,
 }
 
 func getTipText(tip_id int, tip_text, author string) []tu.MessageEntityCollection {

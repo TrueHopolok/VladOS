@@ -130,6 +130,9 @@ Command will immediatly send a response. Expects that min_num <= max_num and the
 		}
 		return nil
 	},
+	cancelation: func(ctx *th.Context, update telego.Update) error {
+		return nil
+	},
 }
 
 func inputRand(ctx *th.Context, chatID telego.ChatID, inputText string, left int, withCancel bool) (inputNum int, invalid bool, msgErr error) {
