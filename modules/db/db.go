@@ -53,9 +53,7 @@ func InitTesting(t *testing.T, pathToRoot string) error {
 		panic(fmt.Errorf("tried to initialize the database in test mode while not in testing mode"))
 	}
 
-	if err := os.Remove(pathToRoot + cfg.GetTest(pathToRoot).DBfilePath); err != nil {
-		return err
-	}
+	os.Remove(pathToRoot + cfg.GetTest(pathToRoot).DBfilePath)
 
 	conn, err := sql.Open("sqlite3", pathToRoot+cfg.GetTest(pathToRoot).DBfilePath)
 	if err == nil {

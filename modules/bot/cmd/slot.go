@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/TrueHopolok/VladOS/modules/db/dbslot"
+	"github.com/TrueHopolok/VladOS/modules/db/dbstats"
 	"github.com/mymmrac/telego"
 	"github.com/mymmrac/telego/telegohandler"
 	tu "github.com/mymmrac/telego/telegoutil"
@@ -40,34 +40,17 @@ Has a leaderboard to count largest score streak.`,
 			return fmt.Errorf("msg is not a dice result: %v", msg)
 		}
 		scored := getSlotScore(msg.Dice.Value)
-		err = dbslot.Update(update.Message.From.ID, scored)
+		err = dbstats.Update("slot", update.Message.From.ID, scored)
 		if err != nil {
 			return err
 		}
-		msgText, err := outputSlot(update.Message.From.ID, scored > 0)
+		msgText, err := utilOutputDice("slot", update.Message.From.ID, scored > 0)
 		if err != nil {
 			return err
 		}
 		_, err = bot.SendMessage(ctx, tu.MessageWithEntities(chatID, msgText...))
 		return err
 	},
-}
-
-func outputSlot(user_id int64, has_won bool) ([]tu.MessageEntityCollection, error) {
-	stats, err := dbslot.Get(user_id)
-	if err != nil {
-		return nil, err
-	}
-
-	var msgText []tu.MessageEntityCollection
-	if has_won {
-		msgText = append(msgText, tu.Entity("You won!\n").Bold())
-	} else {
-		msgText = append(msgText, tu.Entity("You lost!\n").Bold())
-	}
-
-	msgText = append(msgText, tu.Entityf("\nCurrent score: %d\nBest score: %d\nMore stats:", stats.ScoreCurrent, stats.ScoreBest), tu.Entity(" /stats slot").BotCommand(), tu.Entity("\nPlay again: /slot"))
-	return msgText, nil
 }
 
 /*

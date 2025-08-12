@@ -1,4 +1,4 @@
-package dbslot
+package dbstats
 
 import (
 	"database/sql"
@@ -14,7 +14,7 @@ import (
 var QueryDir embed.FS
 
 type UserStats struct {
-	SpinsTotal   int
+	GamesTotal   int
 	ScoreCurrent int
 	ScoreBest    int
 }
@@ -27,7 +27,7 @@ type FullStats struct {
 }
 
 // Updates a leaderboard with recieved result for a particular user.
-func Update(user_id int64, slot_score int) error {
+func Update(gameName string, userID int64, score int) error {
 	query, err := QueryDir.ReadFile("update.sql")
 	if err != nil {
 		err = fmt.Errorf("reading query error: %w", err)
@@ -41,7 +41,7 @@ func Update(user_id int64, slot_score int) error {
 	}
 	defer tx.Rollback()
 
-	if _, err := tx.Exec(string(query), user_id, slot_score); err != nil {
+	if _, err := tx.Exec(fmt.Sprintf(string(query), gameName), userID, score); err != nil {
 		err = fmt.Errorf("query execution error: %w", err)
 		return err
 	}
@@ -55,7 +55,7 @@ func Update(user_id int64, slot_score int) error {
 }
 
 // Recieve stats for certain user and zero if there is no stats.
-func Get(user_id int64) (UserStats, error) {
+func Get(gameName string, userID int64) (UserStats, error) {
 	query, err := QueryDir.ReadFile("get.sql")
 	if err != nil {
 		err = fmt.Errorf("reading query error: %w", err)
@@ -69,10 +69,10 @@ func Get(user_id int64) (UserStats, error) {
 	}
 	defer tx.Rollback()
 
-	rows, err := tx.Query(string(query), user_id)
+	rows, err := tx.Query(fmt.Sprintf(string(query), gameName), userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return UserStats{SpinsTotal: 0, ScoreCurrent: 0, ScoreBest: 0}, nil
+			return UserStats{}, nil
 		}
 		err = fmt.Errorf("query execution error: %w", err)
 		return UserStats{}, err
@@ -82,7 +82,7 @@ func Get(user_id int64) (UserStats, error) {
 	}
 
 	var stats UserStats
-	if err := rows.Scan(&stats.SpinsTotal, &stats.ScoreCurrent, &stats.ScoreBest); err != nil {
+	if err := rows.Scan(&stats.GamesTotal, &stats.ScoreCurrent, &stats.ScoreBest); err != nil {
 		err = fmt.Errorf("result scanning error: %w", err)
 		return UserStats{}, err
 	}
@@ -94,7 +94,7 @@ func Get(user_id int64) (UserStats, error) {
 	}()
 }
 
-func GetFull(user_id int64) ([]FullStats, error) {
+func GetFull(gameName string, userID int64) ([]FullStats, error) {
 	query, err := QueryDir.ReadFile("full.sql")
 	if err != nil {
 		err = fmt.Errorf("reading query error: %w", err)
@@ -108,7 +108,7 @@ func GetFull(user_id int64) ([]FullStats, error) {
 	}
 	defer tx.Rollback()
 
-	rows, err := tx.Query(string(query), user_id)
+	rows, err := tx.Query(fmt.Sprintf(string(query), gameName), userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
@@ -120,7 +120,7 @@ func GetFull(user_id int64) ([]FullStats, error) {
 	var stats []FullStats
 	for rows.Next() {
 		var next FullStats
-		if err := rows.Scan(&next.UserId, &next.Personal.SpinsTotal, &next.Personal.ScoreCurrent, &next.Personal.ScoreBest, &next.Placement, &next.PlayersTotal); err != nil {
+		if err := rows.Scan(&next.UserId, &next.Personal.GamesTotal, &next.Personal.ScoreCurrent, &next.Personal.ScoreBest, &next.Placement, &next.PlayersTotal); err != nil {
 			err = fmt.Errorf("result scanning error: %w", err)
 			return nil, err
 		}
