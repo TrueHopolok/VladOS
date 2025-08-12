@@ -22,7 +22,7 @@ With a your placement and top placement in the leaderboard.`,
 
 		userID := update.Message.From.ID
 		switch args[0] {
-		case "slot", "dice", "bjack":
+		case "slot", "dice", "bjack", "guess":
 			ranking, err := dbstats.GetFull(args[0], userID)
 			if err != nil {
 				return err

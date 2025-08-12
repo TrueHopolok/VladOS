@@ -42,6 +42,7 @@ Few commands are stored and handled seperatly from the list:
 var CommandsList map[string]map[string]Command = map[string]map[string]Command{
     "Gambling": {
         "bjack": CommandBjack,
+        "guess": CommandGuess,
         "slot":  CommandSlot,
         "dice":  CommandDice,
         "stats": CommandStats,
@@ -111,6 +112,7 @@ var CommandDice Command = Command{
     InfoFull: `
  /dice
 Throw a dice. Win is hitting anything except one (5:6 chance).
+
 The value of the dice is counted towards score.
 On losing score is reset.
 
@@ -129,6 +131,25 @@ Starts from 1000, subtracts 7.
 Result is outputed in the message. Then the process is repeated till the 0. 
  `,
     InfoBrief: "output 1000-7 loop",
+    // contains filtered or unexported fields
+}
+```
+
+<a name="CommandGuess"></a>TODO: make a blackjack game
+
+```go
+var CommandGuess Command = Command{
+    InfoBrief: "game of a number guesser",
+    InfoFull: `
+ /guess
+Play a number guesser game against the bot in a role of the guesser.
+He randomly picks a number between 1 and 100.
+Your goal is to guess it in 6 or less guesses. 
+
+On correct guess your score streak is increased.
+On losing score is reset.
+
+Has a leaderboard to count largest score streak.`,
     // contains filtered or unexported fields
 }
 ```

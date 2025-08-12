@@ -7,21 +7,20 @@ import (
 )
 
 // TODO: make a blackjack game
-var CommandBjack Command = Command{
-	InfoBrief: "game of a blackjack",
+var CommandGuess Command = Command{
+	InfoBrief: "game of a number guesser",
 	InfoFull: `
- /bjack
-Play a blackjack against a classical dealer. 
-No need to bet any money, since you will bet your score streak like in dice and slots.
+ /guess
+Play a number guesser game against the bot in a role of the guesser.
+He randomly picks a number between 1 and 100.
+Your goal is to guess it in 6 or less guesses. 
 
-Gameplay:
-Sorry, but this command is currently in development.
-
+On correct guess your score streak is increased.
 On losing score is reset.
 
 Has a leaderboard to count largest score streak.`,
 	handler: func(ctx *telegohandler.Context, update telego.Update) error {
-		bot, chatID, _, valid, err := utilStart(ctx, update, "bjack", 0)
+		bot, chatID, _, valid, err := utilStart(ctx, update, "guess", 0)
 		if !valid {
 			return err
 		}

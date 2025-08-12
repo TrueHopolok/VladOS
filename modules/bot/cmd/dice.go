@@ -14,6 +14,7 @@ var CommandDice Command = Command{
 	InfoFull: `
  /dice
 Throw a dice. Win is hitting anything except one (5:6 chance).
+
 The value of the dice is counted towards score.
 On losing score is reset.
 

@@ -57,6 +57,7 @@ type Command struct {
 var CommandsList map[string]map[string]Command = map[string]map[string]Command{
 	"Gambling": {
 		"bjack": CommandBjack,
+		"guess": CommandGuess,
 		"slot":  CommandSlot,
 		"dice":  CommandDice,
 		"stats": CommandStats,

@@ -10,7 +10,7 @@ import (
 
 const pathToRoot = "../../../"
 
-var tablesToTest = []string{"slot", "dice", "bjack"}
+var tablesToTest = []string{"slot", "dice", "bjack", "guess"}
 
 func TestGet(t *testing.T) {
 	defer func() {
