@@ -25,7 +25,7 @@ else: skip this package and fallthrough to others handlers
 ## Index
 
 - [Variables](<#variables>)
-- [func ConnectCommands\(bh \*th.BotHandler\) error](<#ConnectCommands>)
+- [func ConnectCommands\(bot \*telego.Bot, bh \*th.BotHandler\) error](<#ConnectCommands>)
 - [type Command](<#Command>)
 
 
@@ -61,7 +61,7 @@ var CommandsList map[string]map[string]Command = map[string]map[string]Command{
 ## func ConnectCommands
 
 ```go
-func ConnectCommands(bh *th.BotHandler) error
+func ConnectCommands(bot *telego.Bot, bh *th.BotHandler) error
 ```
 
 Connects converstion handlers. Afterwards create a group in bot handler that handles all incomming commands. See [CommandsList](<#CommandsList>) for all commands details.
@@ -84,7 +84,7 @@ type Command struct {
 }
 ```
 
-<a name="CommandBjack"></a>TODO: make a blackjack game
+<a name="CommandBjack"></a>
 
 ```go
 var CommandBjack Command = Command{
@@ -94,8 +94,7 @@ var CommandBjack Command = Command{
 Play a blackjack against a classical dealer. 
 No need to bet any money, since you will bet your score streak like in dice and slots.
 
-Gameplay:
-Sorry, but this command is currently in development.
+...
 
 On losing score is reset.
 

@@ -12,7 +12,7 @@ Basicly: BRAIN of the VladOS.
 
 ## Index
 
-- [func ConnectAll\(bh \*th.BotHandler\) error](<#ConnectAll>)
+- [func ConnectAll\(bot \*telego.Bot, bh \*th.BotHandler\) error](<#ConnectAll>)
 - [func LoggerMiddleware\(ctx \*th.Context, update telego.Update\) error](<#LoggerMiddleware>)
 - [func Start\(botErrorChan chan error\) error](<#Start>)
 - [func Stop\(\) error](<#Stop>)
@@ -22,7 +22,7 @@ Basicly: BRAIN of the VladOS.
 ## func ConnectAll
 
 ```go
-func ConnectAll(bh *th.BotHandler) error
+func ConnectAll(bot *telego.Bot, bh *th.BotHandler) error
 ```
 
 Connects all connectors and middlewares into given [github.com/mymmrac/telego/telegohandler.BotHandler](<https://pkg.go.dev/github.com/mymmrac/telego/telegohandler/#BotHandler>) to serve.

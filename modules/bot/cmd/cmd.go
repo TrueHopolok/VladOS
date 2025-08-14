@@ -15,6 +15,8 @@
 package cmd
 
 import (
+	"cmp"
+	"context"
 	"log/slog"
 
 	"github.com/mymmrac/telego"
@@ -74,19 +76,26 @@ var CommandsList map[string]map[string]Command = map[string]map[string]Command{
 // Connects converstion handlers.
 // Afterwards create a group in bot handler that handles all incomming commands.
 // See [CommandsList] for all commands details.
-func ConnectCommands(bh *th.BotHandler) error {
+func ConnectCommands(bot *telego.Bot, bh *th.BotHandler) error {
 	if err := connectConversation(bh); err != nil {
 		return err
+	}
+	cmdArray := []telego.BotCommand{
+		{Command: "help", Description: "output information about the bot's commands"},
 	}
 	ch := bh.Group(th.AnyCommand())
 	for category := range CommandsList {
 		for name, cmd := range CommandsList[category] {
 			ch.Handle(cmd.handler, th.CommandEqual(name))
+			cmdArray = append(cmdArray, telego.BotCommand{Command: name, Description: cmd.InfoBrief})
 		}
 	}
 	ch.Handle(handleHelp, th.CommandEqual("help"))
 	ch.Handle(handleSpelling, th.AnyMessage())
-	return nil
+	return cmp.Or(
+		bot.SetMyCommands(context.Background(), &telego.SetMyCommandsParams{Commands: cmdArray, Scope: &telego.BotCommandScopeAllPrivateChats{Type: "all_private_chats"}}),
+		bot.SetMyCommands(context.Background(), &telego.SetMyCommandsParams{Commands: cmdArray, Scope: &telego.BotCommandScopeAllGroupChats{Type: "all_group_chats"}}),
+	)
 }
 
 // Outputs log with info [cmdName] in the [log/slog].

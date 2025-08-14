@@ -24,9 +24,9 @@ var handler *th.BotHandler
 //   - [LoggerMiddleware],
 //   - [github.com/TrueHopolok/VladOS/modules/bot/cmd.ConnectConversation],
 //   - [github.com/TrueHopolok/VladOS/modules/bot/cmd.ConnectCommands].
-func ConnectAll(bh *th.BotHandler) error {
+func ConnectAll(bot *telego.Bot, bh *th.BotHandler) error {
 	bh.Use(LoggerMiddleware)
-	if err := cmd.ConnectCommands(bh); err != nil {
+	if err := cmd.ConnectCommands(bot, bh); err != nil {
 		return err
 	}
 	pun.ConnectJokes(bh)
@@ -78,7 +78,9 @@ func Start(botErrorChan chan error) error {
 		return err
 	}
 
-	ConnectAll(handler)
+	if err := ConnectAll(bot, handler); err != nil {
+		return err
+	}
 
 	go func() {
 		botErrorChan <- handler.Start()

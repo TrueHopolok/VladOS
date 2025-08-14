@@ -6,7 +6,11 @@ import (
 	tu "github.com/mymmrac/telego/telegoutil"
 )
 
-// TODO: make a blackjack game
+/*
+BJACK:
+32 cards per each value
+*/
+
 var CommandBjack Command = Command{
 	InfoBrief: "game of a blackjack",
 	InfoFull: `
@@ -14,8 +18,7 @@ var CommandBjack Command = Command{
 Play a blackjack against a classical dealer. 
 No need to bet any money, since you will bet your score streak like in dice and slots.
 
-Gameplay:
-Sorry, but this command is currently in development.
+...
 
 On losing score is reset.
 
