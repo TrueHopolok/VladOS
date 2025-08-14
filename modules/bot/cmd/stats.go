@@ -7,7 +7,6 @@ import (
 	tu "github.com/mymmrac/telego/telegoutil"
 )
 
-// TODO: make whole stats and update on for each new machine (potentialy make it dynamic)
 var CommandStats Command = Command{
 	InfoBrief: "output stats for game",
 	InfoFull: `

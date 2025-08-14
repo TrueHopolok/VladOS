@@ -91,10 +91,17 @@ var CommandBjack Command = Command{
     InfoBrief: "game of a blackjack",
     InfoFull: `
  /bjack
-Play a blackjack against a classical dealer. 
+Play a blackjack against a dealer. 
 No need to bet any money, since you will bet your score streak like in dice and slots.
 
-...
+Rules of the blackjack can be read here:
+https://en.wikipedia.org/wiki/Blackjack#Player_decisions
+
+This variation differences from the regular blackjack:
+1) Only 1 card deck is in the game so counting would be viable.
+2) Splitting your hand is removed since your only goal is to continue win streak and not to earn net positive.
+3) Wining gives you 1 point to score streak.
+4) Wining on Double Down move gives you 2 points to score streak. 
 
 On losing score is reset.
 
