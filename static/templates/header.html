@@ -1,0 +1,24 @@
+{{ define "header-style" }}
+<link rel="stylesheet" href="static/styles/header.css">
+{{ end }}
+{{ define "header" }}
+<!-- Left side -->
+<div class="title-block">
+    <h1 class="title">VladOS - control panel</h1>
+    <p class="subtitle">Monitor and manage his behaviour</p>
+</div>
+
+<!-- Right side -->
+<div class="user-block">
+    {{if .Auth}}
+    <p class="username">Hello, <span>Username</span></p>
+    <a href="/logout" class="logout">Logout</a>
+    {{ else }}
+    <p class="username">Who are <span>you</span>?</p>
+    <a href="/login" class="login">Login</a>
+    {{ end }}
+</div>
+
+<!-- Navigation -->
+<!-- TODO -->
+{{ end }}

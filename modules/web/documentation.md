@@ -13,7 +13,7 @@ Web package provides:
 
 Use \[ConnectAll\] to access final handler. Handlers logic handlers are in the sub\-packages.
 
-Use [Start](<#Start>) and/or [Stop](<#Stop>) to control the server.
+Before usage, call [github.com/TrueHopolok/VladOS/modules/web/webtmls.PrepareTemplates](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/web/webtmls/#PrepareTemplates>) for html templates to load. Then you can use [Start](<#Start>) and/or [Stop](<#Stop>) to control the server.
 
 ## Index
 

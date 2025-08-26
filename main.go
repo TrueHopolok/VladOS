@@ -12,6 +12,7 @@ import (
 	"github.com/TrueHopolok/VladOS/modules/db"
 	"github.com/TrueHopolok/VladOS/modules/mlog"
 	"github.com/TrueHopolok/VladOS/modules/web"
+	"github.com/TrueHopolok/VladOS/modules/web/webtmls"
 )
 
 func main() {
@@ -54,6 +55,10 @@ func main() {
 	//* HTTP initialization
 	// opening
 	slog.Info("http init", "status", "START")
+	if err := webtmls.PrepareTemplates(); err != nil {
+		slog.Error("http init", "status", "FAILED", "error", err)
+		return
+	}
 	httpErrorChan := make(chan error)
 	if err := web.Start(httpErrorChan); err != nil {
 		slog.Error("http init", "status", "FAILED", "error", err)

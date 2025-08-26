@@ -100,8 +100,9 @@ https://en.wikipedia.org/wiki/Blackjack#Player_decisions
 This variation differences from the regular blackjack:
 1) Only 1 card deck is in the game so counting would be viable.
 2) Splitting your hand is removed since your only goal is to continue win streak and not to earn net positive.
-3) Wining gives you 1 point to score streak.
-4) Wining on Double Down move gives you 2 points to score streak. 
+3) Wining gives you 3 points to score streak.
+4) Wining on Double Down move gives you 6 points to score streak. 
+5) Draw gives you 1 point to score streak.
 
 On losing score is reset.
 
@@ -231,7 +232,7 @@ Provide useful links to bot's website.
 }
 ```
 
-<a name="CommandStats"></a>TODO: make whole stats and update on for each new machine \(potentialy make it dynamic\)
+<a name="CommandStats"></a>
 
 ```go
 var CommandStats Command = Command{
