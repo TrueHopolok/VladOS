@@ -4,3 +4,9 @@ body {
   background-color: #f9fafb;
   color: #333;
 }
+
+hr {
+  height: 2px;
+  color:#333;
+  background: #333;
+}

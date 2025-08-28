@@ -34,6 +34,6 @@ func ConnectUnauthorized(mux *http.ServeMux) {
 func ConnectFileHandlers(mux *http.ServeMux) {
 	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir(cfg.Get().WebStaticDir))))
 	mux.HandleFunc("GET /favicon.ico", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "./static.favicon")
+		http.ServeFile(w, r, "./static/favicon.png")
 	})
 }

@@ -2,25 +2,50 @@
 <link rel="stylesheet" href="static/styles/header.css">
 {{ end }}
 {{ define "header" }}
-<!-- Left side -->
-<div class="title-block">
-    <h1 class="title">VladOS - control panel</h1>
-    <p class="subtitle">Monitor and manage his behaviour</p>
+<!-- Header top -->
+<div class="header-top">
+    <!-- Title/left side -->
+    <div class="title-block">
+        <a href="/" class="title-link">
+            <h1 class="title">VladOS - control panel</h1>
+        </a>
+        <p class="subtitle">Monitor and manage his behaviour</p>
+    </div>
+
+    <!-- User/right side -->
+    <div class="user-block">
+        {{if .Auth}}
+        <p class="username">Hello, <span>{{ .Username }}</span></p>
+        <a href="/logout" class="logout">Logout</a>
+        {{ else }}
+        <p class="username">Who are <span>you</span>?</p>
+        <a href="/login" class="login">Login</a>
+        {{ end }}
+    </div>
 </div>
 
-<!-- Right side -->
-<div class="user-block">
-    {{if .Auth}}
-    <p class="username">Hello, <span>Username</span></p>
-    <a href="/logout" class="logout">Logout</a>
-    {{ else }}
-    <p class="username">Who are <span>you</span>?</p>
-    <a href="/login" class="login">Login</a>
-    {{ end }}
-</div>
-
-<!-- Navigation -->
-<!-- TODO -->
+<!-- Navigation (centered) -->
+<nav class="nav">
+    <ul class="nav-list">
+    <li><a href="/">Homepage</a></li>
+    <li class="dropdown">
+        <a href="#">Leaderboard ▾</a>
+        <ul class="dropdown-content">
+        <li><a href="/leaderboard/slot">Slot</a></li>
+        <li><a href="/leaderboard/dice">Dice</a></li>
+        <li><a href="/leaderboard/bjack">Bjack</a></li>
+        <li><a href="/leaderboard/guess">Guess</a></li>
+        </ul>
+    </li>
+    <li class="dropdown">
+        <a href="#">Suggestions ▾</a>
+        <ul class="dropdown-content">
+        <li><a href="/suggestions/m8b">M8B</a></li>
+        <li><a href="/suggestions/tip">Tip</a></li>
+        <li><a href="/suggestions/pun">Pun</a></li>
+        </ul>
+    </li>
+    <li><a href="https://github.com/TrueHopolok/VladOS" target="_blank">Github</a></li>
+    </ul>
+</nav>
 {{ end }}
-
-{{ template "base" . }}
