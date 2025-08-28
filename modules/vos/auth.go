@@ -56,7 +56,7 @@ func AuthMiddleware(handler http.Handler, permissionFlags AuthFlag) http.Handler
 		}
 		ses, isAuthorized, err := ValidateJWT(jwt)
 		if err != nil {
-			slog.Error(r.Method, "url", r.URL, "auth", "FAILED", "err", err)
+			slog.Error("http req", "mtd", r.Method, "url", r.URL, "auth", "FAILED", "err", err)
 			http.Error(w, fmt.Sprintf("failed to get authorization session: %s", err), http.StatusInternalServerError)
 			return
 		}
