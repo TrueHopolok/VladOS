@@ -12,7 +12,7 @@ import (
 // permission flag [github.com/TrueHopolok/VladOS/modules/vos.Everyone]
 // for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware].
 func ConnectEveryone(mux *http.ServeMux) {
-	mux.HandleFunc("GET /", vos.AuthMiddlewareFunc(webindex.TodoHandler, vos.Everyone))
+	mux.HandleFunc("GET /", vos.AuthMiddlewareFunc(webindex.Handle, vos.Everyone))
 }
 
 // Connects to [net/http.ServeMux] handler functions with

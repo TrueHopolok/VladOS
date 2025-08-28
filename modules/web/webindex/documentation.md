@@ -8,14 +8,14 @@ import "github.com/TrueHopolok/VladOS/modules/web/webindex"
 
 ## Index
 
-- [func TodoHandler\(w http.ResponseWriter, r \*http.Request\)](<#TodoHandler>)
+- [func Handle\(w http.ResponseWriter, r \*http.Request\)](<#Handle>)
 
 
-<a name="TodoHandler"></a>
-## func TodoHandler
+<a name="Handle"></a>
+## func Handle
 
 ```go
-func TodoHandler(w http.ResponseWriter, r *http.Request)
+func Handle(w http.ResponseWriter, r *http.Request)
 ```
 
 

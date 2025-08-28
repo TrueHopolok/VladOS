@@ -242,7 +242,7 @@ type Session struct {
 func GetSession(r *http.Request) (Session, bool)
 ```
 
-Returns [Session](<#Session>) and true if is valid and user is not autheficated. Will always return false in case [AuthMiddleware](<#AuthMiddleware>) was not performed prior.
+Returns [Session](<#Session>) and whether user is autheficated. Will always return false in case [AuthMiddleware](<#AuthMiddleware>) was not performed prior.
 
 <a name="NewSession"></a>
 ### func NewSession

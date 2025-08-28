@@ -21,3 +21,10 @@ func PrepareTemplates() error {
 	Tmls, err = template.ParseGlob(pattern)
 	return err
 }
+
+// Stores all information that can be used on the page.
+type T struct {
+	Auth     bool   // must
+	Username string // if isauth: must; else: optional;
+	Title    string // must
+}

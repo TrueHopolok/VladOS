@@ -11,7 +11,7 @@ import (
 // Used to get the session from the request context, but not to block other potential values of the context.
 type sessionContextKey struct{}
 
-// Returns [Session] and true if is valid and user is not autheficated.
+// Returns [Session] and whether user is autheficated.
 // Will always return false in case [AuthMiddleware] was not performed prior.
 func GetSession(r *http.Request) (Session, bool) {
 	ses := r.Context().Value(sessionContextKey{})
