@@ -72,18 +72,18 @@ func AuthMiddleware(handler http.Handler, permissionFlags AuthFlag) http.Handler
 			// do nothing since any authorization status is allowed
 		case Authorized:
 			if !isAuthorized {
-				slog.Debug(r.Method, "url", r.URL, "auth", "BLOCKED", "msg", "user is blocked because he is unauthorized")
+				slog.Debug("http req", "mtd", r.Method, "url", r.URL, "auth", "BLOCKED", "msg", "user is blocked because he is unauthorized")
 				http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 				return
 			}
 		case Unauthorized:
 			if isAuthorized {
-				slog.Debug(r.Method, "url", r.URL, "auth", "BLOCKED", "msg", "user is blocked because he is authorized")
+				slog.Debug("http req", "mtd", r.Method, "url", r.URL, "auth", "BLOCKED", "msg", "user is blocked because he is authorized")
 				http.Error(w, "user should not be authorized to send this request", http.StatusBadRequest)
 				return
 			}
 		default:
-			slog.Error(r.Method, "url", r.URL, "auth", "FAILED", "err", "unknown permission flags, assumed flag AuthFlag.Everyone")
+			slog.Error("http req", "mtd", r.Method, "url", r.URL, "auth", "FAILED", "err", "unknown permission flags, assumed flag AuthFlag.Everyone")
 			http.Error(w, "invalid permission flags are selected", http.StatusInternalServerError)
 			return
 		}
@@ -92,14 +92,14 @@ func AuthMiddleware(handler http.Handler, permissionFlags AuthFlag) http.Handler
 			r = r.WithContext(context.WithValue(r.Context(), sessionContextKey{}, ses))
 			jwt, err = ses.NewJWT()
 			if err != nil {
-				slog.Error(r.Method, "url", r.URL, "auth", "FAILED", "err", err)
+				slog.Error("http req", "mtd", r.Method, "url", r.URL, "auth", "FAILED", "err", err)
 				http.Error(w, fmt.Sprintf("failed to set authorization cookie: %s", err), http.StatusInternalServerError)
 				return
 			}
 			SetAuthCookie(w, jwt)
 		}
 
-		slog.Debug(r.Method, "url", r.URL, "auth", "SUCCESS")
+		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "auth", "SUCCESS")
 		handler.ServeHTTP(w, r)
 	}
 }
