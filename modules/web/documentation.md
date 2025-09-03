@@ -29,7 +29,7 @@ Before usage, call [github.com/TrueHopolok/VladOS/modules/web/webtmls.PrepareTem
 
 
 <a name="ConnectAuthorized"></a>
-## func ConnectAuthorized
+## func [ConnectAuthorized](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L26>)
 
 ```go
 func ConnectAuthorized(mux *http.ServeMux)
@@ -38,7 +38,7 @@ func ConnectAuthorized(mux *http.ServeMux)
 Connects to [net/http.ServeMux](<https://pkg.go.dev/net/http/#ServeMux>) handler functions with permission flag [github.com/TrueHopolok/VladOS/modules/vos.Authorized](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#Authorized>) for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#AuthMiddleware>).
 
 <a name="ConnectEveryone"></a>
-## func ConnectEveryone
+## func [ConnectEveryone](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L17>)
 
 ```go
 func ConnectEveryone(mux *http.ServeMux)
@@ -47,7 +47,7 @@ func ConnectEveryone(mux *http.ServeMux)
 Connects to [net/http.ServeMux](<https://pkg.go.dev/net/http/#ServeMux>) handler functions with permission flag [github.com/TrueHopolok/VladOS/modules/vos.Everyone](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#Everyone>) for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#AuthMiddleware>).
 
 <a name="ConnectFileHandlers"></a>
-## func ConnectFileHandlers
+## func [ConnectFileHandlers](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L39>)
 
 ```go
 func ConnectFileHandlers(mux *http.ServeMux)
@@ -56,7 +56,7 @@ func ConnectFileHandlers(mux *http.ServeMux)
 Connects to [net/http.ServeMux](<https://pkg.go.dev/net/http/#ServeMux>) handler functions to server static files on the [github.com/TrueHopolok/VladOS/modules/cfg.Config.WebStaticDir](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/cfg/#Config.WebStaticDir>) path.
 
 <a name="ConnectUnauthorized"></a>
-## func ConnectUnauthorized
+## func [ConnectUnauthorized](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L33>)
 
 ```go
 func ConnectUnauthorized(mux *http.ServeMux)
@@ -65,7 +65,7 @@ func ConnectUnauthorized(mux *http.ServeMux)
 Connects to [net/http.ServeMux](<https://pkg.go.dev/net/http/#ServeMux>) handler functions with permission flag [github.com/TrueHopolok/VladOS/modules/vos.Unauthorized](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#Unauthorized>) for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#AuthMiddleware>).
 
 <a name="LoggerMiddleware"></a>
-## func LoggerMiddleware
+## func [LoggerMiddleware](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/util.go#L15>)
 
 ```go
 func LoggerMiddleware(handler http.Handler) http.HandlerFunc
@@ -74,7 +74,7 @@ func LoggerMiddleware(handler http.Handler) http.HandlerFunc
 Provides small http middleware for logs purposes using [log/slog](<https://pkg.go.dev/log/slog/>) package.
 
 <a name="NewWebHandler"></a>
-## func NewWebHandler
+## func [NewWebHandler](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/web.go#L26>)
 
 ```go
 func NewWebHandler() http.Handler
@@ -89,7 +89,7 @@ Connects all connectors into 1 new [net/http.ServeMux](<https://pkg.go.dev/net/h
 - [ConnectFileHandlers](<#ConnectFileHandlers>).
 
 <a name="Start"></a>
-## func Start
+## func [Start](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/web.go#L47>)
 
 ```go
 func Start(serverErrorChan chan error) error
@@ -109,7 +109,7 @@ Server options are:
 Returns error if happens on initialization. Otherwise uses provided channel to report about the error while executing the server.
 
 <a name="Stop"></a>
-## func Stop
+## func [Stop](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/web.go#L68>)
 
 ```go
 func Stop() error
@@ -118,7 +118,7 @@ func Stop() error
 Stops existing server from executing. If no server was opened, will do nothing. Returns an error from [net/http.Server.Close](<https://pkg.go.dev/net/http/#Server.Close>).
 
 <a name="TodoHandler"></a>
-## func TodoHandler
+## func [TodoHandler](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/util.go#L10>)
 
 ```go
 func TodoHandler(w http.ResponseWriter, r *http.Request)

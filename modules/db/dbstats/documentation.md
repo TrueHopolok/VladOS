@@ -25,7 +25,7 @@ var QueryDir embed.FS
 ```
 
 <a name="Update"></a>
-## func Update
+## func [Update](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L30>)
 
 ```go
 func Update(gameName string, userID int64, score int) error
@@ -34,7 +34,7 @@ func Update(gameName string, userID int64, score int) error
 Updates a leaderboard with recieved result for a particular user.
 
 <a name="FullStats"></a>
-## type FullStats
+## type [FullStats](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L22-L27>)
 
 
 
@@ -48,7 +48,7 @@ type FullStats struct {
 ```
 
 <a name="GetFull"></a>
-### func GetFull
+### func [GetFull](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L97>)
 
 ```go
 func GetFull(gameName string, userID int64) ([]FullStats, error)
@@ -57,7 +57,7 @@ func GetFull(gameName string, userID int64) ([]FullStats, error)
 
 
 <a name="UserStats"></a>
-## type UserStats
+## type [UserStats](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L16-L20>)
 
 
 
@@ -70,7 +70,7 @@ type UserStats struct {
 ```
 
 <a name="Get"></a>
-### func Get
+### func [Get](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L58>)
 
 ```go
 func Get(gameName string, userID int64) (UserStats, error)

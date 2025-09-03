@@ -58,7 +58,7 @@ var CommandsList map[string]map[string]Command = map[string]map[string]Command{
 ```
 
 <a name="ConnectCommands"></a>
-## func ConnectCommands
+## func [ConnectCommands](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/cmd/cmd.go#L79>)
 
 ```go
 func ConnectCommands(bot *telego.Bot, bh *th.BotHandler) error
@@ -67,7 +67,7 @@ func ConnectCommands(bot *telego.Bot, bh *th.BotHandler) error
 Connects converstion handlers. Afterwards create a group in bot handler that handles all incomming commands. See [CommandsList](<#CommandsList>) for all commands details.
 
 <a name="Command"></a>
-## type Command
+## type [Command](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/cmd/cmd.go#L33-L52>)
 
 Contains the command's handler and the info text that is displayed on help command.
 

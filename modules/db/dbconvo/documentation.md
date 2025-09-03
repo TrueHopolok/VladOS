@@ -25,7 +25,7 @@ var QueryDir embed.FS
 ```
 
 <a name="Busy"></a>
-## func Busy
+## func [Busy](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbconvo/dbconvo.go#L120>)
 
 ```go
 func Busy(userId int64, cmdName string, data []byte) error
@@ -34,7 +34,7 @@ func Busy(userId int64, cmdName string, data []byte) error
 Saves \[Status.Available\] as false with \[Status.CommandName\] and \[Status.Data\] that were given.
 
 <a name="Clear"></a>
-## func Clear
+## func [Clear](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbconvo/dbconvo.go#L29>)
 
 ```go
 func Clear() error
@@ -43,7 +43,7 @@ func Clear() error
 Deletes all records from the conversation table, so all users start from scratch.
 
 <a name="Free"></a>
-## func Free
+## func [Free](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbconvo/dbconvo.go#L96>)
 
 ```go
 func Free(userId int64) error
@@ -52,7 +52,7 @@ func Free(userId int64) error
 Saves \[Status.Available\] as true for given user.
 
 <a name="Status"></a>
-## type Status
+## type [Status](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbconvo/dbconvo.go#L17-L26>)
 
 Stores info about the user's engagement with the commands.
 
@@ -70,7 +70,7 @@ type Status struct {
 ```
 
 <a name="Get"></a>
-### func Get
+### func [Get](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbconvo/dbconvo.go#L53>)
 
 ```go
 func Get(userId int64) (Status, error)

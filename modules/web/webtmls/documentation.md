@@ -22,7 +22,7 @@ var Tmls *template.Template
 ```
 
 <a name="PrepareTemplates"></a>
-## func PrepareTemplates
+## func [PrepareTemplates](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L18>)
 
 ```go
 func PrepareTemplates() error
@@ -31,7 +31,7 @@ func PrepareTemplates() error
 Reads all html templates stored in static/tempaltes directory. Will store the result in [Tmls](<#Tmls>).
 
 <a name="T"></a>
-## type T
+## type [T](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L26-L30>)
 
 Stores all information that can be used on the page.
 

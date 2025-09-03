@@ -1,4 +1,4 @@
-package websuggestions
+package page_suggestions
 
 import (
 	"log/slog"
