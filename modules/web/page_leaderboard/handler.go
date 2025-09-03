@@ -22,10 +22,16 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 	data.Title = "Leaderboard"
 	ses, data.Auth = vos.GetSession(r)
 	data.Username = ses.Username
+	data.Players = []webtmls.Player{{Id: 19, BestScore: 12}}
 
 	t, err := webtmls.ParseTmls(TmlName)
+	if err != nil {
+		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
+		http.Error(w, "http failed", http.StatusInternalServerError)
+	}
 	err = t.ExecuteTemplate(w, TmlName, data)
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
+		http.Error(w, "http failed", http.StatusInternalServerError)
 	}
 }

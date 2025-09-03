@@ -24,13 +24,6 @@ func PrepareBase() error {
 	return err
 }
 
-// Stores all information that can be used on the page.
-type T struct {
-	Auth     bool   // must
-	Username string // if isauth: must; else: optional;
-	Title    string // must
-}
-
 // Clones existing base templates from [BaseTmls] into a new one.
 // Requires for [PrepareBase] to be executed, otherwise they won't be loaded.
 //
@@ -46,4 +39,18 @@ func ParseTmls(tmlNames ...string) (*template.Template, error) {
 	}
 	t, err = t.ParseFiles(tmlNames...)
 	return t, err
+}
+
+// Stores all information that can be used on the page.
+type T struct {
+	Auth     bool   // must
+	Username string // if user is isauth: must; else: optional;
+	Title    string // must
+
+	Players []Player // if page is leaderboard: must
+}
+
+type Player struct {
+	Id        int64
+	BestScore int
 }

@@ -1,1 +1,30 @@
+{{ define "content-style" . }}
+<link rel="stylesheet" href="static/styles/leaderboard.css">
+{{ end }}
+{{ define "content" . }}
+<h2 class="page-title">Leaderboard</h2>
+<table class="leaderboard">
+    <thead>
+    <tr>
+        <th>Rank</th>
+        <th>ID</th>
+        <th>Score</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{ range $i, $player := .Players }}
+    <tr>
+        <td>{{ add $i 1 }}</td>
+        <td>{{ $player.Id }}</td>
+        <td>{{ $player.BestScore }}</td>
+    </tr>
+    {{ else }}
+    <tr>
+        <td colspan="3">No players yet</td>
+    </tr>
+    {{ end }}
+    </tbody>
+</table>
+{{ end }}
+
 {{ template "base" . }}
