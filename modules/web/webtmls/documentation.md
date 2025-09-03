@@ -9,8 +9,9 @@ import "github.com/TrueHopolok/VladOS/modules/web/webtmls"
 ## Index
 
 - [Variables](<#variables>)
-- [func ParseTmls\(tmlNames ...string\) \(\*template.Template, error\)](<#ParseTmls>)
+- [func ParseTmls\(funcMap template.FuncMap, tmlNames ...string\) \(\*template.Template, error\)](<#ParseTmls>)
 - [func PrepareBase\(\) error](<#PrepareBase>)
+- [type Player](<#Player>)
 - [type T](<#T>)
 
 
@@ -25,10 +26,10 @@ var BaseTmls *template.Template
 ```
 
 <a name="ParseTmls"></a>
-## func [ParseTmls](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L38>)
+## func [ParseTmls](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L31>)
 
 ```go
-func ParseTmls(tmlNames ...string) (*template.Template, error)
+func ParseTmls(funcMap template.FuncMap, tmlNames ...string) (*template.Template, error)
 ```
 
 Clones existing base templates from [BaseTmls](<#BaseTmls>) into a new one. Requires for [PrepareBase](<#PrepareBase>) to be executed, otherwise they won't be loaded.
@@ -44,16 +45,30 @@ func PrepareBase() error
 
 Reads all base html templates stored in static/tempaltes/base directory. Will store the result in \[Tmls\].
 
+<a name="Player"></a>
+## type [Player](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L54-L57>)
+
+
+
+```go
+type Player struct {
+    Id        int64
+    BestScore int
+}
+```
+
 <a name="T"></a>
-## type [T](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L28-L32>)
+## type [T](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L46-L52>)
 
 Stores all information that can be used on the page.
 
 ```go
 type T struct {
     Auth     bool   // must
-    Username string // if isauth: must; else: optional;
+    Username string // if user is isauth: must; else: optional;
     Title    string // must
+
+    Players []Player // if page is leaderboard: must
 }
 ```
 

@@ -9,6 +9,7 @@ import "github.com/TrueHopolok/VladOS/modules/web/page_leaderboard"
 ## Index
 
 - [Constants](<#constants>)
+- [Variables](<#variables>)
 - [func Handle\(w http.ResponseWriter, r \*http.Request\)](<#Handle>)
 
 
@@ -20,8 +21,20 @@ import "github.com/TrueHopolok/VladOS/modules/web/page_leaderboard"
 const TmlName string = "leaderboard.html"
 ```
 
+## Variables
+
+<a name="TmlMap"></a>
+
+```go
+var TmlMap = template.FuncMap{
+    "inc": func(i int) int {
+        return i + 1
+    },
+}
+```
+
 <a name="Handle"></a>
-## func [Handle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/page_leaderboard/handler.go#L15>)
+## func [Handle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/page_leaderboard/handler.go#L22>)
 
 ```go
 func Handle(w http.ResponseWriter, r *http.Request)
