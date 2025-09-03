@@ -28,6 +28,10 @@ var Conn DB = DB{nil}
 // Since it is SQLite, the database is opened (or created does not exists) and modified as file.
 // Saves in [DB] struct to prevent any outside modifications.
 func Init() error {
+	err := os.MkdirAll("database", 0755)
+	if err != nil {
+		return fmt.Errorf("failed creating folder for database: %w", err)
+	}
 	conn, err := sql.Open("sqlite3", cfg.Get().DBfilePath)
 	if err == nil {
 		if conn == nil {
@@ -55,6 +59,10 @@ func InitTesting(t *testing.T, pathToRoot string) error {
 
 	os.Remove(pathToRoot + cfg.GetTest(pathToRoot).DBfilePath)
 
+	err := os.MkdirAll(pathToRoot+"database", 0755)
+	if err != nil {
+		return fmt.Errorf("failed creating folder for database: %w", err)
+	}
 	conn, err := sql.Open("sqlite3", pathToRoot+cfg.GetTest(pathToRoot).DBfilePath)
 	if err == nil {
 		if conn == nil {
