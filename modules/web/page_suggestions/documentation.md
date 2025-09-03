@@ -8,11 +8,20 @@ import "github.com/TrueHopolok/VladOS/modules/web/page_suggestions"
 
 ## Index
 
+- [Constants](<#constants>)
 - [func Handle\(w http.ResponseWriter, r \*http.Request\)](<#Handle>)
 
 
+## Constants
+
+<a name="TmlName"></a>
+
+```go
+const TmlName string = "suggestions.html"
+```
+
 <a name="Handle"></a>
-## func [Handle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/page_suggestions/handler.go#L13>)
+## func [Handle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/page_suggestions/handler.go#L15>)
 
 ```go
 func Handle(w http.ResponseWriter, r *http.Request)

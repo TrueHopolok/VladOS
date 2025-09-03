@@ -10,6 +10,8 @@ import (
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
+const TmlName string = "update.html"
+
 func Handle(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
@@ -25,7 +27,8 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 	ses, data.Auth = vos.GetSession(r)
 	data.Username = ses.Username
 
-	err := webtmls.Tmls.ExecuteTemplate(w, "update.html", data)
+	t, err := webtmls.ParseTmls(TmlName)
+	err = t.ExecuteTemplate(w, TmlName, data)
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 	}

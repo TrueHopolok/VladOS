@@ -9,16 +9,18 @@ import (
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
-// Contain all html templates stored in static/templates directory.
+// Contain all html templates stored in static/templates/base directory.
 // Require [PrepareTemplates] call to be used.
-var Tmls *template.Template
+//
+// Changing anything about this variable may cause unexpected behaviour if done porly.
+var BaseTmls *template.Template
 
-// Reads all html templates stored in static/tempaltes directory.
+// Reads all base html templates stored in static/tempaltes/base directory.
 // Will store the result in [Tmls].
-func PrepareTemplates() error {
-	pattern := filepath.Join(cfg.Get().WebStaticDir + "/templates/*.html")
+func PrepareBase() error {
+	pattern := filepath.Join(cfg.Get().WebStaticDir + "/templates/base/*.html")
 	var err error
-	Tmls, err = template.ParseGlob(pattern)
+	BaseTmls, err = template.ParseGlob(pattern)
 	return err
 }
 
@@ -27,4 +29,21 @@ type T struct {
 	Auth     bool   // must
 	Username string // if isauth: must; else: optional;
 	Title    string // must
+}
+
+// Clones existing base templates from [BaseTmls] into a new one.
+// Requires for [PrepareBase] to be executed, otherwise they won't be loaded.
+//
+// Afterwards parses given template names with added prefix of [github.com/TrueHopolok/VladOS/modules/cfg.Cfg.WebStaticPath] + "/templates/".
+func ParseTmls(tmlNames ...string) (*template.Template, error) {
+	t, err := BaseTmls.Clone()
+	if err != nil {
+		return t, err
+	}
+	prefixPath := cfg.Get().WebStaticDir + "/templates/"
+	for i := range tmlNames {
+		tmlNames[i] = prefixPath + tmlNames[i]
+	}
+	t, err = t.ParseFiles(tmlNames...)
+	return t, err
 }

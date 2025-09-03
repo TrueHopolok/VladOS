@@ -55,7 +55,7 @@ func main() {
 	//* HTTP initialization
 	// opening
 	slog.Info("http init", "status", "START")
-	if err := webtmls.PrepareTemplates(); err != nil {
+	if err := webtmls.PrepareBase(); err != nil {
 		slog.Error("http init", "status", "FAILED", "error", err)
 		return
 	}

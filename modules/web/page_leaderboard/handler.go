@@ -10,6 +10,8 @@ import (
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
+const TmlName string = "leaderboard.html"
+
 func Handle(w http.ResponseWriter, r *http.Request) {
 	slog.Debug("http req", "mtd", r.Method, "url", r.URL, "handler", "leaderboard")
 
@@ -21,7 +23,8 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 	ses, data.Auth = vos.GetSession(r)
 	data.Username = ses.Username
 
-	err := webtmls.Tmls.ExecuteTemplate(w, "leaderboard.html", data)
+	t, err := webtmls.ParseTmls(TmlName)
+	err = t.ExecuteTemplate(w, TmlName, data)
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 	}

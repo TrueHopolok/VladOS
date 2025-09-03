@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="static/styles/base.css">
-  {{ template "header-style" . }}
-  {{ template "content-style" . }}
+  {{ block "header-style" . }}{{ end }}
+  {{ block "content-style" . }}{{ end }}
   <title>VladOS - {{ .Title }}</title>
 </head>
 <body>

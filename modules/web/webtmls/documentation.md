@@ -9,29 +9,43 @@ import "github.com/TrueHopolok/VladOS/modules/web/webtmls"
 ## Index
 
 - [Variables](<#variables>)
-- [func PrepareTemplates\(\) error](<#PrepareTemplates>)
+- [func ParseTmls\(tmlNames ...string\) \(\*template.Template, error\)](<#ParseTmls>)
+- [func PrepareBase\(\) error](<#PrepareBase>)
 - [type T](<#T>)
 
 
 ## Variables
 
-<a name="Tmls"></a>Contain all html templates stored in static/templates directory. Require [PrepareTemplates](<#PrepareTemplates>) call to be used.
+<a name="BaseTmls"></a>Contain all html templates stored in static/templates/base directory. Require \[PrepareTemplates\] call to be used.
+
+Changing anything about this variable may cause unexpected behaviour if done porly.
 
 ```go
-var Tmls *template.Template
+var BaseTmls *template.Template
 ```
 
-<a name="PrepareTemplates"></a>
-## func [PrepareTemplates](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L18>)
+<a name="ParseTmls"></a>
+## func [ParseTmls](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L38>)
 
 ```go
-func PrepareTemplates() error
+func ParseTmls(tmlNames ...string) (*template.Template, error)
 ```
 
-Reads all html templates stored in static/tempaltes directory. Will store the result in [Tmls](<#Tmls>).
+Clones existing base templates from [BaseTmls](<#BaseTmls>) into a new one. Requires for [PrepareBase](<#PrepareBase>) to be executed, otherwise they won't be loaded.
+
+Afterwards parses given template names with added prefix of [github.com/TrueHopolok/VladOS/modules/cfg.Cfg.WebStaticPath](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/cfg/#Cfg.WebStaticPath>) \+ "/templates/".
+
+<a name="PrepareBase"></a>
+## func [PrepareBase](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L20>)
+
+```go
+func PrepareBase() error
+```
+
+Reads all base html templates stored in static/tempaltes/base directory. Will store the result in \[Tmls\].
 
 <a name="T"></a>
-## type [T](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L26-L30>)
+## type [T](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L28-L32>)
 
 Stores all information that can be used on the page.
 
