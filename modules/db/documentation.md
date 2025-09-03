@@ -39,7 +39,7 @@ func Init() error
 Connects to SQLite database with path from [github.com/TrueHopolok/VladOS/modules/cfg.Config.DBfilePath](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/cfg/#Config.DBfilePath>). Since it is SQLite, the database is opened \(or created does not exists\) and modified as file. Saves in [DB](<#DB>) struct to prevent any outside modifications.
 
 <a name="InitTesting"></a>
-## func [InitTesting](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/db.go#L51>)
+## func [InitTesting](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/db.go#L55>)
 
 ```go
 func InitTesting(t *testing.T, pathToRoot string) error
