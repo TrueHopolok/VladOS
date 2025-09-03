@@ -3,6 +3,7 @@ package page_leaderboard
 import (
 	"log/slog"
 	"net/http"
+	"text/template"
 
 	"github.com/TrueHopolok/VladOS/modules/vos"
 	"github.com/TrueHopolok/VladOS/modules/web/webtmls"
@@ -11,6 +12,12 @@ import (
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
 const TmlName string = "leaderboard.html"
+
+var TmlMap = template.FuncMap{
+	"inc": func(i int) int {
+		return i + 1
+	},
+}
 
 func Handle(w http.ResponseWriter, r *http.Request) {
 	slog.Debug("http req", "mtd", r.Method, "url", r.URL, "handler", "leaderboard")
@@ -22,9 +29,9 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 	data.Title = "Leaderboard"
 	ses, data.Auth = vos.GetSession(r)
 	data.Username = ses.Username
-	data.Players = []webtmls.Player{{Id: 19, BestScore: 12}}
+	data.Players = nil // TODO: get leaderboard from db
 
-	t, err := webtmls.ParseTmls(TmlName)
+	t, err := webtmls.ParseTmls(TmlMap, TmlName)
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 		http.Error(w, "http failed", http.StatusInternalServerError)

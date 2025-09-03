@@ -27,7 +27,7 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 	ses, data.Auth = vos.GetSession(r)
 	data.Username = ses.Username
 
-	t, err := webtmls.ParseTmls(TmlName)
+	t, err := webtmls.ParseTmls(nil, TmlName)
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 		http.Error(w, "http failed", http.StatusInternalServerError)

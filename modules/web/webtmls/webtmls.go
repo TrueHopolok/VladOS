@@ -28,11 +28,12 @@ func PrepareBase() error {
 // Requires for [PrepareBase] to be executed, otherwise they won't be loaded.
 //
 // Afterwards parses given template names with added prefix of [github.com/TrueHopolok/VladOS/modules/cfg.Cfg.WebStaticPath] + "/templates/".
-func ParseTmls(tmlNames ...string) (*template.Template, error) {
+func ParseTmls(funcMap template.FuncMap, tmlNames ...string) (*template.Template, error) {
 	t, err := BaseTmls.Clone()
 	if err != nil {
 		return t, err
 	}
+	t.Funcs(funcMap)
 	prefixPath := cfg.Get().WebStaticDir + "/templates/"
 	for i := range tmlNames {
 		tmlNames[i] = prefixPath + tmlNames[i]

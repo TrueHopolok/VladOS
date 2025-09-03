@@ -1,7 +1,7 @@
-{{ define "content-style" . }}
+{{ define "content-style" }}
 <link rel="stylesheet" href="static/styles/leaderboard.css">
 {{ end }}
-{{ define "content" . }}
+{{ define "content" }}
 <h2 class="page-title">Leaderboard</h2>
 <table class="leaderboard">
     <thead>
@@ -14,7 +14,7 @@
     <tbody>
     {{ range $i, $player := .Players }}
     <tr>
-        <td>{{ add $i 1 }}</td>
+        <td>{{ inc $i }}</td>
         <td>{{ $player.Id }}</td>
         <td>{{ $player.BestScore }}</td>
     </tr>
