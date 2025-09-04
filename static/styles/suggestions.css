@@ -1,0 +1,10 @@
+.content {
+  margin: 20px;
+}
+
+.page-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #222;
+}

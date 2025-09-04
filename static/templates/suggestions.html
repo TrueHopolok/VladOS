@@ -1,1 +1,13 @@
+{{ define "content-style" }}
+<link rel="stylesheet" href="static/styles/suggestions.css">
+{{ end }}
+{{ define "content" }}
+<h2 class="page-title">Suggestions - type</h2> <!-- TODO: insert <type> -->
+{{ if .Auth }}
+<p>In development...</p> <!-- TODO: for each <type>: different input fields -->
+{{ else }}
+<p>You must be autheficated to add suggestions.</p>
+{{ end}}
+{{ end }}
+
 {{ template "base" . }}
