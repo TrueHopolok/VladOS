@@ -50,4 +50,6 @@ type T struct {
 	Title    string // must
 
 	Leaderboard []dbstats.Placement // if page is leaderboard: must
+
+	SuggestionType string // if page is suggestions: must
 }

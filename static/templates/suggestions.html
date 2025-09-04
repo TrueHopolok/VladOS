@@ -2,9 +2,11 @@
 <link rel="stylesheet" href="static/styles/suggestions.css">
 {{ end }}
 {{ define "content" }}
-<h2 class="page-title">Suggestions - type</h2> <!-- TODO: insert <type> -->
+<h2 class="page-title">Suggestions - {{ .SuggestionType }}</h2>
 {{ if .Auth }}
-<p>In development...</p> <!-- TODO: for each <type>: different input fields -->
+{{ block "suggestion-input" . }}
+<p>No provided suggestion input yet.</p>
+{{ end }}
 {{ else }}
 <p>You must be autheficated to add suggestions.</p>
 {{ end}}

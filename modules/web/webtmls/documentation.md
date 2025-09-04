@@ -45,7 +45,7 @@ func PrepareBase() error
 Reads all base html templates stored in static/tempaltes/base directory. Will store the result in \[Tmls\].
 
 <a name="T"></a>
-## type [T](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L47-L53>)
+## type [T](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L47-L55>)
 
 Stores all information that can be used on the page.
 
@@ -56,6 +56,8 @@ type T struct {
     Title    string // must
 
     Leaderboard []dbstats.Placement // if page is leaderboard: must
+
+    SuggestionType string // if page is suggestions: must
 }
 ```
 

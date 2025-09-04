@@ -12,8 +12,31 @@ import (
 
 const TmlName string = "suggestions.html"
 
+var existingNames = []string{
+	"m8b", "pun", "tip",
+}
+
 func Handle(w http.ResponseWriter, r *http.Request) {
 	slog.Debug("http req", "mtd", r.Method, "url", r.URL, "handler", "suggestions")
+
+	typeName := r.URL.Query().Get("type")
+	if typeName == "" {
+		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest: ", typeName+" is not recognized")
+		http.Error(w, "bad request: no type provided", http.StatusBadRequest)
+		return
+	}
+	found := false
+	for _, existingName := range existingNames {
+		if typeName == existingName {
+			found = true
+			break
+		}
+	}
+	if !found {
+		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest: ", typeName+" is not recognized")
+		http.Error(w, "bad request: provided type does not supported", http.StatusBadRequest)
+		return
+	}
 
 	var (
 		data webtmls.T
@@ -22,6 +45,7 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 	data.Title = "Suggestions"
 	ses, data.Auth = vos.GetSession(r)
 	data.Username = ses.Username
+	data.SuggestionType = typeName
 
 	t, err := webtmls.ParseTmls(nil, TmlName)
 	if err != nil {
