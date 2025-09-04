@@ -12,11 +12,11 @@
     </tr>
     </thead>
     <tbody>
-    {{ range $i, $player := .Players }}
+    {{ range $i, $player := .Leaderboard }}
     <tr>
         <td>{{ inc $i }}</td>
-        <td>{{ $player.Id }}</td>
-        <td>{{ $player.BestScore }}</td>
+        <td>{{ $player.ScoreBest }}</td>
+        <td>{{ $player.PlayersAmount }}</td>
     </tr>
     {{ else }}
     <tr>

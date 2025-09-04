@@ -34,7 +34,7 @@ var TmlMap = template.FuncMap{
 ```
 
 <a name="Handle"></a>
-## func [Handle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/page_leaderboard/handler.go#L22>)
+## func [Handle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/page_leaderboard/handler.go#L23>)
 
 ```go
 func Handle(w http.ResponseWriter, r *http.Request)

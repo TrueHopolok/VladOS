@@ -213,3 +213,87 @@ func TestFull(t *testing.T) {
 		}
 	}
 }
+
+func TestLeaderboard(t *testing.T) {
+	defer func() {
+		if x := recover(); x != nil {
+			t.Fatal("panic", x)
+		}
+	}()
+	if err := db.InitTesting(t, pathToRoot); err != nil {
+		t.Fatal(err)
+	}
+	defer func() {
+		if err := db.Conn.Close(); err != nil {
+			t.Fatal(err)
+		}
+	}()
+	if err := db.Migrate(); err != nil {
+		t.Fatal(err)
+	}
+
+	var (
+		got  []dbstats.Placement
+		want []dbstats.Placement
+		err  error
+	)
+
+	got, err = dbstats.Leaderboard(tablesToTest[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got != nil {
+		t.Fatal("gotten result is not nil")
+	}
+
+	err = dbstats.Update(tablesToTest[0], 2, 1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want = []dbstats.Placement{{1, 1}}
+	got, err = dbstats.Leaderboard(tablesToTest[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("gotten result is unexpected\ngot: %v\nwant: %v", got, want)
+	}
+
+	err = dbstats.Update(tablesToTest[0], 3, 2)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = dbstats.Update(tablesToTest[0], 2, 1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want = []dbstats.Placement{{2, 2}}
+	got, err = dbstats.Leaderboard(tablesToTest[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("gotten result is unexpected\ngot: %v\nwant: %v", got, want)
+	}
+
+	err = dbstats.Update(tablesToTest[0], 1, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = dbstats.Update(tablesToTest[0], 2, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = dbstats.Update(tablesToTest[0], 3, 1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want = []dbstats.Placement{{3, 1}, {2, 1}, {0, 1}}
+	got, err = dbstats.Leaderboard(tablesToTest[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("gotten result is unexpected\ngot: %v\nwant: %v", got, want)
+	}
+}

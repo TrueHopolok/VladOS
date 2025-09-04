@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/TrueHopolok/VladOS/modules/cfg"
+	"github.com/TrueHopolok/VladOS/modules/db/dbstats"
 )
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
@@ -48,10 +49,5 @@ type T struct {
 	Username string // if user is isauth: must; else: optional;
 	Title    string // must
 
-	Players []Player // if page is leaderboard: must
-}
-
-type Player struct {
-	Id        int64
-	BestScore int
+	Leaderboard []dbstats.Placement // if page is leaderboard: must
 }

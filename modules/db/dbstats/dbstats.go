@@ -26,6 +26,53 @@ type FullStats struct {
 	PlayersTotal int
 }
 
+type Placement struct {
+	ScoreBest     int
+	PlayersAmount int
+}
+
+// Return top of all scores and how many players reached that.
+func Leaderboard(gameName string) ([]Placement, error) {
+	query, err := QueryDir.ReadFile("leaderboard.sql")
+	if err != nil {
+		err = fmt.Errorf("reading query error: %w", err)
+		return nil, err
+	}
+
+	tx, err := db.Conn.Begin()
+	if err != nil {
+		err = fmt.Errorf("beggining connection error: %w", err)
+		return nil, err
+	}
+	defer tx.Rollback()
+
+	rows, err := tx.Query(fmt.Sprintf(string(query), gameName))
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
+		err = fmt.Errorf("query execution error: %w", err)
+		return nil, err
+	}
+
+	var leaderboard []Placement
+	for rows.Next() {
+		var p Placement
+		if err := rows.Scan(&p.ScoreBest, &p.PlayersAmount); err != nil {
+			err = fmt.Errorf("result scanning error: %w", err)
+			return nil, err
+		}
+		leaderboard = append(leaderboard, p)
+	}
+
+	return leaderboard, func() error {
+		if err := tx.Commit(); err != nil {
+			return fmt.Errorf("commit error: %w", err)
+		}
+		return nil
+	}()
+}
+
 // Updates a leaderboard with recieved result for a particular user.
 func Update(gameName string, userID int64, score int) error {
 	query, err := QueryDir.ReadFile("update.sql")

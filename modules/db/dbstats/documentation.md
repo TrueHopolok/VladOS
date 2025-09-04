@@ -12,6 +12,8 @@ import "github.com/TrueHopolok/VladOS/modules/db/dbstats"
 - [func Update\(gameName string, userID int64, score int\) error](<#Update>)
 - [type FullStats](<#FullStats>)
   - [func GetFull\(gameName string, userID int64\) \(\[\]FullStats, error\)](<#GetFull>)
+- [type Placement](<#Placement>)
+  - [func Leaderboard\(gameName string\) \(\[\]Placement, error\)](<#Leaderboard>)
 - [type UserStats](<#UserStats>)
   - [func Get\(gameName string, userID int64\) \(UserStats, error\)](<#Get>)
 
@@ -25,7 +27,7 @@ var QueryDir embed.FS
 ```
 
 <a name="Update"></a>
-## func [Update](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L30>)
+## func [Update](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L77>)
 
 ```go
 func Update(gameName string, userID int64, score int) error
@@ -48,13 +50,34 @@ type FullStats struct {
 ```
 
 <a name="GetFull"></a>
-### func [GetFull](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L97>)
+### func [GetFull](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L144>)
 
 ```go
 func GetFull(gameName string, userID int64) ([]FullStats, error)
 ```
 
 
+
+<a name="Placement"></a>
+## type [Placement](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L29-L32>)
+
+
+
+```go
+type Placement struct {
+    ScoreBest     int
+    PlayersAmount int
+}
+```
+
+<a name="Leaderboard"></a>
+### func [Leaderboard](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L35>)
+
+```go
+func Leaderboard(gameName string) ([]Placement, error)
+```
+
+Return top of all scores and how many players reached that.
 
 <a name="UserStats"></a>
 ## type [UserStats](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L16-L20>)
@@ -70,7 +93,7 @@ type UserStats struct {
 ```
 
 <a name="Get"></a>
-### func [Get](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L58>)
+### func [Get](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L105>)
 
 ```go
 func Get(gameName string, userID int64) (UserStats, error)

@@ -1,10 +1,11 @@
 package page_leaderboard
 
 import (
+	"html/template"
 	"log/slog"
 	"net/http"
-	"text/template"
 
+	"github.com/TrueHopolok/VladOS/modules/db/dbstats"
 	"github.com/TrueHopolok/VladOS/modules/vos"
 	"github.com/TrueHopolok/VladOS/modules/web/webtmls"
 )
@@ -25,18 +26,24 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 	var (
 		data webtmls.T
 		ses  vos.Session
+		err  error
+		tml  *template.Template
 	)
 	data.Title = "Leaderboard"
 	ses, data.Auth = vos.GetSession(r)
 	data.Username = ses.Username
-	data.Players = nil // TODO: get leaderboard from db
-
-	t, err := webtmls.ParseTmls(TmlMap, TmlName)
+	data.Leaderboard, err = dbstats.Leaderboard("dice") // TODO: set to query requested game
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 		http.Error(w, "http failed", http.StatusInternalServerError)
 	}
-	err = t.ExecuteTemplate(w, TmlName, data)
+
+	tml, err = webtmls.ParseTmls(TmlMap, TmlName)
+	if err != nil {
+		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
+		http.Error(w, "http failed", http.StatusInternalServerError)
+	}
+	err = tml.ExecuteTemplate(w, TmlName, data)
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 		http.Error(w, "http failed", http.StatusInternalServerError)
