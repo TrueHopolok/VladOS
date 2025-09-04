@@ -31,6 +31,7 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 		http.Error(w, "http failed", http.StatusInternalServerError)
+		return
 	}
 	err = t.ExecuteTemplate(w, TmlName, data)
 	if err != nil {
