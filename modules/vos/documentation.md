@@ -106,7 +106,7 @@ const SaltSize int = 64
 ```
 
 <a name="AuthMiddleware"></a>
-## func [AuthMiddleware](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/auth.go#L51>)
+## func AuthMiddleware
 
 ```go
 func AuthMiddleware(handler http.Handler, permissionFlags AuthFlag) http.HandlerFunc
@@ -117,7 +117,7 @@ Serves as middleware for handlers and users based on authrization permission fla
 Save authefication status and whole session data in the [net/http.Request.Context](<https://pkg.go.dev/net/http/#Request.Context>).
 
 <a name="AuthMiddlewareFunc"></a>
-## func [AuthMiddlewareFunc](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/auth.go#L42>)
+## func AuthMiddlewareFunc
 
 ```go
 func AuthMiddlewareFunc(handler http.HandlerFunc, permissionFlags AuthFlag) http.HandlerFunc
@@ -126,7 +126,7 @@ func AuthMiddlewareFunc(handler http.HandlerFunc, permissionFlags AuthFlag) http
 
 
 <a name="DeleteAuthCookie"></a>
-## func [DeleteAuthCookie](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/cookies.go#L44>)
+## func DeleteAuthCookie
 
 ```go
 func DeleteAuthCookie(w http.ResponseWriter)
@@ -135,7 +135,7 @@ func DeleteAuthCookie(w http.ResponseWriter)
 Sets [AuthCookieName](<#AuthCookieName>) cookie max age to \-1 thus deleting it from the user.
 
 <a name="GenerateSalt"></a>
-## func [GenerateSalt](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/psh.go#L22>)
+## func GenerateSalt
 
 ```go
 func GenerateSalt() []byte
@@ -144,7 +144,7 @@ func GenerateSalt() []byte
 Returns completly crypto random salt to use for password hashing.
 
 <a name="GetAuthCookie"></a>
-## func [GetAuthCookie](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/cookies.go#L14>)
+## func GetAuthCookie
 
 ```go
 func GetAuthCookie(r *http.Request) (string, error)
@@ -153,7 +153,7 @@ func GetAuthCookie(r *http.Request) (string, error)
 Read [AuthCookieName](<#AuthCookieName>) cookie from the request returning its value. Expected value is jwt. Returns error in case of 0 or \>1 cookies were given.
 
 <a name="NewPSH"></a>
-## func [NewPSH](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/psh.go#L30>)
+## func NewPSH
 
 ```go
 func NewPSH(password string, salt []byte) []byte
@@ -162,7 +162,7 @@ func NewPSH(password string, salt []byte) []byte
 PSH \- Password Salted and Hashed. Function simplifies getting hashed password with given salt.
 
 <a name="SetAuthCookie"></a>
-## func [SetAuthCookie](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/cookies.go#L31>)
+## func SetAuthCookie
 
 ```go
 func SetAuthCookie(w http.ResponseWriter, jwt string)
@@ -171,7 +171,7 @@ func SetAuthCookie(w http.ResponseWriter, jwt string)
 Sets [AuthCookieName](<#AuthCookieName>) cookie with given jwt value. Expects valid jwt. Max age is set to [AuthExpires](<#AuthExpires>) thus having the same value as default session expiration value.
 
 <a name="ValidatePSH"></a>
-## func [ValidatePSH](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/psh.go#L36>)
+## func ValidatePSH
 
 ```go
 func ValidatePSH(password string, salt, psh []byte) bool
@@ -180,7 +180,7 @@ func ValidatePSH(password string, salt, psh []byte) bool
 PSH \- Password Salted and Hashed. Function simplifies validating that given PSH is for the given password and salt combination.
 
 <a name="AuthFlag"></a>
-## type [AuthFlag](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/auth.go#L29>)
+## type AuthFlag
 
 Determine which users are allowed to go through [AuthMiddleware](<#AuthMiddleware>) to see given handler.
 
@@ -204,7 +204,7 @@ const (
 ```
 
 <a name="KeyChain"></a>
-## type [KeyChain](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/keychain.go#L30-L33>)
+## type KeyChain
 
 Contains 2 keys and a mutex, making it multiple goroutines save. Used solely by JWT functions.
 
@@ -224,7 +224,7 @@ type KeyChain struct {
 ```
 
 <a name="Session"></a>
-## type [Session](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/session.go#L7-L10>)
+## type Session
 
 Contains all necessary information for other packages to use. All fields must support [encoding/json](<https://pkg.go.dev/encoding/json/>) marshalling/unmarshalling and be tested on that.
 
@@ -236,7 +236,7 @@ type Session struct {
 ```
 
 <a name="GetSession"></a>
-### func [GetSession](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/auth.go#L16>)
+### func GetSession
 
 ```go
 func GetSession(r *http.Request) (Session, bool)
@@ -245,7 +245,7 @@ func GetSession(r *http.Request) (Session, bool)
 Returns [Session](<#Session>) and whether user is autheficated. Will always return false in case [AuthMiddleware](<#AuthMiddleware>) was not performed prior.
 
 <a name="NewSession"></a>
-### func [NewSession](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/session.go#L13>)
+### func NewSession
 
 ```go
 func NewSession(username string) Session
@@ -254,7 +254,7 @@ func NewSession(username string) Session
 Return new session with valid and refreshed expiration time.
 
 <a name="ValidateJWT"></a>
-### func [ValidateJWT](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/jwt.go#L61>)
+### func ValidateJWT
 
 ```go
 func ValidateJWT(token string) (Session, bool, error)
@@ -269,7 +269,7 @@ Should never return an error, since:
 - [encoding/base64.URLEncoding.DecodeString](<https://pkg.go.dev/encoding/base64/#URLEncoding.DecodeString>) works with valid encoded [Session](<#Session>) thus should not return an error.
 
 <a name="Session.Expired"></a>
-### func \(Session\) [Expired](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/session.go#L26>)
+### func \(Session\) Expired
 
 ```go
 func (ses Session) Expired() bool
@@ -278,7 +278,7 @@ func (ses Session) Expired() bool
 Reports whether or not session is expired.
 
 <a name="Session.NewJWT"></a>
-### func \(Session\) [NewJWT](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/jwt.go#L41>)
+### func \(Session\) NewJWT
 
 ```go
 func (ses Session) NewJWT() (string, error)
@@ -292,7 +292,7 @@ Should never return an error, since:
 - [encoding/json.Marshal](<https://pkg.go.dev/encoding/json/#Marshal>) for [Session](<#Session>) should not return an error.
 
 <a name="Session.Refresh"></a>
-### func \(\*Session\) [Refresh](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/session.go#L21>)
+### func \(\*Session\) Refresh
 
 ```go
 func (ses *Session) Refresh()

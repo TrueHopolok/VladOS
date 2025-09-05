@@ -55,6 +55,7 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 	data.Title = "Leaderboard"
 	ses, data.Auth = vos.GetSession(r)
 	data.Username = ses.Username
+	data.LeaderboardType = gameName
 	data.Leaderboard, err = dbstats.Leaderboard(gameName)
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)

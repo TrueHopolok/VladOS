@@ -19,7 +19,7 @@ Basicly: BRAIN of the VladOS.
 
 
 <a name="ConnectAll"></a>
-## func [ConnectAll](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/bot.go#L27>)
+## func ConnectAll
 
 ```go
 func ConnectAll(bot *telego.Bot, bh *th.BotHandler) error
@@ -32,7 +32,7 @@ Connects all connectors and middlewares into given [github.com/mymmrac/telego/te
 - [github.com/TrueHopolok/VladOS/modules/bot/cmd.ConnectCommands](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/bot/cmd/#ConnectCommands>).
 
 <a name="LoggerMiddleware"></a>
-## func [LoggerMiddleware](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/bot.go#L37>)
+## func LoggerMiddleware
 
 ```go
 func LoggerMiddleware(ctx *th.Context, update telego.Update) error
@@ -41,7 +41,7 @@ func LoggerMiddleware(ctx *th.Context, update telego.Update) error
 Provides small bot handler middleware to connect for logs purposes using [log/slog](<https://pkg.go.dev/log/slog/>) package.
 
 <a name="Start"></a>
-## func [Start](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/bot.go#L51>)
+## func Start
 
 ```go
 func Start(botErrorChan chan error) error
@@ -52,7 +52,7 @@ Initialize a bot and starts it with handlers connected via [ConnectAll](<#Connec
 Will stop execution of a previous bot in case it was working previously.
 
 <a name="Stop"></a>
-## func [Stop](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/bot.go#L97>)
+## func Stop
 
 ```go
 func Stop() error

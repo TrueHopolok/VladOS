@@ -25,7 +25,7 @@ var BaseTmls *template.Template
 ```
 
 <a name="ParseTmls"></a>
-## func [ParseTmls](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L32>)
+## func ParseTmls
 
 ```go
 func ParseTmls(funcMap template.FuncMap, tmlNames ...string) (*template.Template, error)
@@ -36,7 +36,7 @@ Clones existing base templates from [BaseTmls](<#BaseTmls>) into a new one. Requ
 Afterwards parses given template names with added prefix of [github.com/TrueHopolok/VladOS/modules/cfg.Cfg.WebStaticPath](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/cfg/#Cfg.WebStaticPath>) \+ "/templates/".
 
 <a name="PrepareBase"></a>
-## func [PrepareBase](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L21>)
+## func PrepareBase
 
 ```go
 func PrepareBase() error
@@ -45,7 +45,7 @@ func PrepareBase() error
 Reads all base html templates stored in static/tempaltes/base directory. Will store the result in \[Tmls\].
 
 <a name="T"></a>
-## type [T](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L47-L55>)
+## type T
 
 Stores all information that can be used on the page.
 

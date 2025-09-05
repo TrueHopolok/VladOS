@@ -21,7 +21,7 @@ var QueryDir embed.FS
 ```
 
 <a name="Get"></a>
-## func [Get](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbm8b/dbm8b.go#L17>)
+## func Get
 
 ```go
 func Get(isPositive bool) (string, error)

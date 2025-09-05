@@ -49,7 +49,8 @@ type T struct {
 	Username string // if user is isauth: must; else: optional;
 	Title    string // must
 
-	Leaderboard []dbstats.Placement // if page is leaderboard: must
+	LeaderboardType string              // if page is leaderboard: must
+	Leaderboard     []dbstats.Placement // if page is leaderboard: must
 
 	SuggestionType string // if page is suggestions: must
 }

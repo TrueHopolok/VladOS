@@ -22,7 +22,7 @@ var QueryDir embed.FS
 ```
 
 <a name="Get"></a>
-## func [Get](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbtip/dbtip.go#L17>)
+## func Get
 
 ```go
 func Get(id int) (text string, author string, found bool, err error)
@@ -31,7 +31,7 @@ func Get(id int) (text string, author string, found bool, err error)
 Retrive a tip from the db table with a given id.
 
 <a name="Rand"></a>
-## func [Rand](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbtip/dbtip.go#L56>)
+## func Rand
 
 ```go
 func Rand() (text string, author string, id int, err error)
