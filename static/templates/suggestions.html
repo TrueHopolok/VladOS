@@ -1,5 +1,8 @@
 {{ define "content-style" }}
+<link rel="stylesheet" href="static/styles/base/content.css">
+{{ if .Auth }}
 <link rel="stylesheet" href="static/styles/suggestions.css">
+{{ end }}
 {{ end }}
 {{ define "content" }}
 <h2 class="page-title">Suggestions - {{ .SuggestionType }}</h2>

@@ -52,4 +52,7 @@ type T struct {
 	Leaderboard []dbstats.Placement // if page is leaderboard: must
 
 	SuggestionType string // if page is suggestions: must
+
+	LoginLink string // if page is login: must
+	LoginCode string // if page is login: must
 }
