@@ -21,7 +21,7 @@ const TmlName string = "login.html"
 ```
 
 <a name="Handle"></a>
-## func Handle
+## func [Handle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/page_login/handler.go#L14>)
 
 ```go
 func Handle(w http.ResponseWriter, r *http.Request)

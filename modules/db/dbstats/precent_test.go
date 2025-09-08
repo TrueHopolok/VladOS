@@ -32,6 +32,79 @@ func TestPrecent(t *testing.T) {
 		err  error
 	)
 	for _, gameName := range tablesToTest {
+		want = nil
+		got, err = dbstats.GetPrecent(gameName)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("unexpected result\ngot: %v\nwant:%v", got, want)
+		}
+
+		if err = dbstats.Update(gameName, 0, "0", "", 0); err != nil {
+			t.Fatal(err)
+		}
+		want = []dbstats.Precent{{ScoreBest: 0, PlayersAmount: 1}}
+		got, err = dbstats.GetPrecent(gameName)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("unexpected result\ngot: %v\nwant:%v", got, want)
+		}
+
+		if err = dbstats.Update(gameName, 0, "0", "", 1); err != nil {
+			t.Fatal(err)
+		}
+		want = []dbstats.Precent{{ScoreBest: 1, PlayersAmount: 1}}
+		got, err = dbstats.GetPrecent(gameName)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("unexpected result\ngot: %v\nwant:%v", got, want)
+		}
+
+		if err = dbstats.Update(gameName, 1, "1", "", 5); err != nil {
+			t.Fatal(err)
+		}
+		want = []dbstats.Precent{{ScoreBest: 5, PlayersAmount: 1}, {ScoreBest: 1, PlayersAmount: 1}}
+		got, err = dbstats.GetPrecent(gameName)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("unexpected result\ngot: %v\nwant:%v", got, want)
+		}
+
+		if err = dbstats.Update(gameName, 0, "0", "", 4); err != nil {
+			t.Fatal(err)
+		}
+		want = []dbstats.Precent{{ScoreBest: 5, PlayersAmount: 2}}
+		got, err = dbstats.GetPrecent(gameName)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("unexpected result\ngot: %v\nwant:%v", got, want)
+		}
+
+		if err = dbstats.Update(gameName, 0, "0", "", 0); err != nil {
+			t.Fatal(err)
+		}
+		want = []dbstats.Precent{{ScoreBest: 5, PlayersAmount: 2}}
+		got, err = dbstats.GetPrecent(gameName)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("unexpected result\ngot: %v\nwant:%v", got, want)
+		}
+
+		if err = dbstats.Update(gameName, 0, "0", "", 10); err != nil {
+			t.Fatal(err)
+		}
+		want = []dbstats.Precent{{ScoreBest: 10, PlayersAmount: 1}, {ScoreBest: 5, PlayersAmount: 1}}
 		got, err = dbstats.GetPrecent(gameName)
 		if err != nil {
 			t.Fatal(err)

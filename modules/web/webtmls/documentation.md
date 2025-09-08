@@ -25,7 +25,7 @@ var BaseTmls *template.Template
 ```
 
 <a name="ParseTmls"></a>
-## func ParseTmls
+## func [ParseTmls](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L32>)
 
 ```go
 func ParseTmls(funcMap template.FuncMap, tmlNames ...string) (*template.Template, error)
@@ -36,7 +36,7 @@ Clones existing base templates from [BaseTmls](<#BaseTmls>) into a new one. Requ
 Afterwards parses given template names with added prefix of [github.com/TrueHopolok/VladOS/modules/cfg.Cfg.WebStaticPath](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/cfg/#Cfg.WebStaticPath>) \+ "/templates/".
 
 <a name="PrepareBase"></a>
-## func PrepareBase
+## func [PrepareBase](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L21>)
 
 ```go
 func PrepareBase() error
@@ -45,7 +45,7 @@ func PrepareBase() error
 Reads all base html templates stored in static/tempaltes/base directory. Will store the result in \[Tmls\].
 
 <a name="T"></a>
-## type T
+## type [T](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webtmls/webtmls.go#L47-L60>)
 
 Stores all information that can be used on the page.
 
@@ -55,9 +55,14 @@ type T struct {
     Username string // if user is isauth: must; else: optional;
     Title    string // must
 
-    Leaderboard []dbstats.Placement // if page is leaderboard: must
+    LeaderboardType      string              // if page is leaderboard: must
+    LeaderboardPrecent   []dbstats.Precent   // if page is leaderboard: must
+    LeaderboardPlacement []dbstats.Placement // if page is leaderboard: must
 
     SuggestionType string // if page is suggestions: must
+
+    LoginLink string // if page is login: must
+    LoginCode string // if page is login: must
 }
 ```
 

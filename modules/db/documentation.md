@@ -30,7 +30,7 @@ var MigrationsDir embed.FS
 ```
 
 <a name="Init"></a>
-## func Init
+## func [Init](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/db.go#L30>)
 
 ```go
 func Init() error
@@ -39,7 +39,7 @@ func Init() error
 Connects to SQLite database with path from [github.com/TrueHopolok/VladOS/modules/cfg.Config.DBfilePath](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/cfg/#Config.DBfilePath>). Since it is SQLite, the database is opened \(or created does not exists\) and modified as file. Saves in [DB](<#DB>) struct to prevent any outside modifications.
 
 <a name="InitTesting"></a>
-## func InitTesting
+## func [InitTesting](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/db.go#L55>)
 
 ```go
 func InitTesting(t *testing.T, pathToRoot string) error
@@ -50,7 +50,7 @@ Erase provided database via [os.Remove](<https://pkg.go.dev/os/#Remove>) and the
 \!WARNING\! \- must be used only for testing purposes and on testing database to avoid losing data.
 
 <a name="Migrate"></a>
-## func Migrate
+## func [Migrate](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/migrate.go#L17>)
 
 ```go
 func Migrate() error
@@ -61,7 +61,7 @@ Function checks if any more migrations were added and executes them. In case of 
 Must be used after any initialization function.
 
 <a name="DB"></a>
-## type DB
+## type [DB](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/db.go#L21-L23>)
 
 
 

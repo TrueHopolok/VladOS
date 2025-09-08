@@ -17,7 +17,7 @@ Contains all necessary functional to begin work with [log/slog](<https://pkg.go.
 
 
 <a name="Init"></a>
-## func Init
+## func [Init](<https://github.com/TrueHopolok/VladOS/blob/main/modules/mlog/mlog.go#L26>)
 
 ```go
 func Init()
@@ -26,7 +26,7 @@ func Init()
 Initializate the slog package for performing purposes with given config parameters by calling [github.com/TrueHopolok/VladOS/cfg.Get](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/cfg/#Get>). Uses [github.com/TrueHopolok/VladOS/cfg.Config.Verbose](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/cfg/#Config.Verbose>) to decide wheter to output the debug prints \(in case of true value\) or ignore them. Creates multiwriter to print in both [os.Stdout](<https://pkg.go.dev/os/#Stdout>) and [github.com/TrueHopolok/VladOS/cfg.Config.LogFilePath](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/cfg/#Config.LogFilePath>). Creates writer that uses [gopkg.in/natefinch/lumberjack.v2](<https://pkg.go.dev/gopkg.in/natefinch/lumberjack.v2/>) package to perform the log file rotations. Writer is set as default output handler of [log/slog](<https://pkg.go.dev/log/slog/>) package, to be used outside this package.
 
 <a name="InitTesting"></a>
-## func InitTesting
+## func [InitTesting](<https://github.com/TrueHopolok/VladOS/blob/main/modules/mlog/mlog.go#L52>)
 
 ```go
 func InitTesting(_ *testing.T, pathToRoot string)

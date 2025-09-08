@@ -9,13 +9,14 @@ import "github.com/TrueHopolok/VladOS/modules/db/dbstats"
 ## Index
 
 - [Variables](<#variables>)
-- [func Update\(gameName string, userID int64, score int\) error](<#Update>)
-- [type FullStats](<#FullStats>)
-  - [func GetFull\(gameName string, userID int64\) \(\[\]FullStats, error\)](<#GetFull>)
+- [func Update\(gameName string, userID int64, firstName string, username string, score int\) error](<#Update>)
 - [type Placement](<#Placement>)
-  - [func Leaderboard\(gameName string\) \(\[\]Placement, error\)](<#Leaderboard>)
+  - [func GetTop10\(gameName string\) \(\[\]Placement, error\)](<#GetTop10>)
+  - [func GetTopSelf\(gameName string, userID int64\) \(\[\]Placement, error\)](<#GetTopSelf>)
+- [type Precent](<#Precent>)
+  - [func GetPrecent\(gameName string\) \(\[\]Precent, error\)](<#GetPrecent>)
 - [type UserStats](<#UserStats>)
-  - [func Get\(gameName string, userID int64\) \(UserStats, error\)](<#Get>)
+  - [func GetSelf\(gameName string, userID int64\) \(UserStats, error\)](<#GetSelf>)
 
 
 ## Variables
@@ -27,60 +28,71 @@ var QueryDir embed.FS
 ```
 
 <a name="Update"></a>
-## func Update
+## func [Update](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L79>)
 
 ```go
-func Update(gameName string, userID int64, score int) error
+func Update(gameName string, userID int64, firstName string, username string, score int) error
 ```
 
 Updates a leaderboard with recieved result for a particular user.
 
-<a name="FullStats"></a>
-## type FullStats
+<a name="Placement"></a>
+## type [Placement](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L22-L29>)
 
 
 
 ```go
-type FullStats struct {
+type Placement struct {
     UserId       int64
+    FirstName    string
+    Username     string
     Personal     UserStats
     Placement    int
     PlayersTotal int
 }
 ```
 
-<a name="GetFull"></a>
-### func GetFull
+<a name="GetTop10"></a>
+### func [GetTop10](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L157>)
 
 ```go
-func GetFull(gameName string, userID int64) ([]FullStats, error)
+func GetTop10(gameName string) ([]Placement, error)
 ```
 
 
 
-<a name="Placement"></a>
-## type Placement
+<a name="GetTopSelf"></a>
+### func [GetTopSelf](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L161>)
+
+```go
+func GetTopSelf(gameName string, userID int64) ([]Placement, error)
+```
+
+
+
+<a name="Precent"></a>
+## type [Precent](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L31-L34>)
 
 
 
 ```go
-type Placement struct {
+type Precent struct {
     ScoreBest     int
     PlayersAmount int
 }
 ```
 
-<a name="Leaderboard"></a>
-### func Leaderboard
+<a name="GetPrecent"></a>
+### func [GetPrecent](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L37>)
 
 ```go
-func Leaderboard(gameName string) ([]Placement, error)
+func GetPrecent(gameName string) ([]Precent, error)
 ```
 
 Return top of all scores and how many players reached that.
 
 <a name="UserStats"></a>
-## type UserStats
+## type [UserStats](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L16-L20>)
 
 
 
@@ -92,11 +104,11 @@ type UserStats struct {
 }
 ```
 
-<a name="Get"></a>
-### func Get
+<a name="GetSelf"></a>
+### func [GetSelf](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L118>)
 
 ```go
-func Get(gameName string, userID int64) (UserStats, error)
+func GetSelf(gameName string, userID int64) (UserStats, error)
 ```
 
 Recieve stats for certain user and zero if there is no stats.

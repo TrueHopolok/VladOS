@@ -21,7 +21,7 @@ const TmlName string = "update.html"
 ```
 
 <a name="Handle"></a>
-## func Handle
+## func [Handle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/page_index/handler.go#L15>)
 
 ```go
 func Handle(w http.ResponseWriter, r *http.Request)

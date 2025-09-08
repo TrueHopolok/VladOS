@@ -16,7 +16,7 @@ Used to parse config file that was provided in [os.Args](<https://pkg.go.dev/os/
 
 
 <a name="Config"></a>
-## type Config
+## type [Config](<https://github.com/TrueHopolok/VladOS/blob/main/modules/cfg/cfg.go#L18-L29>)
 
 Stores all necessary constants as struct, can be accessed via [Get](<#Get>) function.
 
@@ -36,7 +36,7 @@ type Config struct {
 ```
 
 <a name="Get"></a>
-### func Get
+### func [Get](<https://github.com/TrueHopolok/VladOS/blob/main/modules/cfg/cfg.go#L35>)
 
 ```go
 func Get() Config
@@ -47,7 +47,7 @@ Parses config flag once via [flag](<https://pkg.go.dev/flag/>) and [sync](<https
 Panic if invalid config path is non existent or config file cannot be read.
 
 <a name="GetTest"></a>
-### func GetTest
+### func [GetTest](<https://github.com/TrueHopolok/VladOS/blob/main/modules/cfg/cfg.go#L52>)
 
 ```go
 func GetTest(pathToRoot string) Config

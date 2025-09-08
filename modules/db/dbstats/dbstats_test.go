@@ -29,8 +29,20 @@ func TestExample(t *testing.T) {
 		err  error
 	)
 	for _, gameName := range tablesToTest {
-		want = dbstats.UserStats{}
-		got, err = dbstats.GetSelf(gameName, 0)
+		want = nil
+		got, err = dbstats.GetTEST(gameName)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("unexpected result\ngot: %v\nwant:%v", got, want)
+		}
+
+		if err = dbstats.Update(gameName, 0, "0", "", 0); err != nil {
+			t.Fatal(err)
+		}
+		want = []dbstats.Precent{{ScoreBest: 0, PlayersAmount: 1}}
+		got, err = dbstats.GetTEST(gameName)
 		if err != nil {
 			t.Fatal(err)
 		}

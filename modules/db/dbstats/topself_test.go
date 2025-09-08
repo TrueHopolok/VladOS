@@ -32,7 +32,20 @@ func TestTopSelf(t *testing.T) {
 		err  error
 	)
 	for _, gameName := range tablesToTest {
-		got, err = dbstats.GetTopSelf(gameName, 0)
+		want = nil
+		got, err = dbstats.GetTopSelf(gameName, _)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("unexpected result\ngot: %v\nwant:%v", got, want)
+		}
+
+		if err = dbstats.Update(gameName, _, _, _, _); err != nil {
+			t.Fatal(err)
+		}
+		want = []dbstats.Placement{{_}}
+		got, err = dbstats.GetTopSelf(gameName, _)
 		if err != nil {
 			t.Fatal(err)
 		}

@@ -41,7 +41,9 @@ func TestSelf(t *testing.T) {
 			t.Fatalf("unexpected result\ngot: %v\nwant:%v", got, want)
 		}
 
-		dbstats.Update(gameName, 0, "0", "", 0)
+		if err = dbstats.Update(gameName, 0, "0", "", 0); err != nil {
+			t.Fatal(err)
+		}
 		want.GamesTotal = 1
 		got, err = dbstats.GetSelf(gameName, 0)
 		if err != nil {
@@ -51,7 +53,9 @@ func TestSelf(t *testing.T) {
 			t.Fatalf("unexpected result\ngot: %v\nwant:%v", got, want)
 		}
 
-		dbstats.Update(gameName, 1, "1", "", 5)
+		if err = dbstats.Update(gameName, 1, "1", "", 5); err != nil {
+			t.Fatal(err)
+		}
 		got, err = dbstats.GetSelf(gameName, 0)
 		if err != nil {
 			t.Fatal(err)
@@ -68,7 +72,9 @@ func TestSelf(t *testing.T) {
 			t.Fatalf("unexpected result\ngot: %v\nwant:%v", got, want)
 		}
 
-		dbstats.Update(gameName, 1, "1", "", 0)
+		if err = dbstats.Update(gameName, 1, "1", "", 0); err != nil {
+			t.Fatal(err)
+		}
 		want = dbstats.UserStats{GamesTotal: 1, ScoreCurrent: 0, ScoreBest: 0}
 		got, err = dbstats.GetSelf(gameName, 0)
 		if err != nil {

@@ -32,6 +32,19 @@ func TestTop10(t *testing.T) {
 		err  error
 	)
 	for _, gameName := range tablesToTest {
+		want = nil
+		got, err = dbstats.GetTop10(gameName)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Fatalf("unexpected result\ngot: %v\nwant:%v", got, want)
+		}
+
+		if err = dbstats.Update(gameName, _, _, _, _); err != nil {
+			t.Fatal(err)
+		}
+		want = []dbstats.Placement{{_}}
 		got, err = dbstats.GetTop10(gameName)
 		if err != nil {
 			t.Fatal(err)
