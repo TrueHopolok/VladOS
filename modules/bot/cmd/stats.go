@@ -22,7 +22,7 @@ With a your placement and top placement in the leaderboard.`,
 		userID := update.Message.From.ID
 		switch args[0] {
 		case "slot", "dice", "bjack", "guess":
-			ranking, err := dbstats.GetFull(args[0], userID)
+			ranking, err := dbstats.GetTopSelf(args[0], userID)
 			if err != nil {
 				return err
 			}
@@ -44,7 +44,7 @@ With a your placement and top placement in the leaderboard.`,
 	},
 }
 
-func outputStats(userID int64, ranking []dbstats.FullStats) []tu.MessageEntityCollection {
+func outputStats(userID int64, ranking []dbstats.Placement) []tu.MessageEntityCollection {
 	var yourStats dbstats.UserStats
 	foundYou := false
 	msgText := []tu.MessageEntityCollection{

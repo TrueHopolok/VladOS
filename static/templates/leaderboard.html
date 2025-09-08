@@ -4,6 +4,32 @@
 {{ end }}
 {{ define "content" }}
 <h2 class="page-title">Leaderboard - {{ .LeaderboardType }}</h2>
+<br>
+<h3>TOP-10 players</h3>
+<table class="leaderboard">
+    <thead>
+    <tr>
+        <th width="20%">Rank</th>
+        <th width="30%">Username</th>
+        <th width="50%">Best score</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{ range $i, $player := .LeaderboardPlacement }}
+    <tr>
+        <td>{{ inc $i }}</td>
+        <td>{{ if $player.Username }}{{ $player.Username }}{{ else }}{{ $player.FirstName }}{{ end }}</td>
+        <td>{{ $player.Personal.ScoreBest }}</td>
+    </tr>
+    {{ else }}
+    <tr>
+        <td colspan="3">No players yet</td>
+    </tr>
+    {{ end }}
+    </tbody>
+</table>
+<br>
+<h3>Best scores</h3>
 <table class="leaderboard">
     <thead>
     <tr>
@@ -13,11 +39,11 @@
     </tr>
     </thead>
     <tbody>
-    {{ range $i, $player := .Leaderboard }}
+    {{ range $i, $reached := .LeaderboardPrecent }}
     <tr>
         <td>{{ inc $i }}</td>
-        <td>{{ $player.ScoreBest }}</td>
-        <td>{{ $player.PlayersAmount }}</td>
+        <td>{{ $reached.ScoreBest }}</td>
+        <td>{{ $reached.PlayersAmount }}</td>
     </tr>
     {{ else }}
     <tr>

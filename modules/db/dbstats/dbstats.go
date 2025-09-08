@@ -19,7 +19,7 @@ type UserStats struct {
 	ScoreBest    int
 }
 
-type FullStats struct {
+type Placement struct {
 	UserId       int64
 	FirstName    string
 	Username     string
@@ -28,14 +28,14 @@ type FullStats struct {
 	PlayersTotal int
 }
 
-type Placement struct {
+type Precent struct {
 	ScoreBest     int
 	PlayersAmount int
 }
 
 // Return top of all scores and how many players reached that.
-func Leaderboard(gameName string) ([]Placement, error) {
-	query, err := QueryDir.ReadFile("leaderboard.sql")
+func GetPrecent(gameName string) ([]Precent, error) {
+	query1, err := QueryDir.ReadFile("precent.sql")
 	if err != nil {
 		err = fmt.Errorf("reading query error: %w", err)
 		return nil, err
@@ -48,7 +48,7 @@ func Leaderboard(gameName string) ([]Placement, error) {
 	}
 	defer tx.Rollback()
 
-	rows, err := tx.Query(fmt.Sprintf(string(query), gameName))
+	rows, err := tx.Query(fmt.Sprintf(string(query1), gameName))
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
@@ -57,17 +57,17 @@ func Leaderboard(gameName string) ([]Placement, error) {
 		return nil, err
 	}
 
-	var leaderboard []Placement
+	var precent []Precent
 	for rows.Next() {
-		var p Placement
+		var p Precent
 		if err := rows.Scan(&p.ScoreBest, &p.PlayersAmount); err != nil {
 			err = fmt.Errorf("result scanning error: %w", err)
 			return nil, err
 		}
-		leaderboard = append(leaderboard, p)
+		precent = append(precent, p)
 	}
 
-	return leaderboard, func() error {
+	return precent, func() error {
 		if err := tx.Commit(); err != nil {
 			return fmt.Errorf("commit error: %w", err)
 		}
@@ -115,7 +115,7 @@ func Update(gameName string, userID int64, firstName string, username string, sc
 }
 
 // Recieve stats for certain user and zero if there is no stats.
-func Get(gameName string, userID int64) (UserStats, error) {
+func GetSelf(gameName string, userID int64) (UserStats, error) {
 	query, err := QueryDir.ReadFile("get.sql")
 	if err != nil {
 		err = fmt.Errorf("reading query error: %w", err)
@@ -154,8 +154,24 @@ func Get(gameName string, userID int64) (UserStats, error) {
 	}()
 }
 
-func GetFull(gameName string, userID int64) ([]FullStats, error) {
-	query, err := QueryDir.ReadFile("full.sql")
+func GetTop10(gameName string) ([]Placement, error) {
+	return getPlacement(gameName, 0, false)
+}
+
+func GetTopSelf(gameName string, userID int64) ([]Placement, error) {
+	return getPlacement(gameName, userID, true)
+}
+
+func getPlacement(gameName string, userID int64, include bool) ([]Placement, error) {
+	var (
+		query []byte
+		err   error
+	)
+	if include {
+		query, err = QueryDir.ReadFile("placement.sql")
+	} else {
+		query, err = QueryDir.ReadFile("top10.sql")
+	}
 	if err != nil {
 		err = fmt.Errorf("reading query error: %w", err)
 		return nil, err
@@ -168,7 +184,12 @@ func GetFull(gameName string, userID int64) ([]FullStats, error) {
 	}
 	defer tx.Rollback()
 
-	rows, err := tx.Query(fmt.Sprintf(string(query), gameName), userID)
+	var rows *sql.Rows
+	if include {
+		rows, err = tx.Query(fmt.Sprintf(string(query), gameName), userID)
+	} else {
+		rows, err = tx.Query(fmt.Sprintf(string(query), gameName))
+	}
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
@@ -177,9 +198,9 @@ func GetFull(gameName string, userID int64) ([]FullStats, error) {
 		return nil, err
 	}
 
-	var stats []FullStats
+	var stats []Placement
 	for rows.Next() {
-		var next FullStats
+		var next Placement
 		if err := rows.Scan(&next.UserId, &next.FirstName, &next.Username, &next.Personal.GamesTotal, &next.Personal.ScoreCurrent, &next.Personal.ScoreBest, &next.Placement, &next.PlayersTotal); err != nil {
 			err = fmt.Errorf("result scanning error: %w", err)
 			return nil, err

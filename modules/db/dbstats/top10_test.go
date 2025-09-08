@@ -1,11 +1,14 @@
 package dbstats_test
 
-const pathToRoot = "../../../"
+import (
+	"reflect"
+	"testing"
 
-var tablesToTest = []string{"slot", "dice", "bjack", "guess"}
+	"github.com/TrueHopolok/VladOS/modules/db"
+	"github.com/TrueHopolok/VladOS/modules/db/dbstats"
+)
 
-/*
-func TestExample(t *testing.T) {
+func TestTop10(t *testing.T) {
 	defer func() {
 		if x := recover(); x != nil {
 			t.Fatal("panic", x)
@@ -24,13 +27,12 @@ func TestExample(t *testing.T) {
 	}
 
 	var (
-		got  dbstats.UserStats
-		want dbstats.UserStats
+		got  []dbstats.Placement
+		want []dbstats.Placement
 		err  error
 	)
 	for _, gameName := range tablesToTest {
-		want = dbstats.UserStats{}
-		got, err = dbstats.GetSelf(gameName, 0)
+		got, err = dbstats.GetTop10(gameName)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -39,4 +41,3 @@ func TestExample(t *testing.T) {
 		}
 	}
 }
-*/

@@ -56,7 +56,13 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 	ses, data.Auth = vos.GetSession(r)
 	data.Username = ses.Username
 	data.LeaderboardType = gameName
-	data.Leaderboard, err = dbstats.Leaderboard(gameName)
+	data.LeaderboardPrecent, err = dbstats.GetPrecent(gameName)
+	if err != nil {
+		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
+		http.Error(w, "http failed", http.StatusInternalServerError)
+		return
+	}
+	data.LeaderboardPlacement, err = dbstats.GetTop10(gameName)
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 		http.Error(w, "http failed", http.StatusInternalServerError)

@@ -51,7 +51,7 @@ Has a leaderboard to count largest score streak.`,
 }
 
 func utilOutputDice(gameName string, userID int64, hasWon bool) ([]tu.MessageEntityCollection, error) {
-	stats, err := dbstats.Get(gameName, userID)
+	stats, err := dbstats.GetSelf(gameName, userID)
 	if err != nil {
 		return nil, err
 	}
