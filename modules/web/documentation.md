@@ -47,7 +47,7 @@ func ConnectEveryone(mux *http.ServeMux)
 Connects to [net/http.ServeMux](<https://pkg.go.dev/net/http/#ServeMux>) handler functions with permission flag [github.com/TrueHopolok/VladOS/modules/vos.Everyone](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#Everyone>) for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#AuthMiddleware>).
 
 <a name="ConnectFileHandlers"></a>
-## func [ConnectFileHandlers](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L39>)
+## func [ConnectFileHandlers](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L38>)
 
 ```go
 func ConnectFileHandlers(mux *http.ServeMux)
@@ -56,7 +56,7 @@ func ConnectFileHandlers(mux *http.ServeMux)
 Connects to [net/http.ServeMux](<https://pkg.go.dev/net/http/#ServeMux>) handler functions to server static files on the [github.com/TrueHopolok/VladOS/modules/cfg.Config.WebStaticDir](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/cfg/#Config.WebStaticDir>) path.
 
 <a name="ConnectUnauthorized"></a>
-## func [ConnectUnauthorized](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L33>)
+## func [ConnectUnauthorized](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L32>)
 
 ```go
 func ConnectUnauthorized(mux *http.ServeMux)
