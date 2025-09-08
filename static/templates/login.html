@@ -1,1 +1,20 @@
+{{ define "content-style" }}
+<link rel="stylesheet" href="static/styles/base/content.css">
+<link rel="stylesheet" href="static/styles/login.css">
+{{ end }}
+{{ define "content" }}
+<h2 class="page-title">Login</h2>
+<p>
+This is login page, to connect your browser with telegram account.<br>
+For that you are given a link. Clicking on that will send you to telegram bot to login.<br>
+Alternative you can type code manualy like so <code>/login [your-code]</code>.
+</p>
+<p class="login-warning">
+Auth link and code automaticly expires after 5 min.<br>
+Additionaly do not reload the page, to not restart the auth link and code.
+</p>
+<p>Link: <a class="login-link" href="{{ .LoginLink }}">click here</a></p>
+<p>Code: <b>{{ .LoginCode }}</b></p>
+{{ end }}
+
 {{ template "base" . }}

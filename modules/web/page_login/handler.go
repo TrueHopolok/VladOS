@@ -4,7 +4,6 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/TrueHopolok/VladOS/modules/vos"
 	"github.com/TrueHopolok/VladOS/modules/web/webtmls"
 )
 
@@ -17,11 +16,9 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 
 	var (
 		data webtmls.T
-		ses  vos.Session
 	)
 	data.Title = "Login"
-	ses, data.Auth = vos.GetSession(r)
-	data.Username = ses.Username
+	data.Auth = false
 
 	t, err := webtmls.ParseTmls(nil, TmlName)
 	if err != nil {

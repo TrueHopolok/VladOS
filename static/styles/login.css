@@ -1,0 +1,15 @@
+code {
+    background: #dbdbdb;
+}
+
+.login-warning {
+    background: #ff60606e;
+    color: rgb(133, 0, 0);
+    padding: 5px;
+    width: fit-content;
+    border: rgb(133, 0, 0) 1px solid;
+}
+
+.login-link {
+    color: rgb(31, 0, 167);
+}
