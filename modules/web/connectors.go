@@ -17,13 +17,14 @@ import (
 func ConnectEveryone(mux *http.ServeMux) {
 	mux.HandleFunc("GET /", vos.AuthMiddlewareFunc(page_index.Handle, vos.Everyone))
 	mux.HandleFunc("GET /leaderboard", vos.AuthMiddlewareFunc(page_leaderboard.Handle, vos.Everyone))
+	mux.HandleFunc("GET /suggestions", vos.AuthMiddlewareFunc(page_suggestions.Handle, vos.Everyone))
 }
 
 // Connects to [net/http.ServeMux] handler functions with
 // permission flag [github.com/TrueHopolok/VladOS/modules/vos.Authorized]
 // for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware].
 func ConnectAuthorized(mux *http.ServeMux) {
-	mux.HandleFunc("GET /suggestions", vos.AuthMiddlewareFunc(page_suggestions.Handle, vos.Authorized))
+	// add pages with vox.Authorized
 }
 
 // Connects to [net/http.ServeMux] handler functions with

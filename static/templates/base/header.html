@@ -29,21 +29,20 @@
     <ul class="nav-list">
     <li><a href="/">Homepage</a></li>
     <li class="dropdown">
-        <a href="#">Leaderboard ▾</a>
+        <a href="">Leaderboard ▾</a>
         <ul class="dropdown-content">
         <li><a href="/leaderboard?game=slot">Slot</a></li>
         <li><a href="/leaderboard?game=dice">Dice</a></li>
-        <li><a href="/leaderboard?game=bjack">Bjack</a></li>
+        <li><a href="/leaderboard?game=bjack">Black jack</a></li>
         <li><a href="/leaderboard?game=guess">Guess</a></li>
         </ul>
     </li>
     {{if .Auth}}
     <li class="dropdown">
-        <a href="#">Suggestions ▾</a>
+        <a href="">Suggestions ▾</a>
         <ul class="dropdown-content">
-        <li><a href="/suggestions?type=m8b">M8B</a></li>
+        <li><a href="/suggestions?type=m8b">Magic 8 ball</a></li>
         <li><a href="/suggestions?type=tip">Tip</a></li>
-        <li><a href="/suggestions?type=pun">Pun</a></li>
         </ul>
     </li>
     {{ if .Admin }}
