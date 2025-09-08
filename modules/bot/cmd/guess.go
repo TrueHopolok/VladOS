@@ -85,7 +85,7 @@ You have 6 guesses, good luck!`))
 		}
 
 		if playerGuess == status.PickedNumber {
-			err = dbstats.Update("guess", update.Message.From.ID, 1)
+			err = dbstats.Update("guess", update.Message.From.ID, update.Message.From.FirstName, update.Message.From.Username, 1)
 			if err != nil {
 				return fmt.Errorf("error: %w\ndbconvo.Free: %w", err, dbconvo.Free(userID))
 			}
@@ -102,7 +102,7 @@ You have 6 guesses, good luck!`))
 		}
 
 		if status.GuessesLeft == 0 {
-			err = dbstats.Update("guess", update.Message.From.ID, 0)
+			err = dbstats.Update("guess", update.Message.From.ID, update.Message.From.FirstName, update.Message.From.Username, 0)
 			if err != nil {
 				return fmt.Errorf("error: %w\ndbconvo.Free: %w", err, dbconvo.Free(userID))
 			}
@@ -137,6 +137,6 @@ You have 6 guesses, good luck!`))
 		return dbconvo.Busy(update.Message.From.ID, "guess", buf.Bytes())
 	},
 	cancelation: func(ctx *telegohandler.Context, update telego.Update) error {
-		return dbstats.Update("guess", update.Message.From.ID, 0)
+		return dbstats.Update("guess", update.Message.From.ID, update.Message.From.FirstName, update.Message.From.Username, 0)
 	},
 }

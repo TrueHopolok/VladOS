@@ -190,7 +190,7 @@ Has a leaderboard to count largest score streak.`,
 			status.CardsRemain--
 			status.PlayersHand = append(status.PlayersHand, status.CardsDeck[status.CardsRemain])
 			if bjackScore(status.PlayersHand) > 21 {
-				if err := cmp.Or(dbstats.Update("bjack", userID, 0), dbconvo.Free(userID)); err != nil {
+				if err := cmp.Or(dbstats.Update("bjack", userID, update.Message.From.FirstName, update.Message.From.Username, 0), dbconvo.Free(userID)); err != nil {
 					return err
 				}
 				msgText, err := utilOutputDice("bjack", userID, false)
@@ -224,7 +224,7 @@ Has a leaderboard to count largest score streak.`,
 				finScore *= 2
 			}
 
-			if err := cmp.Or(dbstats.Update("bjack", userID, finScore), dbconvo.Free(userID)); err != nil {
+			if err := cmp.Or(dbstats.Update("bjack", userID, update.Message.From.FirstName, update.Message.From.Username, finScore), dbconvo.Free(userID)); err != nil {
 				return err
 			}
 			msgText, err := utilOutputDice("bjack", userID, hasWon)
@@ -255,7 +255,7 @@ Has a leaderboard to count largest score streak.`,
 		return dbconvo.Busy(update.Message.From.ID, "bjack", buf.Bytes())
 	},
 	cancelation: func(ctx *telegohandler.Context, update telego.Update) error {
-		return dbstats.Update("bjack", update.Message.From.ID, 0)
+		return dbstats.Update("bjack", update.Message.From.ID, update.Message.From.FirstName, update.Message.From.Username, 0)
 	},
 }
 

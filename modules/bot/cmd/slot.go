@@ -40,7 +40,7 @@ Has a leaderboard to count largest score streak.`,
 			return fmt.Errorf("msg is not a dice result: %v", msg)
 		}
 		scored := getSlotScore(msg.Dice.Value)
-		err = dbstats.Update("slot", update.Message.From.ID, scored)
+		err = dbstats.Update("slot", update.Message.From.ID, update.Message.From.FirstName, update.Message.From.Username, scored)
 		if err != nil {
 			return err
 		}

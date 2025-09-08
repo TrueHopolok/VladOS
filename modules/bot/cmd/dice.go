@@ -37,7 +37,7 @@ Has a leaderboard to count largest score streak.`,
 		if diceScore == 1 {
 			diceScore = 0
 		}
-		err = dbstats.Update("dice", update.Message.From.ID, msg.Dice.Value)
+		err = dbstats.Update("dice", update.Message.From.ID, update.Message.From.FirstName, update.Message.From.Username, msg.Dice.Value)
 		if err != nil {
 			return err
 		}

@@ -21,6 +21,8 @@ type UserStats struct {
 
 type FullStats struct {
 	UserId       int64
+	FirstName    string
+	Username     string
 	Personal     UserStats
 	Placement    int
 	PlayersTotal int
@@ -74,8 +76,14 @@ func Leaderboard(gameName string) ([]Placement, error) {
 }
 
 // Updates a leaderboard with recieved result for a particular user.
-func Update(gameName string, userID int64, score int) error {
-	query, err := QueryDir.ReadFile("update.sql")
+func Update(gameName string, userID int64, firstName string, username string, score int) error {
+	query1, err := QueryDir.ReadFile("upd-1.sql")
+	if err != nil {
+		err = fmt.Errorf("reading query error: %w", err)
+		return err
+	}
+
+	query2, err := QueryDir.ReadFile("upd-2.sql")
 	if err != nil {
 		err = fmt.Errorf("reading query error: %w", err)
 		return err
@@ -88,7 +96,12 @@ func Update(gameName string, userID int64, score int) error {
 	}
 	defer tx.Rollback()
 
-	if _, err := tx.Exec(fmt.Sprintf(string(query), gameName), userID, score); err != nil {
+	if _, err := tx.Exec(string(query1), userID, firstName, username); err != nil {
+		err = fmt.Errorf("query execution error: %w", err)
+		return err
+	}
+
+	if _, err := tx.Exec(fmt.Sprintf(string(query2), gameName), userID, score); err != nil {
 		err = fmt.Errorf("query execution error: %w", err)
 		return err
 	}
@@ -167,7 +180,7 @@ func GetFull(gameName string, userID int64) ([]FullStats, error) {
 	var stats []FullStats
 	for rows.Next() {
 		var next FullStats
-		if err := rows.Scan(&next.UserId, &next.Personal.GamesTotal, &next.Personal.ScoreCurrent, &next.Personal.ScoreBest, &next.Placement, &next.PlayersTotal); err != nil {
+		if err := rows.Scan(&next.UserId, &next.FirstName, &next.Username, &next.Personal.GamesTotal, &next.Personal.ScoreCurrent, &next.Personal.ScoreBest, &next.Placement, &next.PlayersTotal); err != nil {
 			err = fmt.Errorf("result scanning error: %w", err)
 			return nil, err
 		}

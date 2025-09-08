@@ -1,0 +1,1 @@
+INSERT OR REPLACE INTO user (id, firstname, username) VALUES ($1, $2, $3);

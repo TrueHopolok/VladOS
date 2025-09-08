@@ -31,7 +31,7 @@ func TestGet(t *testing.T) {
 	}
 
 	for _, gameName := range tablesToTest {
-		if err := dbstats.Update(gameName, 0, 5); err != nil {
+		if err := dbstats.Update(gameName, 0, "Oleg", "", 5); err != nil {
 			t.Fatal(err)
 		}
 		stats, err := dbstats.Get(gameName, 0)
@@ -40,7 +40,7 @@ func TestGet(t *testing.T) {
 		}
 		want := dbstats.UserStats{GamesTotal: 1, ScoreCurrent: 5, ScoreBest: 5}
 
-		if err := dbstats.Update(gameName, 1, 0); err != nil {
+		if err := dbstats.Update(gameName, 1, "Alex", "", 0); err != nil {
 			t.Fatal(err)
 		}
 		stats, err = dbstats.Get(gameName, 1)
@@ -52,10 +52,10 @@ func TestGet(t *testing.T) {
 			t.Fatalf("Unexpeceted stats:\ngot: %+v\nwant:%+v", stats, want)
 		}
 
-		if err := dbstats.Update(gameName, 1, 1); err != nil {
+		if err := dbstats.Update(gameName, 1, "Alex", "", 1); err != nil {
 			t.Fatal(err)
 		}
-		if err := dbstats.Update(gameName, 1, 64); err != nil {
+		if err := dbstats.Update(gameName, 1, "Baby", "", 64); err != nil {
 			t.Fatal(err)
 		}
 		stats, err = dbstats.Get(gameName, 1)
@@ -67,10 +67,10 @@ func TestGet(t *testing.T) {
 			t.Fatalf("Unexpeceted stats:\ngot: %+v\nwant:%+v", stats, want)
 		}
 
-		if err := dbstats.Update(gameName, 1, 0); err != nil {
+		if err := dbstats.Update(gameName, 1, "Alex", "", 0); err != nil {
 			t.Fatal(err)
 		}
-		if err := dbstats.Update(gameName, 1, 6); err != nil {
+		if err := dbstats.Update(gameName, 1, "Alex", "", 6); err != nil {
 			t.Fatal(err)
 		}
 		stats, err = dbstats.Get(gameName, 1)
@@ -119,11 +119,11 @@ func TestFull(t *testing.T) {
 		}
 
 		// player 1 added
-		if err := dbstats.Update(gameName, 1, 1); err != nil {
+		if err := dbstats.Update(gameName, 1, "Oleg", "", 1); err != nil {
 			t.Fatal(err)
 		}
 		want = []dbstats.FullStats{
-			{UserId: 1, Personal: dbstats.UserStats{GamesTotal: 1, ScoreCurrent: 1, ScoreBest: 1}, Placement: 1, PlayersTotal: 1},
+			{UserId: 1, FirstName: "Oleg", Personal: dbstats.UserStats{GamesTotal: 1, ScoreCurrent: 1, ScoreBest: 1}, Placement: 1, PlayersTotal: 1},
 		}
 		// New player
 		stats, err = dbstats.GetFull(gameName, 0)
@@ -143,19 +143,19 @@ func TestFull(t *testing.T) {
 		}
 
 		// Top3 is filled
-		if err := dbstats.Update(gameName, 1, 1); err != nil {
+		if err := dbstats.Update(gameName, 1, "1", "", 1); err != nil {
 			t.Fatal(err)
 		}
-		if err := dbstats.Update(gameName, 2, 3); err != nil {
+		if err := dbstats.Update(gameName, 2, "2", "", 3); err != nil {
 			t.Fatal(err)
 		}
-		if err := dbstats.Update(gameName, 3, 1); err != nil {
+		if err := dbstats.Update(gameName, 3, "3", "username", 1); err != nil {
 			t.Fatal(err)
 		}
 		want = []dbstats.FullStats{
-			{UserId: 2, Personal: dbstats.UserStats{GamesTotal: 1, ScoreCurrent: 3, ScoreBest: 3}, Placement: 1, PlayersTotal: 3},
-			{UserId: 1, Personal: dbstats.UserStats{GamesTotal: 2, ScoreCurrent: 2, ScoreBest: 2}, Placement: 2, PlayersTotal: 3},
-			{UserId: 3, Personal: dbstats.UserStats{GamesTotal: 1, ScoreCurrent: 1, ScoreBest: 1}, Placement: 3, PlayersTotal: 3},
+			{UserId: 2, FirstName: "2", Personal: dbstats.UserStats{GamesTotal: 1, ScoreCurrent: 3, ScoreBest: 3}, Placement: 1, PlayersTotal: 3},
+			{UserId: 1, FirstName: "1", Personal: dbstats.UserStats{GamesTotal: 2, ScoreCurrent: 2, ScoreBest: 2}, Placement: 2, PlayersTotal: 3},
+			{UserId: 3, FirstName: "3", Username: "username", Personal: dbstats.UserStats{GamesTotal: 1, ScoreCurrent: 1, ScoreBest: 1}, Placement: 3, PlayersTotal: 3},
 		}
 		// New player
 		stats, err = dbstats.GetFull(gameName, 0)
@@ -175,16 +175,16 @@ func TestFull(t *testing.T) {
 		}
 
 		// Top5 is filled
-		if err := dbstats.Update(gameName, 4, 5); err != nil {
+		if err := dbstats.Update(gameName, 4, "2", "", 5); err != nil {
 			t.Fatal(err)
 		}
-		if err := dbstats.Update(gameName, 5, 0); err != nil {
+		if err := dbstats.Update(gameName, 5, "2", "username", 0); err != nil {
 			t.Fatal(err)
 		}
 		want = []dbstats.FullStats{
-			{UserId: 4, Personal: dbstats.UserStats{GamesTotal: 1, ScoreCurrent: 5, ScoreBest: 5}, Placement: 1, PlayersTotal: 5},
-			{UserId: 2, Personal: dbstats.UserStats{GamesTotal: 1, ScoreCurrent: 3, ScoreBest: 3}, Placement: 2, PlayersTotal: 5},
-			{UserId: 1, Personal: dbstats.UserStats{GamesTotal: 2, ScoreCurrent: 2, ScoreBest: 2}, Placement: 3, PlayersTotal: 5},
+			{UserId: 4, FirstName: "2", Personal: dbstats.UserStats{GamesTotal: 1, ScoreCurrent: 5, ScoreBest: 5}, Placement: 1, PlayersTotal: 5},
+			{UserId: 2, FirstName: "2", Personal: dbstats.UserStats{GamesTotal: 1, ScoreCurrent: 3, ScoreBest: 3}, Placement: 2, PlayersTotal: 5},
+			{UserId: 1, FirstName: "1", Personal: dbstats.UserStats{GamesTotal: 2, ScoreCurrent: 2, ScoreBest: 2}, Placement: 3, PlayersTotal: 5},
 		}
 		// New player
 		stats, err = dbstats.GetFull(gameName, 0)
@@ -203,7 +203,7 @@ func TestFull(t *testing.T) {
 			t.Fatalf("unexpected stats:\nwant: %+v\ngot: %+v\n", stats, want)
 		}
 		// Old player outside top3
-		want = append(want, dbstats.FullStats{UserId: 5, Personal: dbstats.UserStats{GamesTotal: 1, ScoreCurrent: 0, ScoreBest: 0}, Placement: 5, PlayersTotal: 5})
+		want = append(want, dbstats.FullStats{UserId: 5, FirstName: "2", Username: "username", Personal: dbstats.UserStats{GamesTotal: 1, ScoreCurrent: 0, ScoreBest: 0}, Placement: 5, PlayersTotal: 5})
 		stats, err = dbstats.GetFull(gameName, 5)
 		if err != nil {
 			t.Fatal(err)
@@ -246,7 +246,7 @@ func TestLeaderboard(t *testing.T) {
 		t.Fatal("gotten result is not nil")
 	}
 
-	err = dbstats.Update(tablesToTest[0], 2, 1)
+	err = dbstats.Update(tablesToTest[0], 2, "2", "", 1)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -259,11 +259,11 @@ func TestLeaderboard(t *testing.T) {
 		t.Fatalf("gotten result is unexpected\ngot: %v\nwant: %v", got, want)
 	}
 
-	err = dbstats.Update(tablesToTest[0], 3, 2)
+	err = dbstats.Update(tablesToTest[0], 3, "2", "", 2)
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = dbstats.Update(tablesToTest[0], 2, 1)
+	err = dbstats.Update(tablesToTest[0], 2, "2", "", 1)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -276,15 +276,15 @@ func TestLeaderboard(t *testing.T) {
 		t.Fatalf("gotten result is unexpected\ngot: %v\nwant: %v", got, want)
 	}
 
-	err = dbstats.Update(tablesToTest[0], 1, 0)
+	err = dbstats.Update(tablesToTest[0], 1, "2", "", 0)
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = dbstats.Update(tablesToTest[0], 2, 0)
+	err = dbstats.Update(tablesToTest[0], 2, "2", "", 0)
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = dbstats.Update(tablesToTest[0], 3, 1)
+	err = dbstats.Update(tablesToTest[0], 3, "2", "", 1)
 	if err != nil {
 		t.Fatal(err)
 	}
