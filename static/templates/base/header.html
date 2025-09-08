@@ -37,6 +37,7 @@
         <li><a href="/leaderboard?game=guess">Guess</a></li>
         </ul>
     </li>
+    {{if .Auth}}
     <li class="dropdown">
         <a href="#">Suggestions ▾</a>
         <ul class="dropdown-content">
@@ -45,6 +46,10 @@
         <li><a href="/suggestions?type=pun">Pun</a></li>
         </ul>
     </li>
+    {{ if .Admin }}
+    <li><a href="#">Admin panel</a></li>
+    {{ end }}
+    {{ end }}
     <li><a href="https://github.com/TrueHopolok/VladOS" target="_blank">Github</a></li>
     </ul>
 </nav>
