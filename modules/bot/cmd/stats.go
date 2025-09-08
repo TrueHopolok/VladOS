@@ -37,6 +37,7 @@ With a your placement and top placement in the leaderboard.`,
 				tu.Entity("Provided categories does not exists.\nTry any of those:\n"),
 				tu.Entity(" /stats slot\n").Code(),
 				tu.Entity(" /stats dice\n").Code(),
+				tu.Entity(" /stats guess\n").Code(),
 				tu.Entity(" /stats bjack\n").Code()))
 			return err
 		}
@@ -50,7 +51,11 @@ func outputStats(userID int64, ranking []dbstats.FullStats) []tu.MessageEntityCo
 		tu.Entityf("Players in total:\n%d\n\nLeaderboard:", ranking[0].PlayersTotal).Bold(),
 	}
 	for _, stats := range ranking {
-		msgText = append(msgText, tu.Entityf("\n%d. place: %d", stats.Placement, stats.Personal.ScoreBest))
+		playerName := stats.FirstName
+		if stats.Username != "" {
+			playerName = stats.Username
+		}
+		msgText = append(msgText, tu.Entityf("\n%d. %s: %d", stats.Placement, playerName, stats.Personal.ScoreBest))
 		if stats.UserId == userID {
 			foundYou = true
 			yourStats = stats.Personal
