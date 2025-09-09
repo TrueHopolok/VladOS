@@ -6,15 +6,30 @@
 <h2 class="page-title">Login</h2>
 <p>
 This is login page, to connect your browser with telegram account.<br>
-For that you are given a link. Clicking on that will send you to telegram bot to login.<br>
-Alternative you can type code manualy like so <code>/login [your-code]</code>.
+Send <code>/login</code> command to bot manually or by clicking <a href="https://t.me/VladOperatingSystem_bot?text=/login" target="_blank">this link</a>.<br>
+This will generate a code that you need to paste here in order to login.
 </p>
 <p class="login-warning">
 Auth link and code automaticly expires after 5 min.<br>
 Additionaly do not reload the page, to not restart the auth link and code.
 </p>
-<p>Link: <a class="login-link" href="{{ .LoginLink }}">click here</a></p>
-<p>Code: <b>{{ .LoginCode }}</b></p>
+<form class="code-form" action="/login" method="post">
+    <label for="code" class="visually-hidden">Authentication code</label>
+    <input
+    id="code"
+    name="code"
+    class="code-input"
+    type="text"
+    inputmode="latin"
+    autocomplete="one-time-code"
+    maxlength="8"
+    pattern="[A-Za-z0-9]{8}"
+    placeholder="────────"
+    aria-describedby="code-help"
+    />
+    <p id="code-help" class="code-help">Letters & numbers only (8 characters)</p>
+    <button class="btn-primary" type="submit">Verify</button>
+</form>
 {{ end }}
 
 {{ template "base" . }}

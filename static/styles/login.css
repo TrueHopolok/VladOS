@@ -2,6 +2,40 @@ code {
     background: #dbdbdb;
 }
 
+.code-form { width: 100%; max-width: 420px; background:#ffffff07; padding:24px; border-radius:12px; box-shadow:0 6px 18px rgba(0, 0, 0, 0.034); }
+.code-input {
+  width: 100%;
+  box-sizing: border-box;
+  font: 600 28px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: .6ch;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  color: #111827;
+  background:
+    /* slot separators */
+    repeating-linear-gradient(to right, transparent 0, transparent calc(1ch + .6ch), #e5e7eb calc(1ch + .6ch), #e5e7eb calc(1ch + .7ch)) center/ calc(100% - 32px) 2px no-repeat,
+    /* slot boxes */
+    linear-gradient(#fff, #fff) padding-box;
+  background-position: 16px calc(50% + 22px);
+  caret-color: #2563eb;
+}
+
+/* Focus + invalid states */
+.code-input:focus { outline: none; border-color:#2563eb; box-shadow:0 0 0 4px rgba(37,99,235,.15); }
+.code-input:invalid:not(:placeholder-shown) { border-color:#ef4444; box-shadow:0 0 0 4px rgba(239,68,68,.12); }
+.code-help { margin:8px 0 16px; font-size:.9rem; color:#6b7280; }
+
+/* Button */
+.btn-primary {
+  appearance: none; border: 0; border-radius: 10px;
+  padding: 12px 16px; font-weight: 600; cursor: pointer;
+  background:#2563eb; color:#fff; width:100%;
+}
+.btn-primary:hover { filter: brightness(1.05); }
+.btn-primary:active { transform: translateY(1px); }
+
 .login-warning {
     background: #ff60606e;
     color: rgb(133, 0, 0);
