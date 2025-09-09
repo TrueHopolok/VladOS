@@ -24,7 +24,6 @@ code {
 /* Focus + invalid states */
 .code-input:focus { outline: none; border-color:#2563eb; box-shadow:0 0 0 4px rgba(37,99,235,.15); }
 .code-input:invalid:not(:placeholder-shown) { border-color:#ef4444; box-shadow:0 0 0 4px rgba(239,68,68,.12); }
-.code-help { margin:8px 0 16px; font-size:.9rem; color:#6b7280; }
 
 /* Button */
 .btn-primary {

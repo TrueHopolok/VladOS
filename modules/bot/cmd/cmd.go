@@ -66,6 +66,7 @@ var CommandsList map[string]map[string]Command = map[string]map[string]Command{
 	},
 	"Others": {
 		"start": CommandStart,
+		"login": CommandLogin,
 		"ghoul": CommandGhoul,
 		"rand":  CommandRand,
 		"tip":   CommandTip,
