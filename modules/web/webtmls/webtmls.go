@@ -46,7 +46,7 @@ func ParseTmls(funcMap template.FuncMap, tmlNames ...string) (*template.Template
 // Stores all information that can be used on the page.
 type T struct {
 	Auth     bool   // must
-	Username string // if user is isauth: must; else: optional;
+	Username string // if user is is auth: must; else: optional;
 	Title    string // must
 
 	LeaderboardType      string              // if page is leaderboard: must
