@@ -48,7 +48,7 @@ func GetPrecent(gameName string) ([]Precent, error) {
 	}
 	defer tx.Rollback()
 
-	rows, err := tx.Query(fmt.Sprintf(string(query1), gameName))
+	rows, err := tx.Query(fmt.Sprintf(string(query1), "stats_"+gameName))
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
@@ -101,7 +101,7 @@ func Update(gameName string, userID int64, firstName string, username string, sc
 		return err
 	}
 
-	if _, err := tx.Exec(fmt.Sprintf(string(query2), gameName), userID, score); err != nil {
+	if _, err := tx.Exec(fmt.Sprintf(string(query2), "stats_"+gameName), userID, score); err != nil {
 		err = fmt.Errorf("query execution error: %w", err)
 		return err
 	}
@@ -129,7 +129,7 @@ func GetSelf(gameName string, userID int64) (UserStats, error) {
 	}
 	defer tx.Rollback()
 
-	rows, err := tx.Query(fmt.Sprintf(string(query), gameName), userID)
+	rows, err := tx.Query(fmt.Sprintf(string(query), "stats_"+gameName), userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return UserStats{}, nil
@@ -186,9 +186,9 @@ func getPlacement(gameName string, userID int64, include bool) ([]Placement, err
 
 	var rows *sql.Rows
 	if include {
-		rows, err = tx.Query(fmt.Sprintf(string(query), gameName), userID)
+		rows, err = tx.Query(fmt.Sprintf(string(query), "stats_"+gameName), userID)
 	} else {
-		rows, err = tx.Query(fmt.Sprintf(string(query), gameName))
+		rows, err = tx.Query(fmt.Sprintf(string(query), "stats_"+gameName))
 	}
 	if err != nil {
 		if err == sql.ErrNoRows {

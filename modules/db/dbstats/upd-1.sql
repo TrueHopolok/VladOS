@@ -1,1 +1,1 @@
-INSERT OR REPLACE INTO user (id, firstname, username) VALUES ($1, $2, $3);
+INSERT OR REPLACE INTO user_data (id, firstname, username) VALUES ($1, $2, $3);
