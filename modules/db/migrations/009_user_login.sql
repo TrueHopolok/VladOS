@@ -1,7 +1,9 @@
 CREATE TABLE user_login (
-    user_id INTEGER PRIMARY KEY,
+    user_id INTEGER,
     code TEXT,
     expiration INTEGER,
+
+    PRIMARY KEY (user_id, code),
 
     FOREIGN KEY (user_id)
     REFERENCES user(id)
