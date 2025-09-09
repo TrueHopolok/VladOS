@@ -7,7 +7,6 @@ code {
   width: 100%;
   box-sizing: border-box;
   font: 600 28px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-  text-transform: uppercase;
   letter-spacing: .6ch;
   padding: 14px 16px;
   border-radius: 10px;

@@ -22,12 +22,14 @@ Additionaly do not reload the page, to not restart the auth link and code.
     type="text"
     inputmode="latin"
     autocomplete="one-time-code"
-    maxlength="8"
-    pattern="[A-Za-z0-9]{8}"
-    placeholder="────────"
+    minlength="14"
+    maxlength="14"
+    pattern="[A-Za-z0-9]{14}"
+    required="required"
+    placeholder="──────────────"
     aria-describedby="code-help"
     />
-    <p id="code-help" class="code-help">Letters & numbers only (8 characters)</p>
+    <p id="code-help" class="code-help">Letters & numbers only (14 characters)</p>
     <button class="btn-primary" type="submit">Verify</button>
 </form>
 {{ end }}
