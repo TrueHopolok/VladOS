@@ -17,7 +17,7 @@ var existingNames = []string{
 }
 
 func Handle(w http.ResponseWriter, r *http.Request) {
-	slog.Debug("http req", "mtd", r.Method, "url", r.URL, "handler", "suggestions")
+	slog.Debug("http req", "mtd", r.Method, "url", r.URL, "handler", "page/suggestions")
 
 	typeName := r.URL.Query().Get("type")
 	if typeName == "" {

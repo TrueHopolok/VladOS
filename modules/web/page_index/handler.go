@@ -17,7 +17,7 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	slog.Debug("http req", "mtd", r.Method, "url", r.URL, "handler", "index")
+	slog.Debug("http req", "mtd", r.Method, "url", r.URL, "handler", "page/index")
 
 	var (
 		data webtmls.T

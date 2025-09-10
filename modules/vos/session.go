@@ -5,13 +5,15 @@ import "time"
 // Contains all necessary information for other packages to use.
 // All fields must support [encoding/json] marshalling/unmarshalling and be tested on that.
 type Session struct {
+	UserID   int64     `json:"UserID"`
 	Username string    `json:"Username"`
 	Expire   time.Time `json:"Expire"`
 }
 
 // Return new session with valid and refreshed expiration time.
-func NewSession(username string) Session {
+func NewSession(userID int64, username string) Session {
 	return Session{
+		UserID:   userID,
 		Username: username,
 		Expire:   time.Now().Add(AuthExpires),
 	}

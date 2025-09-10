@@ -25,7 +25,7 @@ var existingNames = []string{
 }
 
 func Handle(w http.ResponseWriter, r *http.Request) {
-	slog.Debug("http req", "mtd", r.Method, "url", r.URL, "handler", "leaderboard")
+	slog.Debug("http req", "mtd", r.Method, "url", r.URL, "handler", "page/leaderboard")
 
 	gameName := r.URL.Query().Get("game")
 	if gameName == "" {

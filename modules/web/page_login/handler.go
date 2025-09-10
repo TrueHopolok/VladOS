@@ -12,7 +12,7 @@ import (
 const TmlName string = "login.html"
 
 func Handle(w http.ResponseWriter, r *http.Request) {
-	slog.Debug("http req", "mtd", r.Method, "url", r.URL, "handler", "login")
+	slog.Debug("http req", "mtd", r.Method, "url", r.URL, "handler", "page/login")
 
 	var (
 		data webtmls.T

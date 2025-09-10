@@ -5,6 +5,7 @@ import (
 
 	"github.com/TrueHopolok/VladOS/modules/cfg"
 	"github.com/TrueHopolok/VladOS/modules/vos"
+	"github.com/TrueHopolok/VladOS/modules/web/api_auth"
 	"github.com/TrueHopolok/VladOS/modules/web/page_index"
 	"github.com/TrueHopolok/VladOS/modules/web/page_leaderboard"
 	"github.com/TrueHopolok/VladOS/modules/web/page_login"
@@ -24,7 +25,7 @@ func ConnectEveryone(mux *http.ServeMux) {
 // permission flag [github.com/TrueHopolok/VladOS/modules/vos.Authorized]
 // for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware].
 func ConnectAuthorized(mux *http.ServeMux) {
-	// add pages with vox.Authorized
+	mux.HandleFunc("GET /logout", vos.AuthMiddlewareFunc(api_auth.HandleLogout, vos.Authorized))
 }
 
 // Connects to [net/http.ServeMux] handler functions with
@@ -32,6 +33,7 @@ func ConnectAuthorized(mux *http.ServeMux) {
 // for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware].
 func ConnectUnauthorized(mux *http.ServeMux) {
 	mux.HandleFunc("GET /login", vos.AuthMiddlewareFunc(page_login.Handle, vos.Unauthorized))
+	mux.HandleFunc("POST /login", vos.AuthMiddlewareFunc(api_auth.HandleLogin, vos.Unauthorized))
 }
 
 // Connects to [net/http.ServeMux] handler functions to server static files
