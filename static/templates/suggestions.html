@@ -5,14 +5,17 @@
 {{ end }}
 {{ end }}
 {{ define "content" }}
-<h2 class="page-title">Suggestions - {{ .SuggestionType }}</h2>
+<h2 class="page-title">Suggestions - {{ tn .SuggestionType }}</h2>
 {{ if .Auth }}
-{{ block "suggestion-input" . }}
-<p>No provided suggestion input yet.</p>
-{{ end }}
+<form action="/suggestions?type={{ .SuggestionType }}" method="post" class="suggestion-form">
+    {{ block "suggestion-input" . }}
+    <p>There is no input implemented yet!</p>
+    {{ end }}
+    <button type="submit" class="btn-primary">Submit</button>
+</form>
 {{ else }}
-<p>You must be autheficated to add suggestions.</p>
-{{ end}}
+<p>You must be authenticated to add suggestions.</p>
+{{ end }}
 {{ end }}
 
 {{ template "base" . }}

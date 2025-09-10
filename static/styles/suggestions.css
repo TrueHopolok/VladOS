@@ -1,1 +1,56 @@
-/*  TODO  */
+.suggestion-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 480px;
+  margin-top: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+input[type="text"] {
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,.2);
+}
+
+.form-group span {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.form-group input[type="radio"] {
+  margin-right: 6px;
+}
+
+.btn-primary {
+  appearance: none;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-weight: 600;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+}

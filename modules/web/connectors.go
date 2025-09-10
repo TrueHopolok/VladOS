@@ -6,10 +6,10 @@ import (
 	"github.com/TrueHopolok/VladOS/modules/cfg"
 	"github.com/TrueHopolok/VladOS/modules/vos"
 	"github.com/TrueHopolok/VladOS/modules/web/api_auth"
+	"github.com/TrueHopolok/VladOS/modules/web/both_suggestions"
 	"github.com/TrueHopolok/VladOS/modules/web/page_index"
 	"github.com/TrueHopolok/VladOS/modules/web/page_leaderboard"
 	"github.com/TrueHopolok/VladOS/modules/web/page_login"
-	"github.com/TrueHopolok/VladOS/modules/web/page_suggestions"
 )
 
 // Connects to [net/http.ServeMux] handler functions with
@@ -18,7 +18,7 @@ import (
 func ConnectEveryone(mux *http.ServeMux) {
 	mux.HandleFunc("GET /", vos.AuthMiddlewareFunc(page_index.Handle, vos.Everyone))
 	mux.HandleFunc("GET /leaderboard", vos.AuthMiddlewareFunc(page_leaderboard.Handle, vos.Everyone))
-	mux.HandleFunc("GET /suggestions", vos.AuthMiddlewareFunc(page_suggestions.Handle, vos.Everyone))
+	mux.HandleFunc("GET /suggestions", vos.AuthMiddlewareFunc(both_suggestions.PageHandle, vos.Everyone))
 }
 
 // Connects to [net/http.ServeMux] handler functions with
@@ -26,6 +26,7 @@ func ConnectEveryone(mux *http.ServeMux) {
 // for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware].
 func ConnectAuthorized(mux *http.ServeMux) {
 	mux.HandleFunc("GET /logout", vos.AuthMiddlewareFunc(api_auth.HandleLogout, vos.Authorized))
+	mux.HandleFunc("POST /suggestions", vos.AuthMiddlewareFunc(both_suggestions.PostHandle, vos.Authorized))
 }
 
 // Connects to [net/http.ServeMux] handler functions with
