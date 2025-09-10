@@ -49,6 +49,7 @@ var CommandsList map[string]map[string]Command = map[string]map[string]Command{
     },
     "Others": {
         "start": CommandStart,
+        "login": CommandLogin,
         "ghoul": CommandGhoul,
         "rand":  CommandRand,
         "tip":   CommandTip,
@@ -58,7 +59,7 @@ var CommandsList map[string]map[string]Command = map[string]map[string]Command{
 ```
 
 <a name="ConnectCommands"></a>
-## func [ConnectCommands](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/cmd/cmd.go#L79>)
+## func [ConnectCommands](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/cmd/cmd.go#L80>)
 
 ```go
 func ConnectCommands(bot *telego.Bot, bh *th.BotHandler) error
@@ -157,6 +158,22 @@ On correct guess your score streak is increased.
 On losing score is reset.
 
 Has a leaderboard to count largest score streak.`,
+    // contains filtered or unexported fields
+}
+```
+
+<a name="CommandLogin"></a>
+
+```go
+var CommandLogin Command = Command{
+    InfoBrief: "generate auth code",
+    InfoFull: `
+ /login
+Used to generate authefication code.
+It is required to login on the web page.
+
+Code is valid for 5 minutes, afterwards it will be deleted.
+`,
     // contains filtered or unexported fields
 }
 ```

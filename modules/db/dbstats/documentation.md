@@ -28,7 +28,7 @@ var QueryDir embed.FS
 ```
 
 <a name="Update"></a>
-## func [Update](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L79>)
+## func [Update](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L76>)
 
 ```go
 func Update(gameName string, userID int64, firstName string, username string, score int) error
@@ -53,7 +53,7 @@ type Placement struct {
 ```
 
 <a name="GetTop10"></a>
-### func [GetTop10](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L157>)
+### func [GetTop10](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L151>)
 
 ```go
 func GetTop10(gameName string) ([]Placement, error)
@@ -62,7 +62,7 @@ func GetTop10(gameName string) ([]Placement, error)
 
 
 <a name="GetTopSelf"></a>
-### func [GetTopSelf](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L161>)
+### func [GetTopSelf](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L155>)
 
 ```go
 func GetTopSelf(gameName string, userID int64) ([]Placement, error)
@@ -105,7 +105,7 @@ type UserStats struct {
 ```
 
 <a name="GetSelf"></a>
-### func [GetSelf](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L118>)
+### func [GetSelf](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbstats/dbstats.go#L115>)
 
 ```go
 func GetSelf(gameName string, userID int64) (UserStats, error)

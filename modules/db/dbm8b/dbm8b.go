@@ -1,7 +1,6 @@
 package dbm8b
 
 import (
-	"database/sql"
 	"embed"
 	"fmt"
 
@@ -30,13 +29,10 @@ func Get(isPositive bool) (string, error) {
 
 	rows, err := tx.Query(string(query), isPositive)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return "", nil
-		}
 		err = fmt.Errorf("query execution error: %w", err)
 		return "", err
 	}
-	if !rows.Next() { // should not be possible since there are results and no error, but leave it just in case
+	if !rows.Next() {
 		return "", nil
 	}
 

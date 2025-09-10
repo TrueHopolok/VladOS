@@ -1,7 +1,6 @@
 package dbconvo
 
 import (
-	"database/sql"
 	"embed"
 	"fmt"
 
@@ -68,13 +67,10 @@ func Get(userId int64) (Status, error) {
 
 	rows, err := tx.Query(string(query), userId)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return res, nil
-		}
 		err = fmt.Errorf("query execution error: %w", err)
 		return res, err
 	}
-	if !rows.Next() { // should not be possible since there are results and no error, but leave it just in case
+	if !rows.Next() {
 		return res, nil
 	}
 

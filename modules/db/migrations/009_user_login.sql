@@ -6,7 +6,7 @@ CREATE TABLE user_login (
     PRIMARY KEY (user_id, code),
 
     FOREIGN KEY (user_id)
-    REFERENCES user(id)
+    REFERENCES user_data(id)
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );

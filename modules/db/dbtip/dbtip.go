@@ -30,13 +30,10 @@ func Get(id int) (text string, author string, found bool, err error) {
 
 	rows, err := tx.Query(string(query), id)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return "", "", false, nil
-		}
 		err = fmt.Errorf("query execution error: %w", err)
 		return "", "", false, err
 	}
-	if !rows.Next() { // should not be possible since there are results and no error, but leave it just in case
+	if !rows.Next() {
 		return "", "", false, nil
 	}
 

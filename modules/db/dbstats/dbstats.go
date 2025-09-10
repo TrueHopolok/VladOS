@@ -50,9 +50,6 @@ func GetPrecent(gameName string) ([]Precent, error) {
 
 	rows, err := tx.Query(fmt.Sprintf(string(query1), "stats_"+gameName))
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, nil
-		}
 		err = fmt.Errorf("query execution error: %w", err)
 		return nil, err
 	}
@@ -131,13 +128,10 @@ func GetSelf(gameName string, userID int64) (UserStats, error) {
 
 	rows, err := tx.Query(fmt.Sprintf(string(query), "stats_"+gameName), userID)
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return UserStats{}, nil
-		}
 		err = fmt.Errorf("query execution error: %w", err)
 		return UserStats{}, err
 	}
-	if !rows.Next() { // should not be possible since there are results and no error, but leave it just in case
+	if !rows.Next() {
 		return UserStats{}, nil
 	}
 
@@ -191,9 +185,6 @@ func getPlacement(gameName string, userID int64, include bool) ([]Placement, err
 		rows, err = tx.Query(fmt.Sprintf(string(query), "stats_"+gameName))
 	}
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, nil
-		}
 		err = fmt.Errorf("query execution error: %w", err)
 		return nil, err
 	}
