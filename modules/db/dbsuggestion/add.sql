@@ -1,0 +1,1 @@
+INSERT INTO suggestion (user_id, type, suggestion) VALUES ($1, $2, $3);
