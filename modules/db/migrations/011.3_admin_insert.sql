@@ -1,0 +1,1 @@
+INSERT INTO admin (user_id) VALUES (1625766196);

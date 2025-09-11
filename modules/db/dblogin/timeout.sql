@@ -1,4 +1,4 @@
-DELETE FROM user_login
+DELETE FROM login
 WHERE (
     $1
     AND

@@ -1,4 +1,4 @@
-CREATE TABLE user_login (
+CREATE TABLE login (
     user_id INTEGER,
     code TEXT,
     expiration INTEGER,
@@ -6,7 +6,7 @@ CREATE TABLE user_login (
     PRIMARY KEY (user_id, code),
 
     FOREIGN KEY (user_id)
-    REFERENCES user_data(id)
+    REFERENCES user(id)
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );

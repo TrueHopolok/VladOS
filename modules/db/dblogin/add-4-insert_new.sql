@@ -1,1 +1,1 @@
-INSERT INTO user_login (user_id, code, expiration) VALUES ($1, $2, $3);
+INSERT INTO login (user_id, code, expiration) VALUES ($1, $2, $3);

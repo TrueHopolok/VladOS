@@ -1,0 +1,8 @@
+CREATE TABLE admin (
+    user_id INTEGER PRIMARY KEY,
+
+    FOREIGN KEY (user_id)
+    REFERENCES user(id)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);

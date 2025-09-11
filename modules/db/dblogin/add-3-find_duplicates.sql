@@ -1,2 +1,2 @@
-SELECT * FROM user_login
+SELECT * FROM login
 WHERE code = $1;

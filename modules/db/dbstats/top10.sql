@@ -9,7 +9,7 @@ WITH ranked AS (
         RANK() OVER (ORDER BY s.score_best DESC) AS rank,
         COUNT(*) OVER () AS players_total
     FROM %s as s
-    JOIN user_data AS u
+    JOIN user AS u
     ON s.user_id = u.id
 )
 SELECT * FROM ranked

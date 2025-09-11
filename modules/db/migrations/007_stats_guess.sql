@@ -5,7 +5,7 @@ CREATE TABLE stats_guess (
     score_best INTEGER NOT NULL DEFAULT 0,
 
     FOREIGN KEY (user_id)
-    REFERENCES user_data(id)
+    REFERENCES user(id)
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );
