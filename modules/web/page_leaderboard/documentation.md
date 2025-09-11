@@ -30,11 +30,19 @@ var TmlMap = template.FuncMap{
     "inc": func(i int) int {
         return i + 1
     },
+    "gn": func(gameName string) string {
+        switch gameName {
+        case "bjack":
+            return "black jack"
+        default:
+            return gameName
+        }
+    },
 }
 ```
 
 <a name="Handle"></a>
-## func [Handle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/page_leaderboard/handler.go#L27>)
+## func [Handle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/page_leaderboard/handler.go#L35>)
 
 ```go
 func Handle(w http.ResponseWriter, r *http.Request)

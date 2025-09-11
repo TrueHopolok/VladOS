@@ -18,6 +18,14 @@ var TmlMap = template.FuncMap{
 	"inc": func(i int) int {
 		return i + 1
 	},
+	"gn": func(gameName string) string {
+		switch gameName {
+		case "bjack":
+			return "black jack"
+		default:
+			return gameName
+		}
+	},
 }
 
 var existingNames = []string{

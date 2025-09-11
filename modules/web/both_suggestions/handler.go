@@ -14,17 +14,19 @@ import (
 
 const TmlName string = "suggestions%s.html"
 
-var existingNames = []string{
-	"m8b", "tip",
+var TmlMap = template.FuncMap{
+	"tn": func(typeName string) string {
+		switch typeName {
+		case "m8b":
+			return "magic 8 ball"
+		default:
+			return typeName
+		}
+	},
 }
 
-func getTypeName(typeName string) string {
-	switch typeName {
-	case "m8b":
-		return "magic 8 ball"
-	default:
-		return typeName
-	}
+var existingNames = []string{
+	"m8b", "tip",
 }
 
 func PageHandle(w http.ResponseWriter, r *http.Request) {
@@ -58,7 +60,7 @@ func PageHandle(w http.ResponseWriter, r *http.Request) {
 	data.Username = ses.Username
 	data.SuggestionType = typeName
 
-	t, err := webtmls.ParseTmls(template.FuncMap{"tn": getTypeName}, fmt.Sprintf(TmlName, ""), fmt.Sprintf(TmlName, typeName))
+	t, err := webtmls.ParseTmls(TmlMap, fmt.Sprintf(TmlName, ""), fmt.Sprintf(TmlName, typeName))
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 		http.Error(w, "http failed", http.StatusInternalServerError)
