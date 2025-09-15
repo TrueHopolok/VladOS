@@ -1,11 +1,14 @@
 package both_suggestions
 
 import (
+	"bytes"
+	"encoding/gob"
 	"fmt"
 	"log/slog"
 	"net/http"
 	"text/template"
 
+	"github.com/TrueHopolok/VladOS/modules/db/dbsuggestion"
 	"github.com/TrueHopolok/VladOS/modules/vos"
 	"github.com/TrueHopolok/VladOS/modules/web/webtmls"
 )
@@ -94,4 +97,48 @@ func PostHandle(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "bad request: provided type does not supported", http.StatusBadRequest)
 		return
 	}
+
+	raw := &bytes.Buffer{}
+	enc := gob.NewEncoder(raw)
+	switch typeName {
+	case "tip":
+		err := enc.Encode(r.PostFormValue("suggestion"))
+		if err != nil {
+			slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
+			http.Error(w, "http failed", http.StatusInternalServerError)
+			return
+		}
+		err = enc.Encode(r.PostFormValue("author"))
+		if err != nil {
+			slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
+			http.Error(w, "http failed", http.StatusInternalServerError)
+			return
+		}
+	case "m8b":
+		err := enc.Encode(r.PostFormValue("suggestion"))
+		if err != nil {
+			slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
+			http.Error(w, "http failed", http.StatusInternalServerError)
+			return
+		}
+		err = enc.Encode(r.PostFormValue("answer"))
+		if err != nil {
+			slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
+			http.Error(w, "http failed", http.StatusInternalServerError)
+			return
+		}
+	default:
+		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", "unhandled type of suggestion")
+		http.Error(w, "http failed", http.StatusInternalServerError)
+		return
+	}
+
+	ses, _ := vos.GetSession(r)
+	if err := dbsuggestion.Add(ses.UserID, typeName, raw.Bytes()); err != nil {
+		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
+		http.Error(w, "http failed", http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/", http.StatusFound)
 }
