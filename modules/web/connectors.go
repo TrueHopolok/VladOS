@@ -5,11 +5,10 @@ import (
 
 	"github.com/TrueHopolok/VladOS/modules/cfg"
 	"github.com/TrueHopolok/VladOS/modules/vos"
-	"github.com/TrueHopolok/VladOS/modules/web/api_auth"
+	"github.com/TrueHopolok/VladOS/modules/web/both_auth"
 	"github.com/TrueHopolok/VladOS/modules/web/both_suggestions"
 	"github.com/TrueHopolok/VladOS/modules/web/page_index"
 	"github.com/TrueHopolok/VladOS/modules/web/page_leaderboard"
-	"github.com/TrueHopolok/VladOS/modules/web/page_login"
 )
 
 // Connects to [net/http.ServeMux] handler functions with
@@ -19,13 +18,13 @@ func ConnectEveryone(mux *http.ServeMux) {
 	mux.HandleFunc("GET /", vos.AuthMiddlewareFunc(page_index.Handle, vos.Everyone))
 	mux.HandleFunc("GET /leaderboard", vos.AuthMiddlewareFunc(page_leaderboard.Handle, vos.Everyone))
 	mux.HandleFunc("GET /suggestions", vos.AuthMiddlewareFunc(both_suggestions.PageHandle, vos.Everyone))
+	mux.HandleFunc("GET /logout", vos.AuthMiddlewareFunc(both_auth.LogoutHandle, vos.Everyone))
 }
 
 // Connects to [net/http.ServeMux] handler functions with
 // permission flag [github.com/TrueHopolok/VladOS/modules/vos.Authorized]
 // for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware].
 func ConnectAuthorized(mux *http.ServeMux) {
-	mux.HandleFunc("GET /logout", vos.AuthMiddlewareFunc(api_auth.HandleLogout, vos.Authorized))
 	mux.HandleFunc("POST /suggestions", vos.AuthMiddlewareFunc(both_suggestions.PostHandle, vos.Authorized))
 }
 
@@ -33,8 +32,8 @@ func ConnectAuthorized(mux *http.ServeMux) {
 // permission flag [github.com/TrueHopolok/VladOS/modules/vos.Unauthorized]
 // for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware].
 func ConnectUnauthorized(mux *http.ServeMux) {
-	mux.HandleFunc("GET /login", vos.AuthMiddlewareFunc(page_login.Handle, vos.Unauthorized))
-	mux.HandleFunc("POST /login", vos.AuthMiddlewareFunc(api_auth.HandleLogin, vos.Unauthorized))
+	mux.HandleFunc("GET /login", vos.AuthMiddlewareFunc(both_auth.PageHandle, vos.Unauthorized))
+	mux.HandleFunc("POST /login", vos.AuthMiddlewareFunc(both_auth.LoginHandle, vos.Unauthorized))
 }
 
 // Connects to [net/http.ServeMux] handler functions to server static files

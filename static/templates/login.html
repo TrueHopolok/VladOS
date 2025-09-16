@@ -22,6 +22,7 @@ This will generate a code that you need to paste here in order to login.
     />
     <button class="btn-primary" type="submit">Verify</button>
 </form>
+<p class="error-text">{{ .LoginError }}</p>
 {{ end }}
 
 {{ template "base" . }}

@@ -55,6 +55,7 @@ type T struct {
 
 	SuggestionType string // if page is suggestions: must
 
-	LoginLink string // if page is login: must
-	LoginCode string // if page is login: must
+	LoginLink  string // if page is login: must
+	LoginCode  string // if page is login: must
+	LoginError string // appears on failed login attempt through request context
 }

@@ -34,14 +34,9 @@ code {
 .btn-primary:hover { filter: brightness(1.05); }
 .btn-primary:active { transform: translateY(1px); }
 
-.login-warning {
-    background: #ff60606e;
+.error-text {
+    background: #ff31316e;
     color: rgb(133, 0, 0);
-    padding: 5px;
     width: fit-content;
     border: rgb(133, 0, 0) 1px solid;
-}
-
-.login-link {
-    color: rgb(31, 0, 167);
 }
