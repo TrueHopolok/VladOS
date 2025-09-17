@@ -15,7 +15,9 @@ import (
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
-const TmlName string = "suggestions%s.html"
+const TmlPath string = "suggestions/propose/"
+const TmlName string = "propose_%s.html"
+const BaseName string = "propose_base.html"
 
 var TmlMap = template.FuncMap{
 	"tn": func(typeName string) string {
@@ -63,13 +65,13 @@ func PageHandle(w http.ResponseWriter, r *http.Request) {
 	data.Username = ses.Username
 	data.SuggestionType = typeName
 
-	t, err := webtmls.ParseTmls(TmlMap, fmt.Sprintf(TmlName, ""), fmt.Sprintf(TmlName, typeName))
+	t, err := webtmls.ParseTmls(TmlMap, TmlPath+BaseName, TmlPath+fmt.Sprintf(TmlName, typeName))
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 		http.Error(w, "http failed", http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, fmt.Sprintf(TmlName, ""), data)
+	err = t.ExecuteTemplate(w, BaseName, data)
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 		http.Error(w, "http failed", http.StatusInternalServerError)
