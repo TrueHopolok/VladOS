@@ -26,6 +26,7 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 	data.Title = "Home"
 	ses, data.Auth = vos.GetSession(r)
 	data.Username = ses.Username
+	data.Admin = ses.Admin
 
 	t, err := webtmls.ParseTmls(nil, TmlName)
 	if err != nil {

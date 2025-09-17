@@ -63,6 +63,7 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 	data.Title = "Leaderboard"
 	ses, data.Auth = vos.GetSession(r)
 	data.Username = ses.Username
+	data.Admin = ses.Admin
 	data.LeaderboardType = gameName
 	data.LeaderboardPrecent, err = dbstats.GetPrecent(gameName)
 	if err != nil {

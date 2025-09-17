@@ -77,7 +77,7 @@ func Add(userID int64, firstName, username string) (string, error) {
 }
 
 // Finds a user by authefication code it recieves
-func Find(authcode string) (userID int64, firstName, username string, validCode bool, err error) {
+func Find(authcode string) (userID int64, firstName, username string, admin, validCode bool, err error) {
 	query3, err := QueryDir.ReadFile("find.sql")
 	if err != nil {
 		err = fmt.Errorf("reading query error: %w", err)
@@ -103,7 +103,7 @@ func Find(authcode string) (userID int64, firstName, username string, validCode 
 	if !rows.Next() {
 		return
 	}
-	if err = rows.Scan(&userID, &firstName, &username); err != nil {
+	if err = rows.Scan(&userID, &firstName, &username, &admin); err != nil {
 		return
 	}
 	if rows.Next() {
@@ -112,7 +112,7 @@ func Find(authcode string) (userID int64, firstName, username string, validCode 
 	}
 	validCode = true
 
-	return userID, firstName, username, validCode, func() error {
+	return userID, firstName, username, admin, validCode, func() error {
 		if err := tx.Commit(); err != nil {
 			return fmt.Errorf("commit error: %w", err)
 		}

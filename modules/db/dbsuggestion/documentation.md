@@ -22,16 +22,16 @@ var QueryDir embed.FS
 ```
 
 <a name="Add"></a>
-## func [Add](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbsuggestion/dbsuggestion.go#L12>)
+## func [Add](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbsuggestion/dbsuggestion.go#L16>)
 
 ```go
 func Add(userID int64, typeName string, data []byte) error
 ```
 
-Add saves provided suggestion from the page TODO
+Add saves provided suggestion from the page
 
 <a name="Get"></a>
-## func [Get](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbsuggestion/dbsuggestion.go#L18>)
+## func [Get](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbsuggestion/dbsuggestion.go#L46>)
 
 ```go
 func Get() (any, error)

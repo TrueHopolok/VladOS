@@ -15,7 +15,7 @@ func equalSessions(ses1, ses2 vos.Session) bool {
 
 // WARNING: may fail if fields of the session struct changes.
 func TestJson(t *testing.T) {
-	ses := vos.NewSession(0, "test")
+	ses := vos.NewSession(0, "test", true)
 	raw, err := json.Marshal(ses)
 	if err != nil {
 		t.Fatalf("marshling error: %s", err)
@@ -31,7 +31,7 @@ func TestJson(t *testing.T) {
 }
 
 func TestExpiration(t *testing.T) {
-	ses := vos.NewSession(0, "test")
+	ses := vos.NewSession(0, "test", true)
 	if ses.Expired() {
 		t.Fatalf("new seesion expired when should not")
 	}

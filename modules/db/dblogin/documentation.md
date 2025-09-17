@@ -10,7 +10,7 @@ import "github.com/TrueHopolok/VladOS/modules/db/dblogin"
 
 - [Variables](<#variables>)
 - [func Add\(userID int64, firstName, username string\) \(string, error\)](<#Add>)
-- [func Find\(authcode string\) \(userID int64, firstName, username string, validCode bool, err error\)](<#Find>)
+- [func Find\(authcode string\) \(userID int64, firstName, username string, admin, validCode bool, err error\)](<#Find>)
 
 
 ## Variables
@@ -34,7 +34,7 @@ Add to database authcode, clears expired ones and return generated one.
 ## func [Find](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dblogin/dblogin.go#L80>)
 
 ```go
-func Find(authcode string) (userID int64, firstName, username string, validCode bool, err error)
+func Find(authcode string) (userID int64, firstName, username string, admin, validCode bool, err error)
 ```
 
 Finds a user by authefication code it recieves

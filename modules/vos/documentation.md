@@ -45,7 +45,7 @@ Implements [AuthMiddleware](<#AuthMiddleware>) to use in http server that handle
 - [type KeyChain](<#KeyChain>)
 - [type Session](<#Session>)
   - [func GetSession\(r \*http.Request\) \(Session, bool\)](<#GetSession>)
-  - [func NewSession\(userID int64, username string\) Session](<#NewSession>)
+  - [func NewSession\(userID int64, username string, admin bool\) Session](<#NewSession>)
   - [func ValidateJWT\(token string\) \(Session, bool, error\)](<#ValidateJWT>)
   - [func \(ses Session\) Expired\(\) bool](<#Session.Expired>)
   - [func \(ses Session\) NewJWT\(\) \(string, error\)](<#Session.NewJWT>)
@@ -224,7 +224,7 @@ type KeyChain struct {
 ```
 
 <a name="Session"></a>
-## type [Session](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/session.go#L7-L11>)
+## type [Session](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/session.go#L7-L12>)
 
 Contains all necessary information for other packages to use. All fields must support [encoding/json](<https://pkg.go.dev/encoding/json/>) marshalling/unmarshalling and be tested on that.
 
@@ -232,6 +232,7 @@ Contains all necessary information for other packages to use. All fields must su
 type Session struct {
     UserID   int64     `json:"UserID"`
     Username string    `json:"Username"`
+    Admin    bool      `json:"Admin"`
     Expire   time.Time `json:"Expire"`
 }
 ```
@@ -246,10 +247,10 @@ func GetSession(r *http.Request) (Session, bool)
 Returns [Session](<#Session>) and whether user is autheficated. Will always return false in case [AuthMiddleware](<#AuthMiddleware>) was not performed prior.
 
 <a name="NewSession"></a>
-### func [NewSession](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/session.go#L14>)
+### func [NewSession](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/session.go#L15>)
 
 ```go
-func NewSession(userID int64, username string) Session
+func NewSession(userID int64, username string, admin bool) Session
 ```
 
 Return new session with valid and refreshed expiration time.
@@ -270,7 +271,7 @@ Should never return an error, since:
 - [encoding/base64.URLEncoding.DecodeString](<https://pkg.go.dev/encoding/base64/#URLEncoding.DecodeString>) works with valid encoded [Session](<#Session>) thus should not return an error.
 
 <a name="Session.Expired"></a>
-### func \(Session\) [Expired](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/session.go#L28>)
+### func \(Session\) [Expired](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/session.go#L30>)
 
 ```go
 func (ses Session) Expired() bool
@@ -293,7 +294,7 @@ Should never return an error, since:
 - [encoding/json.Marshal](<https://pkg.go.dev/encoding/json/#Marshal>) for [Session](<#Session>) should not return an error.
 
 <a name="Session.Refresh"></a>
-### func \(\*Session\) [Refresh](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/session.go#L23>)
+### func \(\*Session\) [Refresh](<https://github.com/TrueHopolok/VladOS/blob/main/modules/vos/session.go#L25>)
 
 ```go
 func (ses *Session) Refresh()

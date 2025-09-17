@@ -7,14 +7,16 @@ import "time"
 type Session struct {
 	UserID   int64     `json:"UserID"`
 	Username string    `json:"Username"`
+	Admin    bool      `json:"Admin"`
 	Expire   time.Time `json:"Expire"`
 }
 
 // Return new session with valid and refreshed expiration time.
-func NewSession(userID int64, username string) Session {
+func NewSession(userID int64, username string, admin bool) Session {
 	return Session{
 		UserID:   userID,
 		Username: username,
+		Admin:    admin,
 		Expire:   time.Now().Add(AuthExpires),
 	}
 }

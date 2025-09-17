@@ -44,6 +44,15 @@
         <li><a href="/suggestions?type=tip">Tip</a></li>
         </ul>
     </li>
+    {{ if .Admin }}
+    <li class="dropdown">
+        <a href="">Review ▾</a>
+        <ul class="dropdown-content">
+        <li><a href="/review?type=m8b">Magic 8 ball</a></li>
+        <li><a href="/review?type=tip">Tip</a></li>
+        </ul>
+    </li>
+    {{ end }}
     <li><a href="https://github.com/TrueHopolok/VladOS" target="_blank">Github</a></li>
     </ul>
 </nav>

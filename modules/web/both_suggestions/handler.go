@@ -15,9 +15,9 @@ import (
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
-const TmlPath string = "suggestions/propose/"
-const TmlName string = "propose_%s.html"
-const BaseName string = "propose_base.html"
+const TmlPath string = "suggestions/"
+const TmlName string = "suggest_%s.html"
+const BaseName string = "suggest.html"
 
 var TmlMap = template.FuncMap{
 	"tn": func(typeName string) string {
@@ -63,6 +63,7 @@ func PageHandle(w http.ResponseWriter, r *http.Request) {
 	data.Title = "Suggestions"
 	ses, data.Auth = vos.GetSession(r)
 	data.Username = ses.Username
+	data.Admin = ses.Admin
 	data.SuggestionType = typeName
 
 	t, err := webtmls.ParseTmls(TmlMap, TmlPath+BaseName, TmlPath+fmt.Sprintf(TmlName, typeName))

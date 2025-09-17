@@ -17,6 +17,7 @@ Before usage, call [github.com/TrueHopolok/VladOS/modules/web/webtmls.PrepareTem
 
 ## Index
 
+- [func AdminMiddleware\(handler http.HandlerFunc\) http.HandlerFunc](<#AdminMiddleware>)
 - [func ConnectAuthorized\(mux \*http.ServeMux\)](<#ConnectAuthorized>)
 - [func ConnectEveryone\(mux \*http.ServeMux\)](<#ConnectEveryone>)
 - [func ConnectFileHandlers\(mux \*http.ServeMux\)](<#ConnectFileHandlers>)
@@ -28,6 +29,15 @@ Before usage, call [github.com/TrueHopolok/VladOS/modules/web/webtmls.PrepareTem
 - [func TodoHandler\(w http.ResponseWriter, r \*http.Request\)](<#TodoHandler>)
 
 
+<a name="AdminMiddleware"></a>
+## func [AdminMiddleware](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/util.go#L33>)
+
+```go
+func AdminMiddleware(handler http.HandlerFunc) http.HandlerFunc
+```
+
+Provides an check for being an admin before accessing the handler. Must be used after \[vos.AuthMiddleware\] was used, otherwise will block all trafic.
+
 <a name="ConnectAuthorized"></a>
 ## func [ConnectAuthorized](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L27>)
 
@@ -38,7 +48,7 @@ func ConnectAuthorized(mux *http.ServeMux)
 Connects to [net/http.ServeMux](<https://pkg.go.dev/net/http/#ServeMux>) handler functions with permission flag [github.com/TrueHopolok/VladOS/modules/vos.Authorized](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#Authorized>) for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#AuthMiddleware>).
 
 <a name="ConnectEveryone"></a>
-## func [ConnectEveryone](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L18>)
+## func [ConnectEveryone](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L17>)
 
 ```go
 func ConnectEveryone(mux *http.ServeMux)
@@ -65,7 +75,7 @@ func ConnectUnauthorized(mux *http.ServeMux)
 Connects to [net/http.ServeMux](<https://pkg.go.dev/net/http/#ServeMux>) handler functions with permission flag [github.com/TrueHopolok/VladOS/modules/vos.Unauthorized](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#Unauthorized>) for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#AuthMiddleware>).
 
 <a name="LoggerMiddleware"></a>
-## func [LoggerMiddleware](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/util.go#L15>)
+## func [LoggerMiddleware](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/util.go#L17>)
 
 ```go
 func LoggerMiddleware(handler http.Handler) http.HandlerFunc
@@ -118,7 +128,7 @@ func Stop() error
 Stops existing server from executing. If no server was opened, will do nothing. Returns an error from [net/http.Server.Close](<https://pkg.go.dev/net/http/#Server.Close>).
 
 <a name="TodoHandler"></a>
-## func [TodoHandler](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/util.go#L10>)
+## func [TodoHandler](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/util.go#L12>)
 
 ```go
 func TodoHandler(w http.ResponseWriter, r *http.Request)

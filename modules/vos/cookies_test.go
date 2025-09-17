@@ -9,7 +9,7 @@ import (
 )
 
 func TestGetCookie(t *testing.T) {
-	ses := vos.NewSession(0, "test")
+	ses := vos.NewSession(0, "test", true)
 	jwt, err := ses.NewJWT()
 	if err != nil {
 		t.Fatalf("generating new jwt failed: %s", err)
@@ -34,7 +34,7 @@ func TestGetCookie(t *testing.T) {
 }
 
 func TestSetCookie(t *testing.T) {
-	ses := vos.NewSession(0, "test")
+	ses := vos.NewSession(0, "test", true)
 	jwt, err := ses.NewJWT()
 	if err != nil {
 		t.Fatalf("generating new jwt failed: %s", err)

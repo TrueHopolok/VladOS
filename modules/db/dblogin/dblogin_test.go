@@ -14,6 +14,7 @@ type outputData struct {
 	UserID    int64
 	FirstName string
 	Username  string
+	Admin     bool
 	Valid     bool
 }
 
@@ -42,7 +43,7 @@ func TestLogin(t *testing.T) {
 		err      error
 	)
 
-	got.UserID, got.FirstName, got.Username, got.Valid, err = dblogin.Find("anything")
+	got.UserID, got.FirstName, got.Username, got.Admin, got.Valid, err = dblogin.Find("anything")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -55,7 +56,7 @@ func TestLogin(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	got.UserID, got.FirstName, got.Username, got.Valid, err = dblogin.Find("anything")
+	got.UserID, got.FirstName, got.Username, got.Admin, got.Valid, err = dblogin.Find("anything")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -63,8 +64,8 @@ func TestLogin(t *testing.T) {
 		t.Fatalf("unexpected result\ngot: %v\nwant: %v", got, want)
 	}
 
-	want = outputData{UserID: 1, Valid: true, FirstName: "1", Username: ""}
-	got.UserID, got.FirstName, got.Username, got.Valid, err = dblogin.Find(authcode)
+	want = outputData{UserID: 1, Valid: true, FirstName: "1", Username: "", Admin: false}
+	got.UserID, got.FirstName, got.Username, got.Admin, got.Valid, err = dblogin.Find(authcode)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -77,8 +78,8 @@ func TestLogin(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	want = outputData{UserID: 0, Valid: false, FirstName: "", Username: ""}
-	got.UserID, got.FirstName, got.Username, got.Valid, err = dblogin.Find("anything")
+	want = outputData{UserID: 0, Valid: false, FirstName: "", Username: "", Admin: false}
+	got.UserID, got.FirstName, got.Username, got.Admin, got.Valid, err = dblogin.Find("anything")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -86,8 +87,8 @@ func TestLogin(t *testing.T) {
 		t.Fatalf("unexpected result\ngot: %v\nwant: %v", got, want)
 	}
 
-	want = outputData{UserID: 1, Valid: true, FirstName: "1", Username: ""}
-	got.UserID, got.FirstName, got.Username, got.Valid, err = dblogin.Find(authcode)
+	want = outputData{UserID: 1, Valid: true, FirstName: "1", Username: "", Admin: false}
+	got.UserID, got.FirstName, got.Username, got.Admin, got.Valid, err = dblogin.Find(authcode)
 	if err != nil {
 		t.Fatal(err)
 	}

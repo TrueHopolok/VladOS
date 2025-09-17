@@ -39,7 +39,7 @@ func getNewAuthCookie(t *testing.T, server *httptest.Server) *http.Cookie {
 	if url == nil {
 		t.Fatalf("received url is nil")
 	}
-	ses := vos.NewSession(0, "test")
+	ses := vos.NewSession(0, "test", true)
 	jwt, err := ses.NewJWT()
 	if err != nil {
 		t.Fatalf("unexpected jwt generation error: %s", err)

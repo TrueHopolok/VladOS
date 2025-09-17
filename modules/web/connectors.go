@@ -6,6 +6,7 @@ import (
 	"github.com/TrueHopolok/VladOS/modules/cfg"
 	"github.com/TrueHopolok/VladOS/modules/vos"
 	"github.com/TrueHopolok/VladOS/modules/web/both_auth"
+	"github.com/TrueHopolok/VladOS/modules/web/both_review"
 	"github.com/TrueHopolok/VladOS/modules/web/both_suggestions"
 	"github.com/TrueHopolok/VladOS/modules/web/page_index"
 	"github.com/TrueHopolok/VladOS/modules/web/page_leaderboard"
@@ -26,6 +27,7 @@ func ConnectEveryone(mux *http.ServeMux) {
 // for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware].
 func ConnectAuthorized(mux *http.ServeMux) {
 	mux.HandleFunc("POST /suggestions", vos.AuthMiddlewareFunc(both_suggestions.PostHandle, vos.Authorized))
+	mux.HandleFunc("GET /review", vos.AuthMiddlewareFunc(AdminMiddleware(both_review.PageHandle), vos.Authorized))
 }
 
 // Connects to [net/http.ServeMux] handler functions with

@@ -47,7 +47,7 @@ func PageHandle(w http.ResponseWriter, r *http.Request) {
 func LoginHandle(w http.ResponseWriter, r *http.Request) {
 	slog.Debug("http req", "mtd", r.Method, "url", r.URL, "handler", "api/login")
 	authcode := r.FormValue("authcode")
-	userID, firstName, username, valid, err := dblogin.Find(authcode)
+	userID, firstName, username, admin, valid, err := dblogin.Find(authcode)
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 		http.Error(w, "http failed", http.StatusInternalServerError)
@@ -61,7 +61,7 @@ func LoginHandle(w http.ResponseWriter, r *http.Request) {
 	if username == "" {
 		username = firstName
 	}
-	ses := vos.NewSession(userID, username)
+	ses := vos.NewSession(userID, username, admin)
 	jwt, err := ses.NewJWT()
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
