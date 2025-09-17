@@ -5,8 +5,6 @@
 {{ define "content" }}
 <h2 class="page-title">Review Suggestion</h2>
 {{ if .SuggestionFound }}
-<p>No suggestions on this type has been found.<br>Try to review different type or reload to page to see if new suggestions have been added.</p>
-{{ else }}
 <div class="suggestion-review">
     <div class="review-field">
         <strong>Type:</strong>
@@ -23,6 +21,8 @@
         <button type="submit" name="decision" value="deny" class="btn-deny">Deny</button>
     </form>
 </div>
+{{ else }}
+<p>No suggestions on this type has been found.<br>Try to review different type or reload to page to see if new suggestions have been added.</p>
 {{ end }}
 {{ end }}
 
