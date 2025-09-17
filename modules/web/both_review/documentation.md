@@ -15,22 +15,10 @@ import "github.com/TrueHopolok/VladOS/modules/web/both_review"
 
 ## Constants
 
-<a name="BaseName"></a>
-
-```go
-const BaseName string = "review.html"
-```
-
 <a name="TmlName"></a>
 
 ```go
-const TmlName string = "review_%s.html"
-```
-
-<a name="TmlPath"></a>
-
-```go
-const TmlPath string = "review/"
+const TmlName string = "review.html"
 ```
 
 ## Variables
@@ -51,7 +39,7 @@ var TmlMap = template.FuncMap{
 ```
 
 <a name="PageHandle"></a>
-## func [PageHandle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/both_review/handler.go#L34>)
+## func [PageHandle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/both_review/handler.go#L32>)
 
 ```go
 func PageHandle(w http.ResponseWriter, r *http.Request)

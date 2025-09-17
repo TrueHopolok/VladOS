@@ -54,7 +54,7 @@ var TmlMap = template.FuncMap{
 ```
 
 <a name="PageHandle"></a>
-## func [PageHandle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/both_suggestions/handler.go#L46>)
+## func [PageHandle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/both_suggestions/handler.go#L47>)
 
 ```go
 func PageHandle(w http.ResponseWriter, r *http.Request)
@@ -63,7 +63,7 @@ func PageHandle(w http.ResponseWriter, r *http.Request)
 
 
 <a name="PostHandle"></a>
-## func [PostHandle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/both_suggestions/handler.go#L91>)
+## func [PostHandle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/both_suggestions/handler.go#L92>)
 
 ```go
 func PostHandle(w http.ResponseWriter, r *http.Request)
@@ -72,7 +72,7 @@ func PostHandle(w http.ResponseWriter, r *http.Request)
 
 
 <a name="SuggestionM8B"></a>
-## type [SuggestionM8B](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/both_suggestions/handler.go#L22-L25>)
+## type [SuggestionM8B](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/both_suggestions/handler.go#L23-L26>)
 
 
 
@@ -84,7 +84,7 @@ type SuggestionM8B struct {
 ```
 
 <a name="SuggestionTip"></a>
-## type [SuggestionTip](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/both_suggestions/handler.go#L17-L20>)
+## type [SuggestionTip](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/both_suggestions/handler.go#L18-L21>)
 
 
 
