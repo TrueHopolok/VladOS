@@ -7,8 +7,14 @@
 {{ if .SuggestionFound }}
 <div class="suggestion-review">
     <div class="review-field">
+        <strong>Suggestion ID:</strong>
+        <span>{{ .SuggestionID }}</span>
+        <br>
         <strong>Type:</strong>
         <span>{{ .SuggestionType }}</span>
+        <br>
+        <strong>By user:</strong>
+        <span>{{ .SuggestionUserID }}</span>
     </div>
 
     <div class="review-field">
@@ -16,7 +22,7 @@
         <p class="review-text">{{ .SuggestionText }}</p>
     </div>
 
-    <form action="/review?type={{ .SuggestionType }}" method="post" class="decision-form">
+    <form action="/review?type={{ .SuggestionType }}?id={{ .SuggestionID }}" method="post" class="decision-form">
         <button type="submit" name="decision" value="accept" class="btn-accept">Accept</button>
         <button type="submit" name="decision" value="deny" class="btn-deny">Deny</button>
     </form>

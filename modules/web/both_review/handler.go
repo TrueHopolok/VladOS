@@ -1,20 +1,18 @@
 package both_review
 
 import (
-	"fmt"
 	"log/slog"
 	"net/http"
 	"text/template"
 
+	"github.com/TrueHopolok/VladOS/modules/db/dbsuggestion"
 	"github.com/TrueHopolok/VladOS/modules/vos"
 	"github.com/TrueHopolok/VladOS/modules/web/webtmls"
 )
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
-const TmlPath string = "review/"
-const TmlName string = "review_%s.html"
-const BaseName string = "review.html"
+const TmlName string = "review.html"
 
 var TmlMap = template.FuncMap{
 	"tn": func(typeName string) string {
@@ -36,7 +34,7 @@ func PageHandle(w http.ResponseWriter, r *http.Request) {
 
 	typeName := r.URL.Query().Get("type")
 	if typeName == "" {
-		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest: ", typeName+" is not recognized")
+		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest", typeName+" is not recognized")
 		http.Error(w, "bad request: no type provided", http.StatusBadRequest)
 		return
 	}
@@ -48,7 +46,7 @@ func PageHandle(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if !found {
-		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest: ", typeName+" is not recognized")
+		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest", typeName+" is not recognized")
 		http.Error(w, "bad request: provided type does not supported", http.StatusBadRequest)
 		return
 	}
@@ -56,20 +54,27 @@ func PageHandle(w http.ResponseWriter, r *http.Request) {
 	var (
 		data webtmls.T
 		ses  vos.Session
+		err  error
 	)
 	data.Title = "Review"
 	ses, data.Auth = vos.GetSession(r)
 	data.Username = ses.Username
 	data.Admin = ses.Admin
 	data.SuggestionType = typeName
-
-	t, err := webtmls.ParseTmls(TmlMap, TmlPath+BaseName, TmlPath+fmt.Sprintf(TmlName, typeName))
+	data.SuggestionID, data.SuggestionUserID, data.SuggestionText, data.SuggestionFound, err = dbsuggestion.Get(typeName)
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 		http.Error(w, "http failed", http.StatusInternalServerError)
 		return
 	}
-	err = t.ExecuteTemplate(w, BaseName, data)
+
+	t, err := webtmls.ParseTmls(TmlMap, TmlName)
+	if err != nil {
+		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
+		http.Error(w, "http failed", http.StatusInternalServerError)
+		return
+	}
+	err = t.ExecuteTemplate(w, TmlName, data)
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 		http.Error(w, "http failed", http.StatusInternalServerError)

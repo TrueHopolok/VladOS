@@ -55,9 +55,11 @@ type T struct {
 	LeaderboardPrecent   []dbstats.Precent   // if page is leaderboard: must
 	LeaderboardPlacement []dbstats.Placement // if page is leaderboard: must
 
-	SuggestionType  string // if page is suggestions/review: must
-	SuggestionFound bool   // if page is review: must
-	SuggestionText  string // if SuggestionFound is true: must
+	SuggestionType   string // if page is suggestions/review: must
+	SuggestionFound  bool   // if page is review: must
+	SuggestionText   string // if SuggestionFound is true: must
+	SuggestionID     int    // if SuggesionFound is true: must
+	SuggestionUserID int64  // if SuggesionFound is true: must
 
 	LoginLink  string // if page is login: must
 	LoginCode  string // if page is login: must

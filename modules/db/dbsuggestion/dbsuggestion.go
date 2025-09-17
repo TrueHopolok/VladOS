@@ -42,7 +42,41 @@ func Add(userID int64, typeName string, data []byte) error {
 }
 
 // Get returns random suggestion to view on the webpage
-// TODO
-func Get() (any, error) {
-	return nil, nil
+func Get(typeName string) (id int, userID int64, data string, found bool, err error) {
+	query, err := QueryDir.ReadFile("get.sql")
+	if err != nil {
+		err = fmt.Errorf("reading query error: %w", err)
+		return
+	}
+
+	tx, err := db.Conn.Begin()
+	if err != nil {
+		err = fmt.Errorf("beggining connection error: %w", err)
+		return
+	}
+	defer tx.Rollback()
+
+	rows, err := tx.Query(string(query), typeName)
+	if err != nil {
+		err = fmt.Errorf("query execution error: %w", err)
+		return
+	}
+	found = rows.Next()
+	if !found {
+		return
+	}
+
+	var raw []byte
+	if err = rows.Scan(&id, &userID, &raw); err != nil {
+		err = fmt.Errorf("result scanning error: %w", err)
+		return
+	}
+	data = string(raw)
+
+	return id, userID, data, found, func() error {
+		if err := tx.Commit(); err != nil {
+			return fmt.Errorf("commit error: %w", err)
+		}
+		return nil
+	}()
 }

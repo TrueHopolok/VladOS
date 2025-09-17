@@ -39,7 +39,7 @@ func AdminMiddleware(handler http.HandlerFunc) http.HandlerFunc
 Provides an check for being an admin before accessing the handler. Must be used after \[vos.AuthMiddleware\] was used, otherwise will block all trafic.
 
 <a name="ConnectAuthorized"></a>
-## func [ConnectAuthorized](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L27>)
+## func [ConnectAuthorized](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L28>)
 
 ```go
 func ConnectAuthorized(mux *http.ServeMux)
@@ -48,7 +48,7 @@ func ConnectAuthorized(mux *http.ServeMux)
 Connects to [net/http.ServeMux](<https://pkg.go.dev/net/http/#ServeMux>) handler functions with permission flag [github.com/TrueHopolok/VladOS/modules/vos.Authorized](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#Authorized>) for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#AuthMiddleware>).
 
 <a name="ConnectEveryone"></a>
-## func [ConnectEveryone](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L17>)
+## func [ConnectEveryone](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L18>)
 
 ```go
 func ConnectEveryone(mux *http.ServeMux)
@@ -57,7 +57,7 @@ func ConnectEveryone(mux *http.ServeMux)
 Connects to [net/http.ServeMux](<https://pkg.go.dev/net/http/#ServeMux>) handler functions with permission flag [github.com/TrueHopolok/VladOS/modules/vos.Everyone](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#Everyone>) for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/vos/#AuthMiddleware>).
 
 <a name="ConnectFileHandlers"></a>
-## func [ConnectFileHandlers](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L42>)
+## func [ConnectFileHandlers](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L43>)
 
 ```go
 func ConnectFileHandlers(mux *http.ServeMux)
@@ -66,7 +66,7 @@ func ConnectFileHandlers(mux *http.ServeMux)
 Connects to [net/http.ServeMux](<https://pkg.go.dev/net/http/#ServeMux>) handler functions to server static files on the [github.com/TrueHopolok/VladOS/modules/cfg.Config.WebStaticDir](<https://pkg.go.dev/github.com/TrueHopolok/VladOS/modules/cfg/#Config.WebStaticDir>) path.
 
 <a name="ConnectUnauthorized"></a>
-## func [ConnectUnauthorized](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L35>)
+## func [ConnectUnauthorized](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/connectors.go#L36>)
 
 ```go
 func ConnectUnauthorized(mux *http.ServeMux)

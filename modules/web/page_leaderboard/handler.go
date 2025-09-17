@@ -37,7 +37,7 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 
 	gameName := r.URL.Query().Get("game")
 	if gameName == "" {
-		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest: ", gameName+" is not recognized")
+		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest", gameName+" is not recognized")
 		http.Error(w, "bad request: no game provided", http.StatusBadRequest)
 		return
 	}
@@ -49,7 +49,7 @@ func Handle(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if !found {
-		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest: ", gameName+" is not recognized")
+		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest", gameName+" is not recognized")
 		http.Error(w, "bad request: provided game does not supported", http.StatusBadRequest)
 		return
 	}
