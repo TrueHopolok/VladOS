@@ -10,8 +10,9 @@ import "github.com/TrueHopolok/VladOS/modules/db/dbsuggestion"
 
 - [Variables](<#variables>)
 - [func Add\(userID int64, typeName string, data \[\]byte\) error](<#Add>)
-- [func GetById\(typeName string, id int\) \(string, bool, error\)](<#GetById>)
-- [func GetRandom\(typeName string\) \(id int, userID int64, data string, found bool, err error\)](<#GetRandom>)
+- [func Delete\(id int\) error](<#Delete>)
+- [func Get\(id int\) \(rawJson \[\]byte, found bool, err error\)](<#Get>)
+- [func Rand\(typeName string\) \(id int, userID int64, data string, found bool, err error\)](<#Rand>)
 
 
 ## Variables
@@ -31,20 +32,29 @@ func Add(userID int64, typeName string, data []byte) error
 
 Add saves provided suggestion from the page
 
-<a name="GetById"></a>
-## func [GetById](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbsuggestion/dbsuggestion.go#L84>)
+<a name="Delete"></a>
+## func [Delete](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbsuggestion/dbsuggestion.go#L121>)
 
 ```go
-func GetById(typeName string, id int) (string, bool, error)
+func Delete(id int) error
 ```
 
 
 
-<a name="GetRandom"></a>
-## func [GetRandom](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbsuggestion/dbsuggestion.go#L45>)
+<a name="Get"></a>
+## func [Get](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbsuggestion/dbsuggestion.go#L84>)
 
 ```go
-func GetRandom(typeName string) (id int, userID int64, data string, found bool, err error)
+func Get(id int) (rawJson []byte, found bool, err error)
+```
+
+
+
+<a name="Rand"></a>
+## func [Rand](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbsuggestion/dbsuggestion.go#L45>)
+
+```go
+func Rand(typeName string) (id int, userID int64, data string, found bool, err error)
 ```
 
 Get returns random suggestion to view on the webpage

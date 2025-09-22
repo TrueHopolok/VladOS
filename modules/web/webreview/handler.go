@@ -39,9 +39,9 @@ func PostHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rawJson, found, err := dbsuggestion.GetById(typeName, suggestionID)
+	rawJson, found, err := dbsuggestion.Get(suggestionID)
 	if err != nil {
-		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", "unhandled type of suggestion")
+		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 		http.Error(w, "http failed", http.StatusInternalServerError)
 		return
 	}
@@ -51,10 +51,16 @@ func PostHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if err = dbsuggestion.Delete(suggestionID); err != nil {
+		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
+		http.Error(w, "http failed", http.StatusInternalServerError)
+		return
+	}
+
 	switch typeName {
 	case "m8b":
 		var sug dbm8b.M8B
-		if err = json.Unmarshal([]byte(rawJson), &sug); err != nil {
+		if err = json.Unmarshal(rawJson, &sug); err != nil {
 			slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", "json unmarshling error")
 			http.Error(w, "http failed", http.StatusInternalServerError)
 			return
@@ -66,7 +72,7 @@ func PostHandle(w http.ResponseWriter, r *http.Request) {
 		}
 	case "tip":
 		var sug dbtip.Tip
-		if err = json.Unmarshal([]byte(rawJson), &sug); err != nil {
+		if err = json.Unmarshal(rawJson, &sug); err != nil {
 			slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 			http.Error(w, "http failed", http.StatusInternalServerError)
 			return
@@ -103,7 +109,7 @@ func PageHandle(w http.ResponseWriter, r *http.Request) {
 	data.Username = ses.Username
 	data.Admin = ses.Admin
 	data.SuggestionType = typeName
-	data.SuggestionID, data.SuggestionUserID, data.SuggestionText, data.SuggestionFound, err = dbsuggestion.GetRandom(typeName)
+	data.SuggestionID, data.SuggestionUserID, data.SuggestionText, data.SuggestionFound, err = dbsuggestion.Rand(typeName)
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 		http.Error(w, "http failed", http.StatusInternalServerError)

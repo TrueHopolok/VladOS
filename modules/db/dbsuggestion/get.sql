@@ -1,5 +1,3 @@
-SELECT id, user_id, data
+SELECT data
 FROM suggestion
-WHERE type = $1
-ORDER BY random()
-LIMIT 1;
+WHERE id = $1;

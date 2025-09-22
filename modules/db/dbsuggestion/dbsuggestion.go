@@ -42,8 +42,8 @@ func Add(userID int64, typeName string, data []byte) error {
 }
 
 // Get returns random suggestion to view on the webpage
-func GetRandom(typeName string) (id int, userID int64, data string, found bool, err error) {
-	query, err := QueryDir.ReadFile("get.sql")
+func Rand(typeName string) (id int, userID int64, data string, found bool, err error) {
+	query, err := QueryDir.ReadFile("rand.sql")
 	if err != nil {
 		err = fmt.Errorf("reading query error: %w", err)
 		return
@@ -81,7 +81,67 @@ func GetRandom(typeName string) (id int, userID int64, data string, found bool, 
 	}()
 }
 
-func GetById(typeName string, id int) (string, bool, error) {
-	panic("TODO")
-	return "", false, nil
+func Get(id int) (rawJson []byte, found bool, err error) {
+	query, err := QueryDir.ReadFile("get.sql")
+	if err != nil {
+		err = fmt.Errorf("reading query error: %w", err)
+		return
+	}
+
+	tx, err := db.Conn.Begin()
+	if err != nil {
+		err = fmt.Errorf("beggining connection error: %w", err)
+		return
+	}
+	defer tx.Rollback()
+
+	rows, err := tx.Query(string(query), id)
+	if err != nil {
+		err = fmt.Errorf("query execution error: %w", err)
+		return
+	}
+	found = rows.Next()
+	if !found {
+		return
+	}
+
+	if err = rows.Scan(&rawJson); err != nil {
+		err = fmt.Errorf("result scanning error: %w", err)
+		return
+	}
+
+	return rawJson, found, func() error {
+		if err := tx.Commit(); err != nil {
+			return fmt.Errorf("commit error: %w", err)
+		}
+		return nil
+	}()
+}
+
+func Delete(id int) error {
+	query, err := QueryDir.ReadFile("delete.sql")
+	if err != nil {
+		err = fmt.Errorf("reading query error: %w", err)
+		return err
+	}
+
+	tx, err := db.Conn.Begin()
+	if err != nil {
+		err = fmt.Errorf("beggining connection error: %w", err)
+		return err
+	}
+	defer tx.Rollback()
+
+	_, err = tx.Exec(string(query), id)
+	if err != nil {
+		err = fmt.Errorf("query execution error: %w", err)
+		return err
+	}
+
+	return func() error {
+		if err := tx.Commit(); err != nil {
+			return fmt.Errorf("commit error: %w", err)
+		}
+		return nil
+	}()
 }
