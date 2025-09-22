@@ -42,7 +42,7 @@ func Add(userID int64, typeName string, data []byte) error {
 }
 
 // Get returns random suggestion to view on the webpage
-func Get(typeName string) (id int, userID int64, data string, found bool, err error) {
+func GetRandom(typeName string) (id int, userID int64, data string, found bool, err error) {
 	query, err := QueryDir.ReadFile("get.sql")
 	if err != nil {
 		err = fmt.Errorf("reading query error: %w", err)
@@ -79,4 +79,9 @@ func Get(typeName string) (id int, userID int64, data string, found bool, err er
 		}
 		return nil
 	}()
+}
+
+func GetById(typeName string, id int) (string, bool, error) {
+	panic("TODO")
+	return "", false, nil
 }

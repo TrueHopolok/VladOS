@@ -10,6 +10,11 @@ import (
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
+type Tip struct {
+	Text   string `json:"Text"`
+	Author string `json:"Author"`
+}
+
 //go:embed *.sql
 var QueryDir embed.FS
 
@@ -86,4 +91,9 @@ func Rand() (text string, author string, id int, err error) {
 		}
 		return nil
 	}()
+}
+
+func Add(data Tip) error {
+	panic("TODO")
+	return nil
 }

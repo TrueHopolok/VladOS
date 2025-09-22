@@ -1,4 +1,4 @@
-package page_index
+package webupdate
 
 import (
 	"log/slog"

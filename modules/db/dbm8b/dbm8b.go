@@ -9,6 +9,11 @@ import (
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
+type M8B struct {
+	Text   string `json:"Text"`
+	Answer bool   `json:"Positive"`
+}
+
 //go:embed *.sql
 var QueryDir embed.FS
 
@@ -47,4 +52,9 @@ func Get(isPositive bool) (string, error) {
 		}
 		return nil
 	}()
+}
+
+func Add(data M8B) error {
+	panic("TODO")
+	return nil
 }

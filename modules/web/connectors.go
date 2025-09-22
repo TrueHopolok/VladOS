@@ -5,37 +5,38 @@ import (
 
 	"github.com/TrueHopolok/VladOS/modules/cfg"
 	"github.com/TrueHopolok/VladOS/modules/vos"
-	"github.com/TrueHopolok/VladOS/modules/web/both_auth"
-	"github.com/TrueHopolok/VladOS/modules/web/both_review"
-	"github.com/TrueHopolok/VladOS/modules/web/both_suggestions"
-	"github.com/TrueHopolok/VladOS/modules/web/page_index"
-	"github.com/TrueHopolok/VladOS/modules/web/page_leaderboard"
+	"github.com/TrueHopolok/VladOS/modules/web/webauth"
+	"github.com/TrueHopolok/VladOS/modules/web/webleaderboard"
+	"github.com/TrueHopolok/VladOS/modules/web/webreview"
+	"github.com/TrueHopolok/VladOS/modules/web/websuggestions"
+	"github.com/TrueHopolok/VladOS/modules/web/webupdate"
 )
 
 // Connects to [net/http.ServeMux] handler functions with
 // permission flag [github.com/TrueHopolok/VladOS/modules/vos.Everyone]
 // for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware].
 func ConnectEveryone(mux *http.ServeMux) {
-	mux.HandleFunc("GET /", vos.AuthMiddlewareFunc(page_index.Handle, vos.Everyone))
-	mux.HandleFunc("GET /leaderboard", vos.AuthMiddlewareFunc(page_leaderboard.Handle, vos.Everyone))
-	mux.HandleFunc("GET /suggestions", vos.AuthMiddlewareFunc(both_suggestions.PageHandle, vos.Everyone))
-	mux.HandleFunc("GET /logout", vos.AuthMiddlewareFunc(both_auth.LogoutHandle, vos.Everyone))
+	mux.HandleFunc("GET /", vos.AuthMiddlewareFunc(webupdate.Handle, vos.Everyone))
+	mux.HandleFunc("GET /leaderboard", vos.AuthMiddlewareFunc(webleaderboard.Handle, vos.Everyone))
+	mux.HandleFunc("GET /suggestions", vos.AuthMiddlewareFunc(websuggestions.PageHandle, vos.Everyone))
+	mux.HandleFunc("GET /logout", vos.AuthMiddlewareFunc(webauth.LogoutHandle, vos.Everyone))
 }
 
 // Connects to [net/http.ServeMux] handler functions with
 // permission flag [github.com/TrueHopolok/VladOS/modules/vos.Authorized]
 // for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware].
 func ConnectAuthorized(mux *http.ServeMux) {
-	mux.HandleFunc("POST /suggestions", vos.AuthMiddlewareFunc(both_suggestions.PostHandle, vos.Authorized))
-	mux.HandleFunc("GET /review", vos.AuthMiddlewareFunc(AdminMiddleware(both_review.PageHandle), vos.Authorized))
+	mux.HandleFunc("POST /suggestions", vos.AuthMiddlewareFunc(websuggestions.PostHandle, vos.Authorized))
+	mux.HandleFunc("GET /review", vos.AuthMiddlewareFunc(AdminMiddleware(webreview.PageHandle), vos.Authorized))
+	mux.HandleFunc("POST /review", vos.AuthMiddlewareFunc(AdminMiddleware(webreview.PostHandle), vos.Authorized))
 }
 
 // Connects to [net/http.ServeMux] handler functions with
 // permission flag [github.com/TrueHopolok/VladOS/modules/vos.Unauthorized]
 // for the function [github.com/TrueHopolok/VladOS/modules/vos.AuthMiddleware].
 func ConnectUnauthorized(mux *http.ServeMux) {
-	mux.HandleFunc("GET /login", vos.AuthMiddlewareFunc(both_auth.PageHandle, vos.Unauthorized))
-	mux.HandleFunc("POST /login", vos.AuthMiddlewareFunc(both_auth.LoginHandle, vos.Unauthorized))
+	mux.HandleFunc("GET /login", vos.AuthMiddlewareFunc(webauth.PageHandle, vos.Unauthorized))
+	mux.HandleFunc("POST /login", vos.AuthMiddlewareFunc(webauth.LoginHandle, vos.Unauthorized))
 }
 
 // Connects to [net/http.ServeMux] handler functions to server static files

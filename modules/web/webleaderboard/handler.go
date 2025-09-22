@@ -1,4 +1,4 @@
-package page_leaderboard
+package webleaderboard
 
 import (
 	"html/template"

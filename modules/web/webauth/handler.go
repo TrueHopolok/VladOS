@@ -1,4 +1,4 @@
-package both_auth
+package webauth
 
 import (
 	"context"

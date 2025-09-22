@@ -1,4 +1,4 @@
-package both_suggestions
+package websuggestions
 
 import (
 	"bytes"
@@ -8,22 +8,14 @@ import (
 	"net/http"
 	"text/template"
 
+	"github.com/TrueHopolok/VladOS/modules/db/dbm8b"
 	"github.com/TrueHopolok/VladOS/modules/db/dbsuggestion"
+	"github.com/TrueHopolok/VladOS/modules/db/dbtip"
 	"github.com/TrueHopolok/VladOS/modules/vos"
 	"github.com/TrueHopolok/VladOS/modules/web/webtmls"
 )
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
-
-type SuggestionTip struct {
-	Text   string `json:"Text"`
-	Author string `json:"Author"`
-}
-
-type SuggestionM8B struct {
-	Text   string `json:"Text"`
-	Answer bool   `json:"Positive"`
-}
 
 const TmlPath string = "suggestions/"
 const TmlName string = "suggest_%s.html"
@@ -40,29 +32,41 @@ var TmlMap = template.FuncMap{
 	},
 }
 
-var existingNames = []string{
+var SuggestionExistingNames = []string{
 	"m8b", "tip",
+}
+
+// Get suggestion type from request.
+//
+// If invalid writes into a response body
+// After being invalid, further responses are impossible.
+func ValidSuggestionType(w http.ResponseWriter, r *http.Request) (valid bool, typeName string) {
+	typeName = r.URL.Query().Get("type")
+	if typeName == "" {
+		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest", typeName+" is not recognized")
+		http.Error(w, "bad request: no type provided", http.StatusBadRequest)
+		return
+	}
+	valid = false
+	for _, existingName := range SuggestionExistingNames {
+		if typeName == existingName {
+			valid = true
+			break
+		}
+	}
+	if !valid {
+		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest", typeName+" is not recognized")
+		http.Error(w, "bad request: provided type does not supported", http.StatusBadRequest)
+		return
+	}
+	return
 }
 
 func PageHandle(w http.ResponseWriter, r *http.Request) {
 	slog.Debug("http req", "mtd", r.Method, "url", r.URL, "handler", "page/suggestions")
 
-	typeName := r.URL.Query().Get("type")
-	if typeName == "" {
-		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest: ", typeName+" is not recognized")
-		http.Error(w, "bad request: no type provided", http.StatusBadRequest)
-		return
-	}
-	found := false
-	for _, existingName := range existingNames {
-		if typeName == existingName {
-			found = true
-			break
-		}
-	}
-	if !found {
-		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest: ", typeName+" is not recognized")
-		http.Error(w, "bad request: provided type does not supported", http.StatusBadRequest)
+	typeValid, typeName := ValidSuggestionType(w, r)
+	if !typeValid {
 		return
 	}
 
@@ -92,29 +96,15 @@ func PageHandle(w http.ResponseWriter, r *http.Request) {
 func PostHandle(w http.ResponseWriter, r *http.Request) {
 	slog.Debug("http req", "mtd", r.Method, "url", r.URL, "handler", "api/suggestions")
 
-	typeName := r.URL.Query().Get("type")
-	if typeName == "" {
-		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest", typeName+" is not recognized")
-		http.Error(w, "bad request: no type provided", http.StatusBadRequest)
-		return
-	}
-	found := false
-	for _, existingName := range existingNames {
-		if typeName == existingName {
-			found = true
-			break
-		}
-	}
-	if !found {
-		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest", typeName+" is not recognized")
-		http.Error(w, "bad request: provided type does not supported", http.StatusBadRequest)
+	typeValid, typeName := ValidSuggestionType(w, r)
+	if !typeValid {
 		return
 	}
 
 	var raw []byte
 	switch typeName {
 	case "tip":
-		var sug SuggestionTip
+		var sug dbtip.Tip
 		sug.Text = r.PostFormValue("suggestion")
 		if len(sug.Text) == 0 {
 			slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest", "no suggestion given")
@@ -130,7 +120,7 @@ func PostHandle(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	case "m8b":
-		var sug SuggestionM8B
+		var sug dbm8b.M8B
 		sug.Text = r.PostFormValue("suggestion")
 		if len(sug.Text) == 0 {
 			slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest", "no suggestion given")
