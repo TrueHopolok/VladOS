@@ -39,4 +39,8 @@ func TestTip(t *testing.T) {
 	if !found {
 		t.Fatal("tip is not found in Get() even though it was found in Rand()")
 	}
+
+	if err := dbtip.Add(dbtip.Tip{Author: "me", Text: "nope"}); err != nil {
+		t.Fatal(err)
+	}
 }

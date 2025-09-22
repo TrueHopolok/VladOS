@@ -13,10 +13,12 @@ import (
 var CommandM8B Command = Command{
 	InfoBrief: "magic 8 ball",
 	InfoFull: `
+ /m8b
+Tells you the truth to a yes/no question in mind.
  /mb
-Tells you the truth to a yes/no question in mind.`,
+Alias for command. Does the same as the original.`,
 	handler: func(ctx *telegohandler.Context, update telego.Update) error {
-		bot, chatID, _, valid, err := utilStart(ctx, update, "mb", 0)
+		bot, chatID, _, valid, err := utilStart(ctx, update, "m8b", 0)
 		if !valid {
 			return err
 		}

@@ -33,4 +33,8 @@ func TestM8B(t *testing.T) {
 	if _, err := dbm8b.Get(false); err != nil {
 		t.Fatal(err)
 	}
+
+	if err := dbm8b.Add(dbm8b.M8B{Answer: true, Text: "ahah"}); err != nil {
+		t.Fatal(err)
+	}
 }

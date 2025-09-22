@@ -94,6 +94,29 @@ func Rand() (text string, author string, id int, err error) {
 }
 
 func Add(data Tip) error {
-	panic("TODO")
-	return nil
+	query, err := QueryDir.ReadFile("add.sql")
+	if err != nil {
+		err = fmt.Errorf("reading query error: %w", err)
+		return err
+	}
+
+	tx, err := db.Conn.Begin()
+	if err != nil {
+		err = fmt.Errorf("beggining connection error: %w", err)
+		return err
+	}
+	defer tx.Rollback()
+
+	_, err = tx.Exec(string(query), data.Author, data.Text)
+	if err != nil {
+		err = fmt.Errorf("query execution error: %w", err)
+		return err
+	}
+
+	return func() error {
+		if err := tx.Commit(); err != nil {
+			return fmt.Errorf("commit error: %w", err)
+		}
+		return nil
+	}()
 }

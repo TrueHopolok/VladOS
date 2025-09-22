@@ -22,7 +22,7 @@
         <p class="review-text">{{ .SuggestionText }}</p>
     </div>
 
-    <form action="/review?type={{ .SuggestionType }}?id={{ .SuggestionID }}" method="post" class="decision-form">
+    <form action="/review?type={{ .SuggestionType }}&id={{ .SuggestionID }}" method="post" class="decision-form">
         <button type="submit" name="decision" value="accept" class="btn-accept">Accept</button>
         <button type="submit" name="decision" value="deny" class="btn-deny">Deny</button>
     </form>

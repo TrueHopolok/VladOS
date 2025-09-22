@@ -1,0 +1,1 @@
+INSERT INTO m8b (type, text) VALUES ($1, $2);

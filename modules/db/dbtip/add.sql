@@ -1,0 +1,1 @@
+INSERT INTO tip (author, text) VALUES ($1, $2);

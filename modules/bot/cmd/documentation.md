@@ -53,13 +53,14 @@ var CommandsList map[string]map[string]Command = map[string]map[string]Command{
         "ghoul": CommandGhoul,
         "rand":  CommandRand,
         "tip":   CommandTip,
+        "m8b":   CommandM8B,
         "mb":    CommandM8B,
     },
 }
 ```
 
 <a name="ConnectCommands"></a>
-## func [ConnectCommands](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/cmd/cmd.go#L80>)
+## func [ConnectCommands](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/cmd/cmd.go#L81>)
 
 ```go
 func ConnectCommands(bot *telego.Bot, bh *th.BotHandler) error
@@ -184,8 +185,10 @@ Code is valid for 5 minutes, afterwards it will be deleted.
 var CommandM8B Command = Command{
     InfoBrief: "magic 8 ball",
     InfoFull: `
+ /m8b
+Tells you the truth to a yes/no question in mind.
  /mb
-Tells you the truth to a yes/no question in mind.`,
+Alias for command. Does the same as the original.`,
     // contains filtered or unexported fields
 }
 ```
