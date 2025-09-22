@@ -1,5 +1,16 @@
-go build -o vlados.exe github.com/TrueHopolok/VladOS
+mkdir build/
+rm -r build/*
 
-zip vlados.zip vlados.exe static/ configs/release.cfg configs/bot.key
+go build -o build/vlados.exe github.com/TrueHopolok/VladOS
 
-rm vlados.exe
+touch build/run.sh
+echo "./vlados.exe -config=configs/release.cfg" > build/run.sh
+chmod 777 build/run.sh 
+
+cp -r static/ build/static/
+
+mkdir build/configs/
+cp configs/release.cfg build/configs/release.cfg
+cp configs/bot.key build/configs/bot.key
+
+zip -r build/vlados.zip build
