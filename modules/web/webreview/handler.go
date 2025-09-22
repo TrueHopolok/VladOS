@@ -39,6 +39,22 @@ func PostHandle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	switch r.FormValue("decision") {
+	case "accept":
+		// continue with execution
+	case "deny":
+		if err = dbsuggestion.Delete(suggestionID); err != nil {
+			slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
+			http.Error(w, "http failed", http.StatusInternalServerError)
+			return
+		}
+		PageHandle(w, r)
+	default:
+		slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest", "unexpected decision")
+		http.Error(w, "bad request: bad id provided", http.StatusBadRequest)
+		return
+	}
+
 	rawJson, found, err := dbsuggestion.Get(suggestionID)
 	if err != nil {
 		slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
