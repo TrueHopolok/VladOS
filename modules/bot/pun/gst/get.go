@@ -3,17 +3,18 @@ package gst
 // Get for a given word return the longest suffix that is stored in the tree.
 //
 // Panics if tree is nil.
-func (tree *SuffixTree) Get(word string) (maxSuffix string) {
+func (tree *SuffixTree) Get(word []byte) (maxSuffix []byte) {
 	if tree == nil {
 		panic("given suffix tree is nil pointer")
 	}
 	wordIndex := len(word) - 1
-	if tree.Size == 0 || wordIndex < 0 {
+	if tree.root == nil || wordIndex < 0 {
 		return
 	}
 
-	suffix := ""
-	current := tree.Root
+	maxSuffix = make([]byte, 0)
+	suffix := make([]byte, 0)
+	current := tree.root
 
 	for {
 		if wordIndex < 0 {
@@ -25,8 +26,8 @@ func (tree *SuffixTree) Get(word string) (maxSuffix string) {
 			return
 		}
 
-		suffix += string(word[wordIndex])
-		wordIndex++
+		suffix = append(suffix, word[wordIndex])
+		wordIndex--
 
 		for edgeIndex := 0; edgeIndex < len(edge.Path); edgeIndex++ {
 
@@ -38,8 +39,8 @@ func (tree *SuffixTree) Get(word string) (maxSuffix string) {
 				return
 			}
 
-			suffix += string(word[wordIndex])
-			wordIndex++
+			suffix = append(suffix, word[wordIndex])
+			wordIndex--
 		}
 
 		current = edge.Dest
@@ -47,7 +48,7 @@ func (tree *SuffixTree) Get(word string) (maxSuffix string) {
 			panic("impossible scenario: destination of the edge is nil")
 		}
 		if current.Valid {
-			maxSuffix = suffix
+			maxSuffix = append(maxSuffix, suffix[len(maxSuffix):]...)
 		}
 	}
 }

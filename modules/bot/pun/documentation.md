@@ -16,7 +16,7 @@ Takes message's suffix and tries to find a pun of a best match.
 
 
 <a name="ConnectJokes"></a>
-## func [ConnectJokes](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/pun.go#L14>)
+## func [ConnectJokes](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/pun.go#L16>)
 
 ```go
 func ConnectJokes(bh *th.BotHandler)
