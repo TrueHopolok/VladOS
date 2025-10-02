@@ -1,6 +1,8 @@
 package gst
 
-import "errors"
+import (
+	"errors"
+)
 
 func (tree *SuffixTree) Put(word []byte) error {
 	if tree == nil {
@@ -12,9 +14,9 @@ func (tree *SuffixTree) Put(word []byte) error {
 	wordIndex := len(word) - 1
 
 	// Project limitations
-	for _, c := range word {
-		c -= 'a'
-		if c > 25 {
+	for i := range word {
+		word[i] -= 'a'
+		if word[i] > 25 {
 			return errors.New("word contain invalid symbols")
 		}
 	}
@@ -85,5 +87,7 @@ func (tree *SuffixTree) Put(word []byte) error {
 
 			wordIndex--
 		}
+
+		current = edge.Dest
 	}
 }

@@ -9,6 +9,8 @@
 // For that [SuffixTree] implements binary marshal / unmarshal / appender interfaces.
 package gst
 
+import "fmt"
+
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md
 
 type Node struct {
@@ -36,4 +38,29 @@ type SuffixTree struct {
 	//
 	// If tree is empty, root will be nil.
 	root *Node
+}
+
+func (tree *SuffixTree) Print() {
+	if tree == nil {
+		panic("given suffix tree is nil pointer")
+	}
+	print(tree.root, 1)
+}
+
+func print(node *Node, level int) {
+	if node == nil {
+		fmt.Printf("%d - nil\n", level)
+	}
+	fmt.Printf("%d - %v\n", level, node.Valid)
+	level++
+	for char, edge := range node.Edges {
+		if edge != nil {
+			fmt.Printf("%s", string(byte(char)+'a'))
+			for _, path := range edge.Path {
+				fmt.Printf("%s", string(byte(path)+'a'))
+			}
+			fmt.Print(" | ")
+			print(edge.Dest, level)
+		}
+	}
 }

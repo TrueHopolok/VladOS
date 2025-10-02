@@ -12,6 +12,13 @@ func (tree *SuffixTree) Get(word []byte) (maxSuffix []byte) {
 		return
 	}
 
+	defer func() {
+		size := len(maxSuffix)
+		half := size >> 1
+		for i := 0; i < half; i++ {
+			maxSuffix[i], maxSuffix[size-i-1] = maxSuffix[size-i-1], maxSuffix[i]
+		}
+	}()
 	maxSuffix = make([]byte, 0)
 	suffix := make([]byte, 0)
 	current := tree.root
@@ -21,12 +28,16 @@ func (tree *SuffixTree) Get(word []byte) (maxSuffix []byte) {
 			return
 		}
 
+		word[wordIndex] -= 'a'
+		if word[wordIndex] > 25 {
+			return
+		}
 		edge := current.Edges[word[wordIndex]]
 		if edge == nil {
 			return
 		}
 
-		suffix = append(suffix, word[wordIndex])
+		suffix = append(suffix, word[wordIndex]+'a')
 		wordIndex--
 
 		for edgeIndex := 0; edgeIndex < len(edge.Path); edgeIndex++ {
@@ -35,11 +46,15 @@ func (tree *SuffixTree) Get(word []byte) (maxSuffix []byte) {
 				return
 			}
 
+			word[wordIndex] -= 'a'
+			if word[wordIndex] > 25 {
+				return
+			}
 			if edge.Path[edgeIndex] != word[wordIndex] {
 				return
 			}
 
-			suffix = append(suffix, word[wordIndex])
+			suffix = append(suffix, word[wordIndex]+'a')
 			wordIndex--
 		}
 
