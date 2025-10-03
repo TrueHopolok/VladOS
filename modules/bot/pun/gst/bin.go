@@ -5,7 +5,11 @@ import (
 	"encoding/gob"
 )
 
-func Serialize(tree SuffixTree) ([]byte, error) {
+func (tree *SuffixTree) Serialize() ([]byte, error) {
+	if tree == nil {
+		panic("given suffix tree is nil pointer")
+	}
+
 	if tree.root == nil {
 		return nil, nil
 	}

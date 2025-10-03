@@ -40,7 +40,7 @@ func TestSerialization(t *testing.T) {
 						want.Put([]byte(testCase.Value))
 					}
 
-					data, err1 = gst.Serialize(want)
+					data, err1 = want.Serialize()
 					got, err2 = gst.Deserialize(data)
 					if cmp.Or(err1, err2) != nil {
 						tt.Fatalf("BIN error: serialization error\n  serialize error: %v\ndeserialize error: %v\n", err1, err2)
