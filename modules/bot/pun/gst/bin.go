@@ -1,22 +1,32 @@
 package gst
 
-func (tree *SuffixTree) AppendBinary(b []byte) ([]byte, error) {
-	if tree == nil {
-		panic("given suffix tree is nil pointer")
+import (
+	"bytes"
+	"encoding/gob"
+)
+
+func Serialize(tree SuffixTree) ([]byte, error) {
+	if tree.root == nil {
+		return nil, nil
 	}
-	return nil, nil
+
+	var buf bytes.Buffer
+	enc := gob.NewEncoder(&buf)
+	err := enc.Encode(tree.root)
+	return buf.Bytes(), err
 }
 
-func (tree *SuffixTree) MarshalBinary() (data []byte, err error) {
-	if tree == nil {
-		panic("given suffix tree is nil pointer")
+func Deserialize(data []byte) (SuffixTree, error) {
+	var tree SuffixTree
+	if len(data) == 0 {
+		return tree, nil
 	}
-	return nil, nil
-}
 
-func (tree *SuffixTree) UnmarshalBinary(data []byte) error {
-	if tree == nil {
-		panic("given suffix tree is nil pointer")
+	var buf bytes.Buffer
+	if _, err := buf.Write(data); err != nil {
+		return tree, err
 	}
-	return nil
+	dec := gob.NewDecoder(&buf)
+	err := dec.Decode(&tree.root)
+	return tree, err
 }

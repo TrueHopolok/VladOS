@@ -1,28 +1,13 @@
 package gst
 
-import (
-	"errors"
-)
-
-func (tree *SuffixTree) Put(word []byte) error {
+func (tree *SuffixTree) Put(word []byte) {
 	if tree == nil {
 		panic("given suffix tree is nil pointer")
 	}
-	if len(word) == 0 {
-		return errors.New("word is empty")
-	}
 	wordIndex := len(word) - 1
 
-	// Project limitations
-	for i := range word {
-		word[i] -= 'a'
-		if word[i] > 25 {
-			return errors.New("word contain invalid symbols")
-		}
-	}
-
 	if tree.root == nil {
-		tree.root = &Node{}
+		tree.root = &Node{Edges: map[byte]*Edge{}}
 	}
 
 	current := tree.root
@@ -32,11 +17,11 @@ func (tree *SuffixTree) Put(word []byte) error {
 				node.valid = true
 			*/
 			current.Valid = true
-			return nil
+			return
 		}
 
-		edge := current.Edges[word[wordIndex]]
-		if edge == nil {
+		edge, exists := current.Edges[word[wordIndex]]
+		if !exists {
 			/*
 				old_node -> new_edge -> new_node
 			*/
@@ -45,8 +30,8 @@ func (tree *SuffixTree) Put(word []byte) error {
 			for wordIndex--; wordIndex >= 0; wordIndex-- {
 				edge.Path = append(edge.Path, word[wordIndex])
 			}
-			edge.Dest = &Node{Valid: true}
-			return nil
+			edge.Dest = &Node{Valid: true, Edges: map[byte]*Edge{}}
+			return
 		}
 
 		wordIndex--
@@ -61,9 +46,9 @@ func (tree *SuffixTree) Put(word []byte) error {
 				oldPath := edge.Path[edgeIndex:]
 				oldNode := edge.Dest
 				edge.Path = edge.Path[:edgeIndex]
-				edge.Dest = &Node{Valid: true}
+				edge.Dest = &Node{Valid: true, Edges: map[byte]*Edge{}}
 				edge.Dest.Edges[oldPath[0]] = &Edge{Path: oldPath[1:], Dest: oldNode}
-				return nil
+				return
 			}
 
 			if word[wordIndex] != edge.Path[edgeIndex] {
@@ -75,14 +60,14 @@ func (tree *SuffixTree) Put(word []byte) error {
 				oldPath := edge.Path[edgeIndex:]
 				oldNode := edge.Dest
 				edge.Path = edge.Path[:edgeIndex]
-				edge.Dest = &Node{}
+				edge.Dest = &Node{Edges: map[byte]*Edge{}}
 				edge.Dest.Edges[oldPath[0]] = &Edge{Path: oldPath[1:], Dest: oldNode}
-				newEdge := &Edge{Dest: &Node{Valid: true}}
+				newEdge := &Edge{Dest: &Node{Valid: true, Edges: map[byte]*Edge{}}}
 				edge.Dest.Edges[word[wordIndex]] = newEdge
 				for wordIndex--; wordIndex >= 0; wordIndex-- {
 					newEdge.Path = append(newEdge.Path, word[wordIndex])
 				}
-				return nil
+				return
 			}
 
 			wordIndex--

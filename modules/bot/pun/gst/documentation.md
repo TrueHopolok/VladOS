@@ -6,26 +6,34 @@
 import "github.com/TrueHopolok/VladOS/modules/bot/pun/gst"
 ```
 
-GST package is realization of generalized suffixtree for the VladOS project. This package supports trees of any depth, with single limitation of using only lower case english letters.
+GST package is realization of generalized suffixtree for the VladOS project. This package supports trees of any depth and any ASCII symbols / strings.
 
 Realization is based on my knowledge and intuition \(might not be the fastest\), but projet limitations are small, thus not requiring a fast implementation.
 
-Max suffix is the size of 3, thus max size of any given tree is 26^3 or 17576. This allows for even a full tree to be easily stored in database. For that [SuffixTree](<#SuffixTree>) implements binary marshal / unmarshal / appender interfaces.
+Max suffix is the size of 3 and is made out of small english letter only thus max size of any given tree is 26^3 or 17576. This allows for even a full tree to be easily stored in database.
 
 ## Index
 
+- [func Serialize\(tree SuffixTree\) \(\[\]byte, error\)](<#Serialize>)
 - [type Edge](<#Edge>)
 - [type Node](<#Node>)
 - [type SuffixTree](<#SuffixTree>)
-  - [func \(tree \*SuffixTree\) AppendBinary\(b \[\]byte\) \(\[\]byte, error\)](<#SuffixTree.AppendBinary>)
+  - [func Deserialize\(data \[\]byte\) \(SuffixTree, error\)](<#Deserialize>)
   - [func \(tree \*SuffixTree\) Get\(word \[\]byte\) \(maxSuffix \[\]byte\)](<#SuffixTree.Get>)
-  - [func \(tree \*SuffixTree\) MarshalBinary\(\) \(data \[\]byte, err error\)](<#SuffixTree.MarshalBinary>)
-  - [func \(tree \*SuffixTree\) Put\(word \[\]byte\) error](<#SuffixTree.Put>)
-  - [func \(tree \*SuffixTree\) UnmarshalBinary\(data \[\]byte\) error](<#SuffixTree.UnmarshalBinary>)
+  - [func \(tree \*SuffixTree\) Put\(word \[\]byte\)](<#SuffixTree.Put>)
+
+
+<a name="Serialize"></a>
+## func Serialize
+
+```go
+func Serialize(tree SuffixTree) ([]byte, error)
+```
+
 
 
 <a name="Edge"></a>
-## type [Edge](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/gst/gst.go#L24-L32>)
+## type Edge
 
 
 
@@ -42,7 +50,7 @@ type Edge struct {
 ```
 
 <a name="Node"></a>
-## type [Node](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/gst/gst.go#L14-L22>)
+## type Node
 
 
 
@@ -53,13 +61,13 @@ type Node struct {
     // If is invalid => suffix at this node does not exists => children may contain existing suffix.
     Valid bool
 
-    // Contain all information regarding the
-    Edges [26]*Edge
+    // Contain all information regarding the edges out goind out of a node.
+    Edges map[byte]*Edge
 }
 ```
 
 <a name="SuffixTree"></a>
-## type [SuffixTree](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/gst/gst.go#L34-L39>)
+## type SuffixTree
 
 
 
@@ -69,17 +77,17 @@ type SuffixTree struct {
 }
 ```
 
-<a name="SuffixTree.AppendBinary"></a>
-### func \(\*SuffixTree\) [AppendBinary](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/gst/bin.go#L3>)
+<a name="Deserialize"></a>
+### func Deserialize
 
 ```go
-func (tree *SuffixTree) AppendBinary(b []byte) ([]byte, error)
+func Deserialize(data []byte) (SuffixTree, error)
 ```
 
 
 
 <a name="SuffixTree.Get"></a>
-### func \(\*SuffixTree\) [Get](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/gst/get.go#L6>)
+### func \(\*SuffixTree\) Get
 
 ```go
 func (tree *SuffixTree) Get(word []byte) (maxSuffix []byte)
@@ -89,29 +97,11 @@ Get for a given word return the longest suffix that is stored in the tree.
 
 Panics if tree is nil.
 
-<a name="SuffixTree.MarshalBinary"></a>
-### func \(\*SuffixTree\) [MarshalBinary](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/gst/bin.go#L10>)
-
-```go
-func (tree *SuffixTree) MarshalBinary() (data []byte, err error)
-```
-
-
-
 <a name="SuffixTree.Put"></a>
-### func \(\*SuffixTree\) [Put](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/gst/put.go#L5>)
+### func \(\*SuffixTree\) Put
 
 ```go
-func (tree *SuffixTree) Put(word []byte) error
-```
-
-
-
-<a name="SuffixTree.UnmarshalBinary"></a>
-### func \(\*SuffixTree\) [UnmarshalBinary](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/gst/bin.go#L17>)
-
-```go
-func (tree *SuffixTree) UnmarshalBinary(data []byte) error
+func (tree *SuffixTree) Put(word []byte)
 ```
 
 

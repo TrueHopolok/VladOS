@@ -28,16 +28,12 @@ func (tree *SuffixTree) Get(word []byte) (maxSuffix []byte) {
 			return
 		}
 
-		word[wordIndex] -= 'a'
-		if word[wordIndex] > 25 {
-			return
-		}
-		edge := current.Edges[word[wordIndex]]
-		if edge == nil {
+		edge, exists := current.Edges[word[wordIndex]]
+		if !exists {
 			return
 		}
 
-		suffix = append(suffix, word[wordIndex]+'a')
+		suffix = append(suffix, word[wordIndex])
 		wordIndex--
 
 		for edgeIndex := 0; edgeIndex < len(edge.Path); edgeIndex++ {
@@ -46,15 +42,11 @@ func (tree *SuffixTree) Get(word []byte) (maxSuffix []byte) {
 				return
 			}
 
-			word[wordIndex] -= 'a'
-			if word[wordIndex] > 25 {
-				return
-			}
 			if edge.Path[edgeIndex] != word[wordIndex] {
 				return
 			}
 
-			suffix = append(suffix, word[wordIndex]+'a')
+			suffix = append(suffix, word[wordIndex])
 			wordIndex--
 		}
 
