@@ -14,7 +14,12 @@
 
 This is a personal project created to practice **web development** and **API integration** skills.  
 
-The project’s main focus is a **Telegram bot**, designed with a modular command system that makes it easy to add new features. Most of the commands are implemented as small **minigames**, showcasing different approaches to bot interaction and command handling.  
+The project’s main focus is a **Telegram bot**, designed with a modular command system that makes it easy to add new features. Most of the commands are implemented as small **minigames**, showcasing different approaches to bot interaction and command handling.
+
+Features that bot itself provides are as follows:   
+- Includes gambling mini-games (no real money!) — compete with others for win streaks.
+- Fun commands like **Magic 8 Ball** or **Random Tip** for quick laughs.
+- A clever **Pun System** that adds a playful twist to your messages.
 
 A secondary focus is on building a **web application** that works hand-in-hand with the bot. The website serves as an extension of the bot, providing:  
 - A more comprehensive **leaderboard**  
