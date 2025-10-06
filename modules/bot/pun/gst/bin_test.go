@@ -3,7 +3,6 @@ package gst_test
 import (
 	"cmp"
 	"fmt"
-	"reflect"
 	"testing"
 
 	"github.com/TrueHopolok/VladOS/modules/bot/pun/gst"
@@ -45,7 +44,7 @@ func TestSerialization(t *testing.T) {
 					if cmp.Or(err1, err2) != nil {
 						tt.Fatalf("BIN error: serialization error\n  serialize error: %v\ndeserialize error: %v\n", err1, err2)
 					}
-					if !reflect.DeepEqual(want, got) {
+					if !gst.Equal(t, want, got) {
 						tt.Logf("RES error: unexpected result\n\nwant:\n")
 						want.Print(tt)
 						tt.Logf("\n\n got:\n")
