@@ -41,7 +41,7 @@ const TmlPath string = "suggestions/"
 
 ```go
 var SuggestionExistingNames = []string{
-    "m8b", "tip",
+    "m8b", "tip", "pun",
 }
 ```
 
@@ -61,7 +61,7 @@ var TmlMap = template.FuncMap{
 ```
 
 <a name="PageHandle"></a>
-## func [PageHandle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/websuggestions/handler.go#L65>)
+## func [PageHandle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/websuggestions/handler.go#L66>)
 
 ```go
 func PageHandle(w http.ResponseWriter, r *http.Request)
@@ -70,7 +70,7 @@ func PageHandle(w http.ResponseWriter, r *http.Request)
 
 
 <a name="PostHandle"></a>
-## func [PostHandle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/websuggestions/handler.go#L96>)
+## func [PostHandle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/websuggestions/handler.go#L97>)
 
 ```go
 func PostHandle(w http.ResponseWriter, r *http.Request)
@@ -79,7 +79,7 @@ func PostHandle(w http.ResponseWriter, r *http.Request)
 
 
 <a name="ValidSuggestionType"></a>
-## func [ValidSuggestionType](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/websuggestions/handler.go#L43>)
+## func [ValidSuggestionType](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/websuggestions/handler.go#L44>)
 
 ```go
 func ValidSuggestionType(w http.ResponseWriter, r *http.Request) (valid bool, typeName string)

@@ -9,6 +9,7 @@ import (
 	"text/template"
 
 	"github.com/TrueHopolok/VladOS/modules/db/dbm8b"
+	"github.com/TrueHopolok/VladOS/modules/db/dbpun"
 	"github.com/TrueHopolok/VladOS/modules/db/dbsuggestion"
 	"github.com/TrueHopolok/VladOS/modules/db/dbtip"
 	"github.com/TrueHopolok/VladOS/modules/vos"
@@ -33,7 +34,7 @@ var TmlMap = template.FuncMap{
 }
 
 var SuggestionExistingNames = []string{
-	"m8b", "tip",
+	"m8b", "tip", "pun",
 }
 
 // Get suggestion type from request.
@@ -134,6 +135,27 @@ func PostHandle(w http.ResponseWriter, r *http.Request) {
 			sug.Answer = false
 		default:
 			slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest", "invalid answer is given")
+			http.Error(w, "http failed", http.StatusBadRequest)
+			return
+		}
+		var err error
+		raw, err = json.MarshalIndent(sug, "", "  ")
+		if err != nil {
+			slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
+			http.Error(w, "http failed", http.StatusInternalServerError)
+			return
+		}
+	case "pun":
+		var sug dbpun.Pun
+		sug.Pun = r.PostFormValue("pun")
+		if len(sug.Pun) == 0 {
+			slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest", "no pun given")
+			http.Error(w, "http failed", http.StatusBadRequest)
+			return
+		}
+		sug.Suffix = r.PostFormValue("suffix")
+		if len(sug.Suffix) == 0 {
+			slog.Debug("http req", "mtd", r.Method, "url", r.URL, "badrequest", "no suffix given")
 			http.Error(w, "http failed", http.StatusBadRequest)
 			return
 		}

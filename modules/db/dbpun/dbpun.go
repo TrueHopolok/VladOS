@@ -22,8 +22,15 @@ type SyncSuffixTree struct {
 	Tree gst.SuffixTree
 }
 
+// ArgumentLengthError used by [Write] and [Answer] if any of the given argument is empty.
 type ArgumentLengthError struct {
 	Description string
+}
+
+// Pun used by suggestions to save it into database.
+type Pun struct {
+	Suffix string `json:"Suffix"`
+	Pun    string `json:"Pun"`
 }
 
 func (err *ArgumentLengthError) Error() string {

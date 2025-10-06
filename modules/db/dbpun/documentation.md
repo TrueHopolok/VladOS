@@ -13,6 +13,7 @@ import "github.com/TrueHopolok/VladOS/modules/db/dbpun"
 - [func Write\(suffix, pun string\) error](<#Write>)
 - [type ArgumentLengthError](<#ArgumentLengthError>)
   - [func \(err \*ArgumentLengthError\) Error\(\) string](<#ArgumentLengthError.Error>)
+- [type Pun](<#Pun>)
 - [type SyncSuffixTree](<#SyncSuffixTree>)
 
 
@@ -25,7 +26,7 @@ var QueryDir embed.FS
 ```
 
 <a name="Answer"></a>
-## func [Answer](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbpun/dbpun.go#L62>)
+## func [Answer](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbpun/dbpun.go#L69>)
 
 ```go
 func Answer(word string) (pun string, err error)
@@ -34,7 +35,7 @@ func Answer(word string) (pun string, err error)
 Answer returns a random pun choosing the longest suffix of the given word.
 
 <a name="Write"></a>
-## func [Write](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbpun/dbpun.go#L37>)
+## func [Write](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbpun/dbpun.go#L44>)
 
 ```go
 func Write(suffix, pun string) error
@@ -43,9 +44,9 @@ func Write(suffix, pun string) error
 Write adds a suffix into a database, starting tree and subsequencional gst\-s.
 
 <a name="ArgumentLengthError"></a>
-## type [ArgumentLengthError](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbpun/dbpun.go#L25-L27>)
+## type [ArgumentLengthError](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbpun/dbpun.go#L26-L28>)
 
-
+ArgumentLengthError used by [Write](<#Write>) and [Answer](<#Answer>) if any of the given argument is empty.
 
 ```go
 type ArgumentLengthError struct {
@@ -54,13 +55,25 @@ type ArgumentLengthError struct {
 ```
 
 <a name="ArgumentLengthError.Error"></a>
-### func \(\*ArgumentLengthError\) [Error](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbpun/dbpun.go#L29>)
+### func \(\*ArgumentLengthError\) [Error](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbpun/dbpun.go#L36>)
 
 ```go
 func (err *ArgumentLengthError) Error() string
 ```
 
 
+
+<a name="Pun"></a>
+## type [Pun](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbpun/dbpun.go#L31-L34>)
+
+Pun used by suggestions to save it into database.
+
+```go
+type Pun struct {
+    Suffix string `json:"Suffix"`
+    Pun    string `json:"Pun"`
+}
+```
 
 <a name="SyncSuffixTree"></a>
 ## type [SyncSuffixTree](<https://github.com/TrueHopolok/VladOS/blob/main/modules/db/dbpun/dbpun.go#L20-L23>)
