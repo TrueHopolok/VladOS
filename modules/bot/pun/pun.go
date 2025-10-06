@@ -6,6 +6,7 @@ package pun
 import (
 	"log/slog"
 
+	"github.com/TrueHopolok/VladOS/modules/db/dbpun"
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 )
@@ -19,28 +20,38 @@ func ConnectJokes(bh *th.BotHandler) {
 	ph.Handle(handleEdit, th.AnyEditedMessage())
 }
 
-// TODO
 func handleNew(ctx *th.Context, update telego.Update) error {
 	slog.Debug("bot handler", "upd", update.UpdateID, "message", "pun/new")
-	_, err := ctx.Bot().SendMessage(ctx, &telego.SendMessageParams{
-		Text:   "new reply",
-		ChatID: update.Message.Chat.ChatID(),
-		ReplyParameters: &telego.ReplyParameters{
-			MessageID: update.Message.MessageID,
-		},
-	})
+	pun, err := dbpun.Answer(update.Message.Text)
+	if err != nil {
+		return err
+	}
+	if pun != "" {
+		_, err = ctx.Bot().SendMessage(ctx, &telego.SendMessageParams{
+			Text:   pun,
+			ChatID: update.Message.Chat.ChatID(),
+			ReplyParameters: &telego.ReplyParameters{
+				MessageID: update.Message.MessageID,
+			},
+		})
+	}
 	return err
 }
 
-// TODO
 func handleEdit(ctx *th.Context, update telego.Update) error {
 	slog.Debug("bot handler", "upd", update.UpdateID, "message", "pun/edit")
-	_, err := ctx.Bot().SendMessage(ctx, &telego.SendMessageParams{
-		Text:   "edit reply",
-		ChatID: update.EditedMessage.Chat.ChatID(),
-		ReplyParameters: &telego.ReplyParameters{
-			MessageID: update.EditedMessage.MessageID,
-		},
-	})
+	pun, err := dbpun.Answer(update.Message.Text)
+	if err != nil {
+		return err
+	}
+	if pun != "" {
+		_, err = ctx.Bot().SendMessage(ctx, &telego.SendMessageParams{
+			Text:   pun,
+			ChatID: update.EditedMessage.Chat.ChatID(),
+			ReplyParameters: &telego.ReplyParameters{
+				MessageID: update.EditedMessage.MessageID,
+			},
+		})
+	}
 	return err
 }
