@@ -4,13 +4,37 @@
 }
 
 .note {
-  margin: 15px 0;
-  padding: 12px 16px;
-  background-color: #fff3cd; 
-  border: 1px solid #ffeeba; 
-  border-radius: 6px;
-  color: #856404;           
-  font-size: 0.95rem;
+  background: #fffbe6;
+  border-left: 6px solid #f1c40f;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  animation: fadeIn 0.6s ease-in-out;
+  line-height: 1.6;
+  color: #555;
+}
+
+.note p {
+  margin: 0.5rem 0;
+}
+
+.note a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.note a:hover {
+  color: #1d6fa5;
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .update-card {

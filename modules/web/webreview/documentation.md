@@ -22,7 +22,7 @@ const TmlName string = "review.html"
 ```
 
 <a name="PageHandle"></a>
-## func [PageHandle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webreview/handler.go#L110>)
+## func [PageHandle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webreview/handler.go#L123>)
 
 ```go
 func PageHandle(w http.ResponseWriter, r *http.Request)
@@ -31,7 +31,7 @@ func PageHandle(w http.ResponseWriter, r *http.Request)
 
 
 <a name="PostHandle"></a>
-## func [PostHandle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webreview/handler.go#L21>)
+## func [PostHandle](<https://github.com/TrueHopolok/VladOS/blob/main/modules/web/webreview/handler.go#L22>)
 
 ```go
 func PostHandle(w http.ResponseWriter, r *http.Request)

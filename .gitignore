@@ -2,3 +2,4 @@ logs/
 database/
 configs/bot.key
 build/
+.vscode/

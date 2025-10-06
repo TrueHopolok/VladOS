@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/TrueHopolok/VladOS/modules/db/dbm8b"
+	"github.com/TrueHopolok/VladOS/modules/db/dbpun"
 	"github.com/TrueHopolok/VladOS/modules/db/dbsuggestion"
 	"github.com/TrueHopolok/VladOS/modules/db/dbtip"
 	"github.com/TrueHopolok/VladOS/modules/vos"
@@ -94,6 +95,18 @@ func PostHandle(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		if err = dbtip.Add(sug); err != nil {
+			slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
+			http.Error(w, "http failed", http.StatusInternalServerError)
+			return
+		}
+	case "pun":
+		var sug dbpun.Pun
+		if err = json.Unmarshal(rawJson, &sug); err != nil {
+			slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
+			http.Error(w, "http failed", http.StatusInternalServerError)
+			return
+		}
+		if err = dbpun.Write(sug.Suffix, sug.Pun); err != nil {
 			slog.Warn("http req", "mtd", r.Method, "url", r.URL, "error", err)
 			http.Error(w, "http failed", http.StatusInternalServerError)
 			return

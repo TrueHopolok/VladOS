@@ -4,6 +4,9 @@
 package pun
 
 import (
+	"log/slog"
+
+	"github.com/TrueHopolok/VladOS/modules/db/dbpun"
 	"github.com/mymmrac/telego"
 	th "github.com/mymmrac/telego/telegohandler"
 )
@@ -12,18 +15,43 @@ import (
 
 // Connect a handler that analyze the message and find a joke / pun for the suffix of that message.
 func ConnectJokes(bh *th.BotHandler) {
-	// slog.Debug("bot handler", "upd", update.UpdateID, "message", "joke")
-	ph := bh.Group(th.AnyMessage(), th.AnyEditedMessage())
+	ph := bh.Group(th.Or(th.AnyMessage(), th.AnyEditedMessage()))
 	ph.Handle(handleNew, th.AnyMessage())
 	ph.Handle(handleEdit, th.AnyEditedMessage())
 }
 
-// TODO
 func handleNew(ctx *th.Context, update telego.Update) error {
-	return nil
+	slog.Debug("bot handler", "upd", update.UpdateID, "message", "pun/new")
+	pun, err := dbpun.Answer(update.Message.Text)
+	if err != nil {
+		return err
+	}
+	if pun != "" {
+		_, err = ctx.Bot().SendMessage(ctx, &telego.SendMessageParams{
+			Text:   pun,
+			ChatID: update.Message.Chat.ChatID(),
+			ReplyParameters: &telego.ReplyParameters{
+				MessageID: update.Message.MessageID,
+			},
+		})
+	}
+	return err
 }
 
-// TODO
 func handleEdit(ctx *th.Context, update telego.Update) error {
-	return nil
+	slog.Debug("bot handler", "upd", update.UpdateID, "message", "pun/edit")
+	pun, err := dbpun.Answer(update.Message.Text)
+	if err != nil {
+		return err
+	}
+	if pun != "" {
+		_, err = ctx.Bot().SendMessage(ctx, &telego.SendMessageParams{
+			Text:   pun,
+			ChatID: update.EditedMessage.Chat.ChatID(),
+			ReplyParameters: &telego.ReplyParameters{
+				MessageID: update.EditedMessage.MessageID,
+			},
+		})
+	}
+	return err
 }
