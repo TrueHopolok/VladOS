@@ -1,0 +1,1 @@
+INSERT INTO pun (suffix, pun) VALUES ($1, $2);

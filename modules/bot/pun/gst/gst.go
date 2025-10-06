@@ -3,9 +3,6 @@
 //
 // Realization is based on my knowledge and intuition (might not be the fastest),
 // but projet limitations are small, thus not requiring a fast implementation.
-//
-// Max suffix is the size of 3 and is made out of small english letter only thus max size of any given tree is 26^3 or 17576.
-// This allows for even a full tree to be easily stored in database.
 package gst
 
 //go:generate go tool github.com/princjef/gomarkdoc/cmd/gomarkdoc -o documentation.md

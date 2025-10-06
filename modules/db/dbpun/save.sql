@@ -1,0 +1,1 @@
+INSERT OR REPLACE INTO sst (raw) VALUES ($1);

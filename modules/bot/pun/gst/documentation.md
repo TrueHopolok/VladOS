@@ -10,30 +10,19 @@ GST package is realization of generalized suffixtree for the VladOS project. Thi
 
 Realization is based on my knowledge and intuition \(might not be the fastest\), but projet limitations are small, thus not requiring a fast implementation.
 
-Max suffix is the size of 3 and is made out of small english letter only thus max size of any given tree is 26^3 or 17576. This allows for even a full tree to be easily stored in database.
-
 ## Index
 
-- [func Serialize\(tree SuffixTree\) \(\[\]byte, error\)](<#Serialize>)
 - [type Edge](<#Edge>)
 - [type Node](<#Node>)
 - [type SuffixTree](<#SuffixTree>)
   - [func Deserialize\(data \[\]byte\) \(SuffixTree, error\)](<#Deserialize>)
   - [func \(tree \*SuffixTree\) Get\(word \[\]byte\) \(maxSuffix \[\]byte\)](<#SuffixTree.Get>)
   - [func \(tree \*SuffixTree\) Put\(word \[\]byte\)](<#SuffixTree.Put>)
-
-
-<a name="Serialize"></a>
-## func Serialize
-
-```go
-func Serialize(tree SuffixTree) ([]byte, error)
-```
-
+  - [func \(tree \*SuffixTree\) Serialize\(\) \(\[\]byte, error\)](<#SuffixTree.Serialize>)
 
 
 <a name="Edge"></a>
-## type Edge
+## type [Edge](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/gst/gst.go#L20-L28>)
 
 
 
@@ -50,7 +39,7 @@ type Edge struct {
 ```
 
 <a name="Node"></a>
-## type Node
+## type [Node](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/gst/gst.go#L10-L18>)
 
 
 
@@ -67,7 +56,7 @@ type Node struct {
 ```
 
 <a name="SuffixTree"></a>
-## type SuffixTree
+## type [SuffixTree](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/gst/gst.go#L30-L35>)
 
 
 
@@ -78,7 +67,7 @@ type SuffixTree struct {
 ```
 
 <a name="Deserialize"></a>
-### func Deserialize
+### func [Deserialize](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/gst/bin.go#L23>)
 
 ```go
 func Deserialize(data []byte) (SuffixTree, error)
@@ -87,7 +76,7 @@ func Deserialize(data []byte) (SuffixTree, error)
 
 
 <a name="SuffixTree.Get"></a>
-### func \(\*SuffixTree\) Get
+### func \(\*SuffixTree\) [Get](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/gst/get.go#L6>)
 
 ```go
 func (tree *SuffixTree) Get(word []byte) (maxSuffix []byte)
@@ -98,10 +87,19 @@ Get for a given word return the longest suffix that is stored in the tree.
 Panics if tree is nil.
 
 <a name="SuffixTree.Put"></a>
-### func \(\*SuffixTree\) Put
+### func \(\*SuffixTree\) [Put](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/gst/put.go#L3>)
 
 ```go
 func (tree *SuffixTree) Put(word []byte)
+```
+
+
+
+<a name="SuffixTree.Serialize"></a>
+### func \(\*SuffixTree\) [Serialize](<https://github.com/TrueHopolok/VladOS/blob/main/modules/bot/pun/gst/bin.go#L8>)
+
+```go
+func (tree *SuffixTree) Serialize() ([]byte, error)
 ```
 
 

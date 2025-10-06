@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX idx_pun_suffixes ON pun(suffix);
